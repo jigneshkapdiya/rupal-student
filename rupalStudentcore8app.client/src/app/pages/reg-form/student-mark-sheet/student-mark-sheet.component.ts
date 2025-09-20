@@ -131,10 +131,7 @@ export class StudentMarkSheetComponent implements OnInit {
       c1.updateValueAndValidity({ emitEvent: false });
       c2.updateValueAndValidity({ emitEvent: false });
     };
-
-    // Initial validation setup
     updateValidators();
-
     // Update validators when either control changes
     c1.valueChanges.subscribe(() => updateValidators());
     c2.valueChanges.subscribe(() => updateValidators());
@@ -143,12 +140,10 @@ export class StudentMarkSheetComponent implements OnInit {
   setupAtLeastOneRequiredMultiple(controlNames: string[]) {
     const controls = controlNames.map(name => this.form.get(name)).filter(Boolean);
     if (controls.length === 0) return;
-
     const updateValidators = () => {
       const hasAnyValue = controls.some(control =>
         control.value !== null && control.value.toString().trim() !== ''
       );
-
       controls.forEach(control => {
         if (!hasAnyValue) {
           control.setValidators([Validators.required]);
@@ -158,11 +153,7 @@ export class StudentMarkSheetComponent implements OnInit {
         control.updateValueAndValidity({ emitEvent: false });
       });
     };
-
-    // Initial validation setup
     updateValidators();
-
-    // Update validators when any control changes
     controls.forEach(control => {
       control.valueChanges.subscribe(() => updateValidators());
     });
@@ -230,12 +221,12 @@ export class StudentMarkSheetComponent implements OnInit {
     formData.append('mobile', this.form.get('mobile')?.value);
     formData.append('familyName', this.form.get('familyName')?.value);
     formData.append('familyNameGu', this.form.get('familyNameGu')?.value || '');
-    formData.append('studentName', this.form.get('studentName')?.value);
+    formData.append('studentName', this.form.get('studentName')?.value || '');
     formData.append('studentNameGU', this.form.get('studentNameGU')?.value || '');
-    formData.append('fatherName', this.form.get('fatherName')?.value);
+    formData.append('fatherName', this.form.get('fatherName')?.value || '');
     formData.append('fatherNameGU', this.form.get('fatherNameGU')?.value || '');
-    formData.append('schoolName', this.form.get('schoolName')?.value);
-    formData.append('education', this.form.get('education')?.value);
+    formData.append('schoolName', this.form.get('schoolName')?.value || '');
+    formData.append('education', this.form.get('education')?.value || '');
     formData.append('educationGu', this.form.get('educationGu')?.value || '');
     formData.append('percentage', this.form.get('percentage')?.value || '');
     formData.append('sgpa', this.form.get('sgpa')?.value || '');
