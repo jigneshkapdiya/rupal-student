@@ -14,6 +14,7 @@ export class ConfirmStudentMarksheetComponent implements OnInit {
   formNumber: string = '';
   studentId: number;
   studentDetails: any;
+  attachmentList: any[] = [];
 
   constructor(
     public toastr: ToastrService,
@@ -39,6 +40,7 @@ export class ConfirmStudentMarksheetComponent implements OnInit {
         if (res) {
           this.formNumber = res.formNumber;
           this.studentDetails = res;
+          this.attachmentList = res.attachmentList || [];
         }
       },
       error: (err: any) => {

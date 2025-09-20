@@ -53,9 +53,22 @@
                   <input type="text" class="form-control" formControlName="mobile" placeholder="મોબાઇલ નંબર દાખલ કરો"
                     [ngClass]="{'is-invalid': form.get('mobile')?.touched && form.get('mobile')?.invalid}">
                 </div>
-                <div *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid" class="invalid-feedback d-block">
-                  મોબાઇલ નંબર જરૂરી છે.
-                </div>
+                <small class="form-text text-danger" *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">
+                  <ng-container *ngIf="form.get('mobile')?.errors as errors">
+                    <span *ngIf="errors?.['required']">
+                      મોબાઇલ નંબર જરૂરી છે.
+                    </span>
+                    <span *ngIf="!errors?.['required'] && errors?.['pattern']">
+                      ફક્ત અંક જ દાખલ કરો.
+                    </span>
+                    <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && errors?.['minlength']">
+                      મોબાઇલ નંબર ઓછામાં ઓછો ૧૦ અંકનો હોવો જોઈએ.
+                    </span>
+                    <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && !errors?.['minlength'] && errors?.['maxlength']">
+                      મોબાઇલ નંબર વધારેમાં વધારે ૧૫ અંકનો હોવો જોઈએ.
+                    </span>
+                  </ng-container>
+                </small>
               </div>
 
               <!-- Family Name -->
@@ -71,9 +84,9 @@
                     {{ item.name }} - {{ item.nameGU }}
                   </ng-template>
                 </ng-select>
-                <div *ngIf="form.get('familyName')?.touched && form.get('familyName')?.invalid" class="text-danger">
-                  શાખે જરૂરી છે.
-                </div>
+                <small class="form-text text-muted danger" *ngIf="form.get('familyName')?.touched && form.get('familyName')?.invalid">
+                  <span *ngIf="form.get('familyName').errors.required"> શાખે જરૂરી છે.</span>
+                </small>
               </div>
 
               <!-- Student Name -->
@@ -174,20 +187,21 @@
                 </small>
               </div>
 
+              <!-- Education -->
               <div class="col-md-6 form-group">
                 <div class="d-flex justify-content-between">
                   <label for="education">Education</label>
                   <label for="education">શિક્ષણ</label>
                 </div>
-                <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="શિક્ષણ પસંદ કરો" formControlName="education"
+                <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="શિક્ષણ પસંદ કરો" formControlName="education" (change)="onEducationChange($event)"
                   [ngClass]="{'is-invalid': form.get('education')?.touched && form.get('education')?.invalid}">
                   <ng-template ng-option-tmp let-item="item">
                     {{ item.name }} - {{ item.nameGu }}
                   </ng-template>
                 </ng-select>
-                <div *ngIf="form.get('education')?.touched && form.get('education')?.invalid" class="text-danger small mt-1">
-                  શિક્ષણ જરૂરી છે
-                </div>
+                <small class="form-text text-muted danger" *ngIf="form.get('education')?.touched && form.get('education')?.invalid">
+                  <span *ngIf="form.get('education').errors.required">શિક્ષણ જરૂરી છે.</span>
+                </small>
               </div>
             </div>
 
@@ -196,7 +210,6 @@
               <div class="col-12">
                 <h6 class="border-bottom pb-2 mb-3 text-primary">
                   <i class="fas fa-percentage me-2"></i> મેળવેલા ગુણ
-                  <!-- <span class="text-warning">કૃપા કરીને ટકાવારી અથવા SGPA, અને CGPA દાખલ કરો.</span> -->
                 </h6>
               </div>
 

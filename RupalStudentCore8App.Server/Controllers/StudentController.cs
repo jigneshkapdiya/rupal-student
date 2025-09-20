@@ -66,6 +66,7 @@ namespace RupalStudentCore8App.Server.Controllers
                 entity.FatherName = vm.FatherName;
                 entity.FatherNameGu = vm.FatherNameGu;
                 entity.Education = vm.Education;
+                entity.EducationGu = vm.EducationGu;
                 entity.SchoolName = vm.SchoolName;
                 entity.Percentage = vm.Percentage;
                 entity.Sgpa = vm.Sgpa;

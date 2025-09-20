@@ -15,7 +15,6 @@ namespace RupalStudentCore8App.Server.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class StudentMarkSheetController : ControllerBase
     {
         #region Init
@@ -51,6 +50,7 @@ namespace RupalStudentCore8App.Server.Controllers
                             s.StudentName,
                             s.StudentNameGu,
                             s.Education,
+                            s.EducationGu,
                             s.SchoolName,
                             s.Percentage,
                             s.Sgpa,
@@ -86,6 +86,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.FatherName,
                     s.FatherNameGu,
                     s.Education,
+                    s.EducationGu,
                     s.SchoolName,
                     s.Percentage,
                     s.Sgpa,

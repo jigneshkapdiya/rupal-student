@@ -56,7 +56,12 @@ export class StudentMarksheetFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      mobile: [null, Validators.required],
+      mobile: [null, Validators.compose([
+        Validators.required,
+        Validators.minLength(10),  // Minimum 10 digits
+        Validators.maxLength(15),  // Maximum 15 digits
+        Validators.pattern(/^[0-9]*$/) // Only numbers allowed
+      ])],
       familyName: [null, Validators.required],
       familyNameGu: [null],
       studentName: [null],
@@ -65,6 +70,7 @@ export class StudentMarksheetFormComponent implements OnInit {
       fatherNameGU: [null],
       schoolName: [null, Validators.required],
       education: [null, Validators.required],
+      educationGu: [null],
       percentage: [null, [
         Validators.min(0),
         Validators.max(2),
@@ -196,6 +202,12 @@ export class StudentMarksheetFormComponent implements OnInit {
     }
   }
 
+  onEducationChange(e: any) {
+    if (e) {
+      this.form.get('educationGu')?.setValue(this.educationList.find(item => item.name === e.name).nameGu);
+    }
+  }
+
   removeAttachment(item: any): void {
     const index = this.attachmentList.indexOf(item);
     if (index > -1) {
@@ -224,6 +236,7 @@ export class StudentMarksheetFormComponent implements OnInit {
     formData.append('fatherNameGU', this.form.get('fatherNameGU')?.value || '');
     formData.append('schoolName', this.form.get('schoolName')?.value);
     formData.append('education', this.form.get('education')?.value);
+    formData.append('educationGu', this.form.get('educationGu')?.value || '');
     formData.append('percentage', this.form.get('percentage')?.value || '');
     formData.append('sgpa', this.form.get('sgpa')?.value || '');
     formData.append('cgpa', this.form.get('cgpa')?.value || '');

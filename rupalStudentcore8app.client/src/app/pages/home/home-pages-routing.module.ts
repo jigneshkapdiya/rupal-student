@@ -2,8 +2,6 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { StudentMarksheetFormComponent } from "./student-marksheet-form/student-marksheet-form.component";
 import { ConfirmStudentMarksheetComponent } from "./confirm-student-marksheet/confirm-student-marksheet.component";
-import { ViewMarkSheetDetailsComponent } from "./view-mark-sheet-details/view-mark-sheet-details.component";
-
 
 const routes: Routes = [
   {
@@ -21,13 +19,6 @@ const routes: Routes = [
         component: ConfirmStudentMarksheetComponent,
         data: {
           title: 'Student Marksheet Confirmation',
-        }
-      },
-      {
-        path: 'view/:id',
-        component: ViewMarkSheetDetailsComponent,
-        data: {
-          title: 'Student Marksheet View',
         }
       },
     ],

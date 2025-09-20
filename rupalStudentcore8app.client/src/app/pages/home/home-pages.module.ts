@@ -9,13 +9,11 @@ import { TranslateModule } from "@ngx-translate/core";
 import { NgxSpinnerModule } from "ngx-spinner";
 import { FileUploadModule } from 'ng2-file-upload';
 import { ConfirmStudentMarksheetComponent } from './confirm-student-marksheet/confirm-student-marksheet.component';
-import { ViewMarkSheetDetailsComponent } from './view-mark-sheet-details/view-mark-sheet-details.component';
 
 @NgModule({
   declarations: [
     StudentMarksheetFormComponent,
     ConfirmStudentMarksheetComponent,
-    ViewMarkSheetDetailsComponent,
   ],
   imports: [HomePagesRoutingModule,
     CommonModule,

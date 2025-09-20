@@ -13,6 +13,7 @@ namespace RupalStudentCore8App.Server.ServiceModel
         public string FatherName { get; set; }
         public string FatherNameGu { get; set; }
         public string Education { get; set; }
+        public string EducationGu { get; set; }
         public string SchoolName { get; set; }
         public decimal? Percentage { get; set; }
         public decimal? Sgpa { get; set; }

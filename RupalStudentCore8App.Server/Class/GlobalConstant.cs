@@ -128,7 +128,7 @@
         {
             public const string Default = "/Upload/";
             public const string Attachment = "/Upload/Attachment/";
-            public const string Student = "Upload/Student";
+            public const string Student = "/Upload/Student/";
             public const string ProfileImage = "/Upload/ProfileImage/";
         }
 

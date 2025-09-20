@@ -42,6 +42,9 @@ namespace RupalStudentCore8App.Server.Entities
         public string Education { get; set; }
 
         [StringLength(50)]
+        public string EducationGu { get; set; }
+
+        [StringLength(50)]
         public string SchoolName { get; set; }
 
         [Column(TypeName = "decimal(5, 2)")]
