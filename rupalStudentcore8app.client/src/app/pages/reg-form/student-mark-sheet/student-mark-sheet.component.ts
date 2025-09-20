@@ -10,11 +10,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'student-marksheet-form',
-  templateUrl: './student-marksheet-form.component.html',
-  styleUrls: ['./student-marksheet-form.component.scss']
+  selector: 'student-mark-sheet',
+  templateUrl: './student-mark-sheet.component.html',
+  styleUrls: ['./student-mark-sheet.component.scss']
 })
-export class StudentMarksheetFormComponent implements OnInit {
+export class StudentMarkSheetComponent implements OnInit {
   form: FormGroup;
   familyNameList = StudentShakhList;
   educationList: any[] = [];
@@ -251,7 +251,7 @@ export class StudentMarksheetFormComponent implements OnInit {
     this.studentService.saveStudentMarkSheet(formData).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res: any) => {
         this.toastr.success('ફોર્મ સફળતાપૂર્વક સબમિટ થઇ ગયું .');
-        this.router.navigate(['/home/confirmation/', + res]);
+        this.router.navigate(['/reg-form/view/', res]);
         this.form.reset();
         this.attachmentList = [];
         this.uploader.clearQueue();
@@ -261,4 +261,5 @@ export class StudentMarksheetFormComponent implements OnInit {
       }
     });
   }
-};
+
+}

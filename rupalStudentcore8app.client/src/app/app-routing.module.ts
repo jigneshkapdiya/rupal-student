@@ -1,19 +1,31 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { FullLayoutComponent } from "./layouts/full/full-layout.component";
 import { AccountLayoutComponent } from './layouts/account/account-layout.component';
+import { FullLayoutComponent } from "./layouts/full/full-layout.component";
+import { StudentMarkSheetComponent } from './pages/reg-form/student-mark-sheet/student-mark-sheet.component';
 import { AuthGuard } from './shared/auth/auth-guard.service';
 import { ACCOUNT_ROUTES } from './shared/routes/account-layout.routes';
 import { Full_ROUTES } from './shared/routes/full-layout.routes';
-import { HOME_ROUTES } from './shared/routes/home-layout.routes';
-import { HomeLayoutComponent } from './layouts/home/home-layout.component';
+import { ViewStudentMarkSheetComponent } from './pages/reg-form/view-student-mark-sheet/view-student-mark-sheet.component';
 
 const appRoutes: Routes = [
   {
     path: "",
-    redirectTo: "/home",
+    redirectTo: "/reg-form",
     pathMatch: "full",
   },
+  // Direct routes without layout
+  {
+    path: "reg-form",
+    component: StudentMarkSheetComponent,
+    data: { title: "Registration Form" }
+  },
+  {
+    path: "reg-form/view/:id",
+    component: ViewStudentMarkSheetComponent,
+    data: { title: "Confirmation" }
+  },
+  // Layout-based routes
   {
     path: "",
     component: AccountLayoutComponent,
@@ -28,20 +40,18 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "",
-    component: HomeLayoutComponent,
-    data: { title: 'Home' },
-    children: HOME_ROUTES,
-  },
-  {
     path: '**',
-    redirectTo: 'pages/error'
+    redirectTo: '/reg-form'
   },
-
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules, relativeLinkResolution: 'legacy' })],
+  imports: [RouterModule.forRoot(appRoutes, {
+    preloadingStrategy: PreloadAllModules,
+    relativeLinkResolution: 'legacy',
+    useHash: true,  // This will use hash routing (/#/reg-form/view/123)
+    enableTracing: false
+  })],
   exports: [RouterModule]
 })
 

@@ -6,11 +6,11 @@ import { ToastrService } from 'ngx-toastr';
 import { finalize } from 'rxjs/operators';
 
 @Component({
-  selector: 'confirm-student-marksheet',
-  templateUrl: './confirm-student-marksheet.component.html',
-  styleUrls: ['./confirm-student-marksheet.component.scss']
+  selector: 'view-student-mark-sheet',
+  templateUrl: './view-student-mark-sheet.component.html',
+  styleUrls: ['./view-student-mark-sheet.component.scss']
 })
-export class ConfirmStudentMarksheetComponent implements OnInit {
+export class ViewStudentMarkSheetComponent implements OnInit {
   formNumber: string = '';
   studentId: number;
   studentDetails: any;
@@ -51,3 +51,5 @@ export class ConfirmStudentMarksheetComponent implements OnInit {
 
 
 }
+
+

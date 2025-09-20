@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { APP_BASE_HREF } from '@angular/common';
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
@@ -28,7 +29,12 @@ import { WINDOW_PROVIDERS } from './shared/services/window.service';
 import { AccountLayoutComponent } from "./layouts/account/account-layout.component";
 import { ToastrModule } from "ngx-toastr";
 import { ErrorInterceptorProvider } from "./_services/error.interceptor";
-import { HomeLayoutComponent } from "./layouts/home/home-layout.component";
+import { FileUploadModule } from "ng2-file-upload";
+import { NgSelectModule } from "@ng-select/ng-select";
+import { CommonModule } from "@angular/common";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { StudentMarkSheetComponent } from './pages/reg-form/student-mark-sheet/student-mark-sheet.component';
+import { ViewStudentMarkSheetComponent } from './pages/reg-form/view-student-mark-sheet/view-student-mark-sheet.component';
 
 var firebaseConfig = {
   apiKey: "YOUR_API_KEY", //YOUR_API_KEY
@@ -52,7 +58,7 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, AccountLayoutComponent, HomeLayoutComponent],
+  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, AccountLayoutComponent, StudentMarkSheetComponent, StudentMarkSheetComponent, ViewStudentMarkSheetComponent],
   imports: [
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -61,6 +67,8 @@ export function createTranslateLoader(http: HttpClient) {
     AngularFireAuthModule,
     NgbModule,
     NgxSpinnerModule,
+    FileUploadModule,
+    NgSelectModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -74,12 +82,17 @@ export function createTranslateLoader(http: HttpClient) {
       tapToDismiss: false,
     }),
     PerfectScrollbarModule,
-    SharedModule
+    SharedModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgbModule,
   ],
   providers: [
     AuthService,
     AuthGuard,
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG },
+    { provide: APP_BASE_HREF, useValue: '/' },
     WINDOW_PROVIDERS,
     ErrorInterceptorProvider
   ],
