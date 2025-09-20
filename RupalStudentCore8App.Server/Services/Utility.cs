@@ -128,9 +128,6 @@ namespace RupalStudentCore8App.Server.Services
                 string filePath = string.Empty;
                 switch (pathType)
                 {
-                    case GlobalConstant.FilePathType.Company:
-                        filePath = GlobalConstant.CompanyLogoPath;
-                        break;
                     case GlobalConstant.FilePathType.StudentImage:
                         filePath = GlobalConstant.FilePath.Student;
                         break;
