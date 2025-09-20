@@ -1,0 +1,6 @@
+@Apex14Core8App.Server_HostAddress = http://localhost:5074
+
+GET {{Apex14Core8App.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

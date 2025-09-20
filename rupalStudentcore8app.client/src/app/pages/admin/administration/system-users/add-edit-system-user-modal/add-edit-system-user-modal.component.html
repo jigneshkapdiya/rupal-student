@@ -1,0 +1,119 @@
+<ngx-spinner name="modalspin" type="timer" [fullScreen]="false"></ngx-spinner>
+
+<div class="modal-header">
+  <h4 class="modal-title pull-left">{{ id > 0 ? 'Edit' : 'Add' }} User</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit_Form()">
+  <div class="modal-body">
+
+    <!-- Role  -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="roleName">Role</label>
+      <div class="col-md-8">
+        <ng-select id="roleName" formControlName="roleName" [items]="roleList" bindLabel="name" bindValue="name" placeholder="Select" appendTo="body"
+          [ngClass]="{'is-invalid': form.get('roleName')?.touched && form.get('roleName')?.invalid,'is-valid': form.get('roleName')?.touched && form.get('roleName')?.valid}">
+        </ng-select>
+        <small class="form-text text-muted danger" *ngIf="form.get('roleName')?.touched && form.get('roleName')?.invalid">
+          <span *ngIf="form.get('roleName')?.errors?.required"> Role is required. </span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Full Name -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="fullName">Full Name</label>
+      <div class="col-md-8">
+        <input id="fullName" formControlName="fullName" type="text" class="form-control"
+          [ngClass]="{'is-invalid': form.get('fullName')?.touched && form.get('fullName')?.invalid,'is-valid': form.get('fullName')?.touched && form.get('fullName')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid">
+          <span *ngIf="form.get('fullName')?.errors?.required">Full Name is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Arabic Name -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="fullNameAr">Arabic Name</label>
+      <div class="col-md-8">
+        <input id="fullNameAr" formControlName="fullNameAr" type="text" class="form-control" name="fullNameAr"
+          [ngClass]="{'is-invalid': form.get('fullNameAr')?.touched && form.get('fullNameAr')?.invalid,'is-valid': form.get('fullNameAr')?.touched && form.get('fullNameAr')?.valid}" />
+      </div>
+    </div>
+
+    <!-- User Name -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="userName">User Name</label>
+      <div class="col-md-8">
+        <input id="userName" formControlName="userName" type="text" class="form-control" name="userName"
+          [ngClass]="{'is-invalid': form.get('userName')?.touched && form.get('userName')?.invalid,'is-valid': form.get('userName')?.touched && form.get('userName')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('userName')?.touched && form.get('userName')?.invalid">
+          <span *ngIf="form.get('userName')?.errors?.required">Username is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="email">Email</label>
+      <div class="col-md-8">
+        <input id="email" formControlName="email" type="text" class="form-control"
+          [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid,'is-valid': form.get('email')?.touched && form.get('email')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+          <span *ngIf="form.get('email')?.errors?.required">Email is required.</span>
+          <span *ngIf="form.get('email')?.errors?.email">Enter valid email.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="phoneNumber">Phone Number</label>
+      <div class="col-md-8">
+        <div class="input-group mb-1">
+          <div class="input-group-prepend">
+            <span class="input-group-text text-dark" dir="ltr">+966</span>
+          </div>
+          <input id="phoneNumber" formControlName="phoneNumber" type="text" class="form-control"
+            [ngClass]="{'is-invalid': form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid,'is-valid': form.get('phoneNumber')?.touched && form.get('phoneNumber')?.valid}" />
+        </div>
+        <small class="form-text text-muted danger" *ngIf="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid">
+          <span *ngIf="form.get('phoneNumber')?.errors?.required">Phone Number is required.</span>
+          <span *ngIf="form.get('phoneNumber')?.errors?.minlength">Phone Number must have at least 9 digits.</span>
+          <span *ngIf="form.get('phoneNumber')?.errors?.maxlength">Phone Number should not exceed 15 characters.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group row" *ngIf="id == 0">
+      <label class="col-md-4 label-control" for="password">Password</label>
+      <div class="col-md-8">
+        <div class="input-group mb-0">
+          <input id="password" formControlName="password" [type]="showPassword ? 'text' : 'password'" class="form-control"
+            [ngClass]="{'is-invalid': form.get('password')?.touched && form.get('password')?.invalid,'is-valid': form.get('password')?.touched && form.get('password')?.valid}" />
+          <div class="input-group-append">
+            <span class="input-group-text" (click)="onClick_TogglePassword()">
+              <i [class]="showPassword ? 'fa fa-eye-slash' : 'fa fa-eye'"></i>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary m-1">
+      <i class="ft-check-square" aria-hidden="true"></i>
+      Save
+    </button>
+    <button type="button" class="btn btn-outline-secondary m-1" (click)="activeModal.dismiss('Cross click')">
+      <i class="fa fa-times" aria-hidden="true"></i>
+      Cancel
+    </button>
+  </div>
+</form>

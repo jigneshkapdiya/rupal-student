@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RupalStudentCore8App.Server", "RupalStudentCore8App.Server\RupalStudentCore8App.Server.csproj", "{59EE9C1D-5D19-829D-3AF5-DF022B6A2A6F}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "rupalStudentcore8app.client", "rupalStudentcore8app.client\rupalStudentcore8app.client.esproj", "{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59EE9C1D-5D19-829D-3AF5-DF022B6A2A6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59EE9C1D-5D19-829D-3AF5-DF022B6A2A6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59EE9C1D-5D19-829D-3AF5-DF022B6A2A6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59EE9C1D-5D19-829D-3AF5-DF022B6A2A6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9BC6DAA-D744-CBA4-B765-BCB7AFB0AD32}.Release|Any CPU.Deploy.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCB0A456-0FEC-4EFF-B7E3-F5F1744CCC5C}
+	EndGlobalSection
+EndGlobal

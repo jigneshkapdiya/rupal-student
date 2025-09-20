@@ -1,0 +1,81 @@
+<section id="login">
+  <div class="row auth-height full-height-vh m-0">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+      <div class="card overflow-hidden">
+        <div class="card-content">
+          <div class="card-body auth-img">
+            <div class="row m-0">
+              <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center auth-img-bg p-3">
+                <img src="assets/image/login.png" alt="" class="img-fluid" width="300" height="230">
+              </div>
+              <div class="col-lg-6 col-12 px-4 py-3">
+                <h4 class="mb-2 card-title">Login</h4>
+                <p>Welcome back, please login to your account.</p>
+                <div *ngIf="alert.type">
+                  <ngb-alert [type]="alert.type" [dismissible]="false">
+                    <button type="button" class="close" aria-label="Close" (click)="closeAlert()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span [innerHtml]="alert.message"></span>
+                  </ngb-alert>
+                </div>
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                  <!--Start: Username-->
+                  <div class="form-group">
+                    <input type="text" formControlName="username" class="form-control" placeholder="Username" id="username" name="username" autocomplete="username"
+                      [ngClass]="{'is-invalid': form.get('username')?.touched && form.get('username')?.invalid,'is-valid': form.get('username')?.touched && form.get('username')?.valid}" />
+                    <div class="help-block mt-1 text-danger" *ngIf="form.get('username')?.touched && form.get('username')?.invalid">
+                      <i class="ft-alert-circle align-middle"></i> Username is required.
+                    </div>
+                  </div>
+                  <!--End: Username-->
+                  <!--Start: Password-->
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-control" placeholder="Password" id="password" name="password"
+                        autocomplete="current-password"
+                        [ngClass]="{'is-invalid': form.get('password')?.touched && form.get('password')?.invalid,'is-valid': form.get('password')?.touched && form.get('password')?.valid}" />
+                      <div class="input-group-append">
+                        <span class="input-group-text" (click)="togglePassword()">
+                          <i [class]="showPassword ? 'fa fa-eye' : 'fa fa-eye-slash'"></i>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="help-block text-danger" *ngIf="form.get('password')?.touched && form.get('password')?.invalid">
+                      <i class="ft-alert-circle align-middle"></i> Password is required.
+                    </div>
+                    <div class="help-block text-danger" *ngIf="form.get('password')?.touched && form.get('password')?.errors?.pattern">
+                      <i class="ft-alert-circle align-middle"></i> Password must be 8 characters long and must be a combination of uppercase, lowercase, and numbers.
+                    </div>
+                  </div>
+                  <!--End: Password-->
+                  <!--Start: Remember Me and Forgot Password-->
+                  <div class="d-sm-flex justify-content-between mb-3 font-small-2">
+                    <div class="remember-me mb-2 mb-sm-0">
+                      <div class="checkbox auth-checkbox">
+                        <input type="checkbox" formControlName="rememberMe" class="form-control" id="rememberMe">
+                        <label for="rememberMe"><span class="font-small-2 mb-3 font-weight-normal">Remember Me</span></label>
+                      </div>
+                    </div>
+                    <a href="javascript:;" (click)="openModal()">Forgot Password?</a>
+                  </div>
+                  <!--End: Remember Me and Forgot Password-->
+                  <!--Start: Login-->
+                  <div class="d-flex justify-content-between flex-sm-row flex-column">
+                    <!-- <a href="javascript:;" class="btn bg-light-primary mb-2 mb-sm-0">Register</a> -->
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoading$ | async">
+                      <span *ngIf="!(isLoading$ | async)">Login</span>
+                      <span *ngIf="isLoading$ | async">Logging in...</span>
+                    </button>
+                  </div>
+                  <!--End: Login-->
+                </form>
+                <ngx-spinner></ngx-spinner>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,15 @@
+.users-view {
+  .table-borderless {
+    td {
+      padding: 0.3rem 0;
+      &:first-child {
+        width: 10rem;
+      }
+    }
+  }
+  h6.text-primary {
+    span.text-bold-400 {
+      color: theme-color(primary) !important;
+    }
+  }
+}

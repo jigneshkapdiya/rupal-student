@@ -1,0 +1,52 @@
+<ngx-spinner name="modalspin" type="timer" [fullScreen]="false"></ngx-spinner>
+<div class="modal-header">
+  <h4 class="modal-title">Permissions Dashboard</h4>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body">
+  <div class="text-right mb-2">
+    <button type="button" class="btn btn-primary btn-sm" (click)="onClick_AddEdit(0)">
+      <i class="fa fa-plus mr-1" aria-hidden="true"></i> Add New
+    </button>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="table-responsive">
+        <table class="table table-striped table-sm table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th>Description (Arabic)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataList; let i = index">
+              <td data-title="Name"> {{ i +1 }} </td>
+              <td data-title="Description"> {{ item.name }} </td>
+              <td data-title="Description (Arabic)"> {{ item.description }}</td>
+              <td data-title="Action">{{ item.descriptionAr }}</td>
+              <td>
+                <a class="primary p-0" ngbTooltip="Edit" (click)="onClick_AddEdit(item.id)">
+                  <i class="ft-edit font-medium-3 mr-2"></i>
+                </a>
+                <a class="danger p-0" ngbTooltip="Cancel" (click)="onClick_Delete(item.id)">
+                  <i class="ft-trash-2 font-medium-3"></i>
+                </a>
+              </td>
+            </tr>
+            <tr *ngIf="dataList.length == 0">
+              <td colspan="5" class="text-center">
+                No Permission Found
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

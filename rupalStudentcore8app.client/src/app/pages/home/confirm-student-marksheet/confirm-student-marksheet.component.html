@@ -1,0 +1,86 @@
+<div class="container-fluid">
+  <!-- Success Confirmation Section -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow-sm border-0 mb-4 bg-success-subtle">
+        <div class="card-body text-center py-4">
+          <!-- Success Icon -->
+          <div class="mb-3">
+            <i class="fa fa-check-circle text-success" style="font-size: 3rem;"></i>
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-dark fw-bold mb-2">તમારું ફોર્મ સફળતાપૂર્વક સબમિટ થઇ ગયું છે!</h3>
+
+          <!-- Message -->
+          <p class="text-muted mb-2"></p>
+          <p class="mb-3">તમારો ફોર્મનો નોંધણી નંબર :
+            <span class="text-primary">{{ formNumber }}</span>
+          </p>
+
+          <!-- Thank You -->
+          <h5 class="text-success fw-bold">🙏 આભાર!</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Student Details Section -->
+  <div class="row" *ngIf="studentDetails">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-xl-4">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>મોબાઇલ નંબર:</td>
+                      <td>{{studentDetails.mobile}}</td>
+                    </tr>
+                    <tr>
+                      <td>શાખે :</td>
+                      <td class="users-view-latest-activity">{{studentDetails.familyName}}</td>
+                    </tr>
+                    <tr>
+                      <td>પિતાનું નામ:</td>
+                      <td class="users-view-verified">{{studentDetails.fatherName}}</td>
+                    </tr>
+                    <tr>
+                      <td>શિક્ષણ:</td>
+                      <td class="users-view-role">{{studentDetails.education}}</td>
+                    </tr>
+                    <tr>
+                      <td>શાળાનું નામ:</td>
+                      <td>{{studentDetails.schoolName}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.percentage">
+                      <td>ટકાવારી:</td>
+                      <td>{{studentDetails.percentage}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.sgpa">
+                      <td>એસજીપીએ:</td>
+                      <td>{{studentDetails.sgpa}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.cgpa">
+                      <td>સીજીપીએ:</td>
+                      <td>{{studentDetails.cgpa}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row mt-4">
+              <div class="col-12 text-center">
+                <button type="button" class="btn btn-outline-secondary" [routerLink]="'/home'">
+                  <i class="fa fa-home me-2"></i> હોમ પર જાઓ
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

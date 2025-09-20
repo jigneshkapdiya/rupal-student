@@ -1,0 +1,202 @@
+<!-- <div>
+  <div class="card">
+    <div class="card-header">
+      <div class="row">
+        <div class="col-md-12 form-group">
+          <ng-select (change)="onChangeRole($event)" appendTo="body" [items]="roleList" bindLabel="name" bindValue="name" [(ngModel)]="selectedRole" placeholder="Select"
+            id="roleName">
+          </ng-select>
+        </div>
+      </div>
+    </div>
+    <hr class="m-0">
+    <div class="card-content" *ngIf="permissionDetails">
+      <div class="card-body">
+        <div>
+          <div class="tree">
+            <ul>
+              <li *ngFor="let first of permissionDetails">
+                <span>
+                  <div class="custom-control custom-checkbox d-inline">
+                    <input type="checkbox" class="custom-control-input" [name]="first.name" [id]="first.name+first.id" (change)="onFirstLevelCheckBox($event,first.id)"
+                      [checked]="first.selected" [disabled]="first.name === 'Dashboard'">
+                    <label class="custom-control-label" [for]="first.name+first.id">
+                      <i class="mr-2" [ngClass]="first.icon"></i>
+                      <span>{{first.title}}</span>
+                    </label>
+                  </div>
+                </span>
+                <ul *ngIf="first.permissions.length !== 0 && first.selected">
+                  <li *ngFor="let rec of first.permissions">
+                    <span>
+                      <div class="custom-control custom-checkbox d-inline">
+                        <input type="checkbox" class="custom-control-input" [name]="rec.name" [id]="rec.name+rec.id" (change)="onChildCheckBoxForClaim($event, rec)"
+                          [checked]="rec.selected" [disabled]="rec.name === 'Dashboard.ViewDashboard'">
+                        <label class="custom-control-label" [for]="rec.name+rec.id">
+                          <i class="mr-2"></i>
+                          <span>{{rec.description}}</span>
+                        </label>
+                      </div>
+                    </span>
+                  </li>
+                </ul>
+                <ul *ngIf="first.subList.length !== 0 && first.selected">
+                  <li *ngFor="let second of first.subList">
+                    <span>
+                      <div class="custom-control custom-checkbox d-inline">
+                        <input type="checkbox" class="custom-control-input" [name]="second.name" [id]="second.name+second.id" (change)="onSecondLevelCheckBox($event, second)"
+                          [checked]="second.selected">
+                        <label class="custom-control-label" [for]="second.name+second.id">
+                          <i class="mr-2" [ngClass]="second.icon"></i>
+                          <span>{{second.title}}</span>
+                        </label>
+                      </div>
+                    </span>
+                    <ul *ngIf="second.permissions.length !== 0 && second.selected">
+                      <li *ngFor="let rec of second.permissions">
+                        <span>
+                          <div class="custom-control custom-checkbox d-inline">
+                            <input type="checkbox" class="custom-control-input" [name]="rec.name" [id]="rec.name+rec.id" (change)="onChildCheckBoxForClaim($event, rec)"
+                              [checked]="rec.selected">
+                            <label class="custom-control-label" [for]="rec.name+rec.id">
+                              <i class="mr-2"></i>
+                              <span>{{rec.description}}</span>
+                            </label>
+                          </div>
+                        </span>
+                      </li>
+                    </ul>
+                    <ul *ngIf="second.subList.length !== 0 && second.selected">
+                      <li *ngFor="let third of second.subList">
+                        <div class="custom-control custom-checkbox d-inline">
+                          <input type="checkbox" class="custom-control-input" [name]="third.name" [id]="third.name+third.id"
+                            (change)="onThirdLevelCheckBox($event, third, second.id, first.id)" [checked]="third.selected">
+                          <label class="custom-control-label" [for]="third.name+third.id">
+                            <i class="mr-2" [ngClass]="third.icon"></i>
+                            <span>{{third.title}}</span>
+                          </label>
+                        </div>
+                        <ul *ngIf="third.permissions.length !== 0 && third.selected">
+                          <li *ngFor="let rec of third.permissions">
+                            <span>
+                              <div class="custom-control custom-checkbox d-inline">
+                                <input type="checkbox" class="custom-control-input" [name]="rec.name" [id]="rec.name+rec.id" (change)="onChildCheckBoxForClaim($event, rec)"
+                                  [checked]="rec.selected">
+                                <label class="custom-control-label" [for]="rec.name+rec.id">
+                                  <i class="mr-2"></i>
+                                  <span>{{rec.description}}</span>
+                                </label>
+                              </div>
+                            </span>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <div class="row" *ngIf="menuId.length > 0">
+            <div class="col-md-12 text-center">
+              <button type="button" (click)="onClickSubmit()" class="btn btn-primary">
+                <i class="ft-check-square mr-1"></i> Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-2" *ngIf="!permissionDetails">
+    <div class="col-sm-12 text-center">
+      <img src="assets/image/login.png" alt="" class="img-fluid error-img mt-2" height="300" width="500">
+      <h1 class="mt-4">Select role for details</h1>
+      <div class="w-75 error-text mx-auto mt-4">
+        <p class="text-primary">Did not find details</p>
+        <p> Permission details not available.<br /></p>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="w-100 h-100" style="min-height: 100vh;">
+  <div class="card shadow rounded-4 w-100" style="min-height: 90vh;">
+    <div class="card-header bg-primary text-white rounded-top-4 d-flex align-items-center justify-content-between">
+      <h4>Role Permissions</h4>
+      <button class="btn btn-light btn-sm fw-bold" (click)="onClickSubmit()" *ngIf="menuId.length">
+        <i class="fas fa-save me-1"></i> Save Permissions
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row mb-4">
+        <label class="form-label fw-semibold">Select Role</label>
+        <ng-select [items]="roleList" bindLabel="name" bindValue="id" [(ngModel)]="selectedRole" (change)="onChangeRole($event)" placeholder="Choose a role" class="w-100">
+        </ng-select>
+      </div>
+      <div *ngIf="permissionDetails">
+        <ul class="list-group">
+          <ng-container *ngFor="let menu of permissionDetails">
+            <!-- First Level -->
+            <li class="list-group-item">
+              <div class="d-flex align-items-center">
+                <i [class]="menu.icon + ' text-primary m-1'"></i>
+                <input class="form-check-input me-2" type="checkbox" [checked]="menu.selected" (change)="onFirstLevelCheckBox($event, menu.id)">
+                <span class="fw-bold">{{ menu.name }}</span>
+              </div>
+              <!-- Permissions for first level -->
+              <div class="ms-4 my-2" *ngIf="menu.permissions?.length">
+                <span *ngFor="let perm of menu.permissions" class="form-check form-check-inline">
+                  <input class="form-check-input" type="checkbox" [checked]="perm.selected" (change)="onChildCheckBoxForClaim($event, perm)">
+                  <label class="form-check-label small">{{ perm.name }}</label>
+                </span>
+              </div>
+              <!-- Second Level -->
+              <ul class="list-group ms-4 mt-2" *ngIf="menu.subList?.length">
+                <ng-container *ngFor="let sub of menu.subList">
+                  <li class="list-group-item">
+                    <div class="d-flex align-items-center">
+                      <i [class]="sub.icon + ' text-primary m-1'"></i>
+                      <input class="form-check-input me-2" type="checkbox" [checked]="sub.selected" (change)="onSecondLevelCheckBox($event, sub)">
+                      <span>{{ sub.name }}</span>
+                    </div>
+                    <!-- Permissions for second level -->
+                    <div class="ms-4 my-2" *ngIf="sub.permissions?.length">
+                      <span *ngFor="let perm of sub.permissions" class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" [checked]="perm.selected" (change)="onChildCheckBoxForClaim($event, perm)">
+                        <label class="form-check-label small">{{ perm.name }}</label>
+                      </span>
+                    </div>
+                    <!-- Third Level -->
+                    <ul class="list-group ms-4 mt-2" *ngIf="sub.subList?.length">
+                      <ng-container *ngFor="let subsub of sub.subList">
+                        <li class="list-group-item">
+                          <div class="d-flex align-items-center">
+                            <i [class]="subsub.icon + ' text-primary m-1'"></i>
+                            <input class="form-check-input me-2" type="checkbox" [checked]="subsub.selected" (change)="onThirdLevelCheckBox($event, subsub, sub.id, menu.id)">
+                            <span>{{ subsub.name }}</span>
+                          </div>
+                          <!-- Permissions for third level -->
+                          <div class="ms-4 my-2" *ngIf="subsub.permissions?.length">
+                            <span *ngFor="let perm of subsub.permissions" class="form-check form-check-inline">
+                              <input class="form-check-input" type="checkbox" [checked]="perm.selected" (change)="onChildCheckBoxForClaim($event, perm)">
+                              <label class="form-check-label small">{{ perm.name }}</label>
+                            </span>
+                          </div>
+                        </li>
+                      </ng-container>
+                    </ul>
+                  </li>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+      <div *ngIf="!permissionDetails" class="text-center text-muted py-5">
+        <i class="fas fa-user-shield fa-2x mb-3"></i>
+        <div>Select a role to view and assign permissions.</div>
+      </div>
+    </div>
+  </div>
+</div>

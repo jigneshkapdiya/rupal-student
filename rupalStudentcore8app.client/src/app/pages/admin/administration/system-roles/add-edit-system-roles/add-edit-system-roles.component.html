@@ -1,0 +1,32 @@
+<ngx-spinner name="modalspin" type="timer" [fullScreen]="false"></ngx-spinner>
+<div class="modal-header">
+  <h5 class="modal-title">{{ roleId ? 'Edit Role' : 'Add Role' }}</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit_Form()">
+  <div class="modal-body">
+    <div class="form-group row d-flex align-items-center">
+      <label class="col-md-4 label-control" for="striped-form-1">
+        Role Name
+      </label>
+      <div class="col-md-8">
+        <input formControlName="name" type="text" id="striped-form-1" class="form-control"
+          [ngClass]="{'is-invalid': form.get('name')?.touched && form.get('name')?.invalid,'is-valid': form.get('name')?.touched && form.get('name')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+          <span *ngIf="form.get('name')?.errors?.required">Role name is required.</span>
+        </small>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary m-1">
+      <i class="ft-check-square mr-1" aria-hidden="true"></i> Save
+    </button>
+    <button type="button" class="btn btn-outline-secondary m-1" (click)="activeModal.dismiss('Cross click')">
+      <i class="fa fa-times mr-1" aria-hidden="true"></i> Cancel
+    </button>
+  </div>
+</form>

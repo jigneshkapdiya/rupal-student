@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-10">
+        <div class="alert bg-light-danger mb-2 alert-light-danger" role="alert" *ngIf="profileDetails?.twoFactorEnabled == false">
+          <i class="ft-x mr-1"></i> TFA has been disabled for your account.
+        </div>
+        <div class="alert bg-light-success mb-2 alert-light-success" role="alert" *ngIf="profileDetails?.twoFactorEnabled == true">
+          <i class="ft-check mr-2"></i>TFA has been enable for your account.
+        </div>
+      </div>
+      <div class="col-md-2 mb-2 row align-items-center">
+        <button type="button" class=" btn bg-light-primary mr-1 custom-icon mb-1 mb-lg-0" *ngIf="profileDetails?.twoFactorEnabled"
+          (click)="disableTFA(profileDetails?.id, profileDetails?.twoFactorEnabled)">
+          Disable it
+        </button>
+        <button type="button" class="btn btn-secondary bg-light-secondary mr-1 mb-1" *ngIf="!profileDetails?.twoFactorEnabled"
+          (click)="disableTFA(profileDetails?.id, profileDetails?.twoFactorEnabled)">
+          Enable it
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

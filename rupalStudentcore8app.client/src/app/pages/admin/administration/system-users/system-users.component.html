@@ -1,0 +1,104 @@
+<div class="row">
+  <div class="col-12">
+    <form [formGroup]="form" novalidate (ngSubmit)="onClick_Submit()">
+      <div class="row">
+        <div class="col-md-2 text-left">
+          <label for="searchText">Search</label>
+          <div class="input-group mb-0">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" formControlName="searchText" id="searchText" placeholder="Search" class="form-control">
+          </div>
+        </div>
+        <div class="form-group col-md-3 text-left">
+          <label>Role</label>
+          <ng-select [items]="roleList" formControlName="roleId" bindLabel="name" bindValue="id" placeholder="Select">
+          </ng-select>
+        </div>
+        <div class="col-md-4 d-flex align-items-center mt-1 mt-md-0">
+          <button type="submit" class="btn btn-warning m-1"> <i class="fa fa-search mr-1"></i> Filter</button>
+          <button type="button" class="btn btn-outline-secondary m-1" (click)="onClearFilter()"> <i class="fa fa-times mr-1"></i>Clear</button>
+        </div>
+        <div class="form-group col-md-3 text-right">
+          <button type="button" class="btn btn-primary mb-1 ml-auto mt-3" (click)="onClick_AddEdit(0)">
+            <i class="fa fa-plus mr-1" aria-hidden="true"></i> Add User
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover table-sm table-specialresponsive">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Full Name</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>2FA</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="text-left" *ngFor="let item of dataList; let i = index">
+                  <td data-title="#"> {{(page - 1) * pageSize + i +1}}</td>
+                  <td data-title="Full Name">{{ item.fullName }}</td>
+                  <td data-title="Username">{{ item.userName }}</td>
+                  <td data-title="Email">{{ item.email }}</td>
+                  <td data-title="Phone Number">{{ item.phoneNumber }}</td>
+                  <td data-title="2FA">
+                    <a class="success" ngbTooltip="2FA" (click)="onClick_Disable2FA(item.id, item.twoFactorEnabled)" *ngIf="item.twoFactorEnabled">
+                      <i class="fa-solid fa-mobile-screen-button"></i>
+                    </a>
+                    <a class="secondary" ngbTooltip="2FA" (click)="onClick_Disable2FA(item.id, item.twoFactorEnabled)" *ngIf="!item.twoFactorEnabled">
+                      <i class="fa-solid fa-mobile-screen-button"></i>
+                    </a>
+                  </td>
+                  <td data-title="Role">{{ item.roleInfo.name }}</td>
+                  <td data-title="Status">
+                    <div class="custom-control custom-switch custom-control-inline mb-1 mb-xl-0">
+                      <input type="checkbox" class="custom-control-input custom-switch-success" id="status-{{item.id}}" [checked]="item.status"
+                        (click)="onClick_Status($event, item.id, item.status)" />
+                      <label class="custom-control-label mr-1" for="status-{{item.id}}">
+                        <span>{{ item.status ? 'Active' : 'Inactive' }}</span>
+                      </label>
+                    </div>
+                  </td>
+                  <td data-title="Action">
+                    <a class="secondary" (click)="onClick_ChangePassword(item.id)"><i class="fa-solid fa-key mr-1"></i></a>
+                    <a class="warning" (click)="onClick_AddEdit(item.id)"><i class="ft-edit text-primary cursor-pointer ng-star-inserted mr-1"></i></a>
+                    <a class="danger" (click)="onClick_Delete(item.id)"><i class="ft-x font-medium mr-1"></i></a>
+                  </td>
+                </tr>
+                <tr *ngIf="dataList.length == 0">
+                  <td colspan="12" class="text-center">No record's found!</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="row mt-3">
+            <div class="col-md-3 mb-2"> Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ totalRecords}} entries
+            </div>
+            <div class="col-md-7 d-flex justify-content-end mb-0">
+              <ngb-pagination [collectionSize]="totalRecords" [page]="page" (pageChange)="onClick_PageChange($event)" [pageSize]="pageSize" [maxSize]="20">
+              </ngb-pagination>
+            </div>
+            <div class="col-md-2 mb-2">
+              <ng-select [items]="pageSizeList" [bindLabel]="arabic? 'nameAr' :'name'" bindValue="pageSize" [(ngModel)]="pageSize" [clearable]="false"
+                (change)="onChange_PageSize()"></ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<ngx-spinner name="modalspin" type="timer" [fullScreen]="false"></ngx-spinner>
+<div class="modal-header">
+  <h5 class="modal-title" id="exampleModalLabel">{{ menuId > 0 ? 'Edit Menu' : 'Add Menu' }}</h5>
+  <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss('Cross click')">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit_Menu()">
+  <div class="modal-body">
+    <!-- Name -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="name">Name</label>
+      <div class="col-md-8">
+        <input formControlName="name" type="text" id="name" class="form-control"
+          [ngClass]="{'is-invalid': form.get('name')?.touched && form.get('name')?.invalid,'is-valid': form.get('name')?.touched && form.get('name')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('name')?.touched && form.get('name')?.invalid">
+          <span *ngIf="form.get('name')?.errors?.required">Name is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Title -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="title">Title</label>
+      <div class="col-md-8">
+        <input formControlName="title" type="text" id="title" class="form-control"
+          [ngClass]="{'is-invalid': form.get('title')?.touched && form.get('title')?.invalid,'is-valid': form.get('title')?.touched && form.get('title')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('title')?.touched && form.get('title')?.invalid">
+          <span *ngIf="form.get('title')?.errors?.required">Title is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Title Arabic -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="titleAr">Title In Arabic</label>
+      <div class="col-md-8">
+        <input formControlName="titleAr" type="text" id="titleAr" class="form-control"
+          [ngClass]="{'is-invalid': form.get('titleAr')?.touched && form.get('titleAr')?.invalid,'is-valid': form.get('titleAr')?.touched && form.get('titleAr')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('titleAr')?.touched && form.get('titleAr')?.invalid">
+          <span *ngIf="form.get('titleAr')?.errors?.required">Title in Arabic is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Route -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="path">Route</label>
+      <div class="col-md-8">
+        <input formControlName="path" type="text" id="path" class="form-control"
+          [ngClass]="{'is-invalid': form.get('path')?.touched && form.get('path')?.invalid,'is-valid': form.get('path')?.touched && form.get('path')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('path')?.touched && form.get('path')?.invalid">
+          <span *ngIf="form.get('path')?.errors?.required">Route is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Icon -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="icon">Icon</label>
+      <div class="col-md-8">
+        <input formControlName="icon" type="text" id="icon" class="form-control"
+          [ngClass]="{'is-invalid': form.get('icon')?.touched && form.get('icon')?.invalid,'is-valid': form.get('icon')?.touched && form.get('icon')?.valid}" />
+        <small class="form-text text-muted danger" *ngIf="form.get('icon')?.touched && form.get('icon')?.invalid">
+          <span *ngIf="form.get('icon')?.errors?.required">Icon is required.</span>
+        </small>
+      </div>
+    </div>
+
+    <!-- Parent Menu -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="parentId">Parent Menu</label>
+      <div class="col-md-8">
+        <ng-select formControlName="parentId" [items]="parentMenuList" bindLabel="name" bindValue="id" placeholder="Select" id="parentId" appendTo="body"
+          [ngClass]="{'is-invalid': form.get('parentId')?.touched && form.get('parentId')?.invalid,'is-valid': form.get('parentId')?.touched && form.get('parentId')?.valid}">
+        </ng-select>
+      </div>
+    </div>
+
+    <!-- Has sub menu -->
+    <div class="form-group row">
+      <label class="col-md-4 label-control" for="class"></label>
+      <div class="col-md-8">
+        <div class="custom-control custom-checkbox checkbox-xl">
+          <input type="checkbox" formControlName="class" class="custom-control-input" name="class" id="class" />
+          <label class="custom-control-label" for="class"><span>Has Sub Menu</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="submit" class="btn btn-primary m-1">
+      <i class="ft-check-square mr-1" aria-hidden="true"></i> Save
+    </button>
+    <button type="button" class="btn btn-outline-secondary m-1" (click)="activeModal.dismiss('Cross click')">
+      <i class="fa fa-times mr-1" aria-hidden="true"></i>
+      Cancel
+    </button>
+  </div>
+</form>

@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+      <div class="col-md-12 text-md-right text-left">
+        <button type="button" class="btn btn-primary mr-1 mb-1" (click)="onClick_AddEdit(0)">
+          <i class="fa fa-plus mr-1" aria-hidden="true"></i> Add Role
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="card-content">
+    <div class="card-body table-responsive table-sm">
+      <table class="table m-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Role Name</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="text-left" *ngFor="let item of roleList; let i = index">
+            <td data-title="#"> {{ i + 1 }}</td>
+            <td data-title="Role Name">{{ item.name }}</td>
+            <td class="text-truncate">
+              <a (click)="onClick_AddEdit(item.id)" class="warning"><i class="ft ft-edit mr-1"></i></a>
+              <a class="danger" (click)="onClick_Delete(item.id)"><i class="ft-x font-medium mr-1"></i></a>
+            </td>
+          </tr>
+          <tr *ngIf="roleList.length == 0">
+            <td colspan="3" class="text-center">No record's found!</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

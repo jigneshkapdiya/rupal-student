@@ -1,0 +1,98 @@
+<section class="users-view">
+  <div class="row">
+    <div class="col-12 col-sm-7">
+      <div class="media d-flex align-items-center">
+        <div class="media-body ml-3">
+          <h4>
+            <span class="users-view-name mr-1">{{studentDetails.studentName}}</span>
+            <span class="text-muted font-medium-1">
+              <span></span>
+              <span class="users-view-username">{{studentDetails.studentNameGu}}</span>
+            </span>
+          </h4>
+          <span class="mr-1">Form Number:</span>
+          <span class="users-view-id">{{studentDetails.formNumber}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-5 d-flex justify-content-end align-items-center">
+      <button type=" button" class="btn btn-sm btn-outline-secondary" [routerLink]="['/home/confirmation/', this.studentId]">
+        <i class="fas fa-arrow-left me-1"></i> Back
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <!-- Card data starts -->
+      <div class="card">
+        <div class="card-content">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-xl-4">
+                <table class="table table-borderless">
+                  <tbody>
+                    <tr>
+                      <td>મોબાઇલ નંબર:</td>
+                      <td>{{studentDetails.mobile}}</td>
+                    </tr>
+                    <tr>
+                      <td>શાખે :</td>
+                      <td class="users-view-latest-activity">{{studentDetails.familyName}}</td>
+                    </tr>
+                    <tr>
+                      <td>પિતાનું નામ:</td>
+                      <td class="users-view-verified">{{studentDetails.fatherName}}</td>
+                    </tr>
+                    <tr>
+                      <td>શિક્ષણ:</td>
+                      <td class="users-view-role">{{studentDetails.education}}</td>
+                    </tr>
+                    <tr>
+                      <td>શાળાનું નામ:</td>
+                      <td>{{studentDetails.schoolName}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.percentage">
+                      <td>ટકાવારી:</td>
+                      <td>{{studentDetails.percentage}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.sgpa">
+                      <td>એસજીપીએ:</td>
+                      <td>{{studentDetails.sgpa}}</td>
+                    </tr>
+                    <tr *ngIf="studentDetails.cgpa">
+                      <td>સીજીપીએ:</td>
+                      <td>{{studentDetails.cgpa}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-12 col-xl-8 users-module">
+                <div class="table-responsive">
+                  <table class="table mb-0">
+                    <thead>
+                      <tr>
+                        <th scope="col">Attachment Type</th>
+                        <th scope="col">File</th>
+                        <th scope="col">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let attachment of attachmentList">
+                        <td>{{attachment.referenceType}}</td>
+                        <td data-title="File">
+                          <a class="primary" href="{{attachment.fileUrl}}" target="_blank">{{attachment.fileName}}</a>
+                        </td>
+                        <td>{{attachment.description}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Card data ends -->
+    </div>
+  </div>
+</section>

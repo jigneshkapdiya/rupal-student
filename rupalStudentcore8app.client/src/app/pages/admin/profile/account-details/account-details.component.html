@@ -1,0 +1,125 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="tab-content">
+        <div class="tab-pane" [ngClass]="{active: activeTab === 'general'}" id="general" role="tabpanel" aria-labelledby="general-tab">
+          <div class="media">
+            <img [src]="imageProfile" onError="this.src='assets/image/user.png'" alt="profile-img" class="rounded mr-3" height="64" width="64">
+            <div class="media-body">
+              <div class="col-12 d-flex flex-sm-row flex-column justify-content-start px-0 mb-sm-2">
+                <label class="btn btn-sm bg-light-primary mb-sm-0" for="select-files">Upload Photo</label>
+                <input type="file" id="select-files" hidden (change)="onFileChange($event)">
+                <button class="btn btn-sm bg-light-secondary ml-sm-2" (click)="resetImage()">Reset</button>
+              </div>
+              <p class="text-muted mb-0 mt-1 mt-sm-0">
+                <small>Allowed JPG, JPEG or PNG.</small>
+              </p>
+            </div>
+          </div>
+
+          <hr class="mt-1 mt-sm-2">
+          <!-- Start: Profile Form -->
+          <form [formGroup]="form" novalidate (ngSubmit)="onSubmit_Profile()">
+            <!--Start: Full Name-->
+            <div class="form-group row">
+              <label class="col-md-3 label-control" for="fullName">Full Name</label>
+              <div class="col-md-9">
+                <div class="position-relative has-icon-left">
+                  <input type="text" id="fullName" class="form-control" formControlName="fullName"
+                    [ngClass]="{'is-invalid': form.get('fullName')?.touched && form.get('fullName')?.invalid,'is-valid': form.get('fullName')?.touched && form.get('fullName')?.valid}" />
+                  <div class="form-control-position">
+                    <i class="ft-user"></i>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="form.get('fullName')?.touched && form.get('fullName')?.invalid">
+                    <span *ngIf="form.get('fullName')?.errors.required"> Full name is required</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!--End: Full Name-->
+            <!--Start: Full Name Arabic-->
+            <div class="form-group row">
+              <label class="col-md-3 label-control" for="fullNameAr">Arabic Name</label>
+              <div class="col-md-9">
+                <div class="position-relative has-icon-left">
+                  <input type="text" id="fullNameAr" class="form-control" formControlName="fullNameAr"
+                    [ngClass]="{'is-invalid': form.get('fullNameAr')?.touched && form.get('fullNameAr')?.invalid,'is-valid': form.get('fullNameAr')?.touched && form.get('fullNameAr')?.valid}" />
+                  <div class="form-control-position">
+                    <i class="ft-user"></i>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="form.get('fullNameAr')?.touched && form.get('fullNameAr')?.invalid">
+                    <span *ngIf="form.get('fullNameAr')?.errors.required"> Full arabic name is required.</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!--End: Full Name Arabic-->
+            <!--Start: Username-->
+            <div class="form-group row">
+              <label class="col-md-3 label-control" for="userName">Username</label>
+              <div class="col-md-9">
+                <div class="position-relative has-icon-left">
+                  <input type="text" id="userName" class="form-control" formControlName="userName"
+                    [ngClass]="{'is-invalid': form.get('userName')?.touched && form.get('userName')?.invalid,'is-valid': form.get('userName')?.touched && form.get('userName')?.valid}" />
+                  <div class="form-control-position">
+                    <i class="ft-user"></i>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="form.get('userName')?.touched && form.get('userName')?.invalid">
+                    <span *ngIf="form.get('userName')?.errors.required"> Username is required</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!--End: Username-->
+            <!--Start: Email-->
+            <div class="form-group row">
+              <label class="col-md-3 label-control" for="email">Email</label>
+              <div class="col-md-9">
+                <div class="position-relative has-icon-left">
+                  <input type="text" id="email" class="form-control" formControlName="email"
+                    [ngClass]="{'is-invalid': form.get('email')?.touched && form.get('email')?.invalid,'is-valid': form.get('email')?.touched && form.get('email')?.valid}" />
+                  <div class="form-control-position">
+                    <i class="ft-mail"></i>
+                  </div>
+                  <small class="form-text text-muted danger" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                    <span *ngIf="form.get('email')?.errors.required"> Email is required.</span>
+                    <span *ngIf="form.get('email')?.errors.pattern"> Enter a valid email</span>
+                  </small>
+                </div>
+              </div>
+            </div>
+            <!--End: Email-->
+            <!--Start: Phone Number-->
+            <div class="form-group row">
+              <label class="col-md-3 label-control" for="phoneNumber">Phone Number</label>
+              <div class="col-md-9">
+                <div class="input-group mb-1">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text text-dark" dir="ltr">+966</span>
+                  </div>
+                  <input type="text" id="phoneNumber" class="form-control pickatime" formControlName="phoneNumber" autocomplete="off"
+                    [ngClass]="{'is-invalid': form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid,'is-valid': form.get('phoneNumber')?.touched && form.get('phoneNumber')?.valid}" />
+                </div>
+
+                <small class="form-text text-muted danger" *ngIf="form.get('phoneNumber')?.touched && form.get('phoneNumber')?.invalid">
+                  <span *ngIf="form.get('phoneNumber')?.errors.minlength || form.get('phoneNumber')?.errors.maxlength">
+                    Phone number must have at least 9 digits
+                  </span>
+                  <span *ngIf="form.get('phoneNumber')?.errors.required">
+                    Phone number is required
+                  </span>
+                </small>
+              </div>
+            </div>
+            <!--End: Phone Number-->
+
+            <button type="submit" class="btn btn-primary mr-2 m-1 ">
+              <i class="ft-check-square mr-1"></i> Update
+            </button>
+          </form>
+          <!-- End: Profile Form -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

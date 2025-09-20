@@ -1,0 +1,75 @@
+<div class="card">
+  <div class="card-header">
+    <form [formGroup]="form" novalidate>
+      <div class="row text-left">
+        <div class="col-md-2 col-12 form-group mb-0">
+          <label for="parentId">Select Menu</label>
+          <ng-select formControlName="parentId" [items]="parentMenuList" bindLabel="name" bindValue="id" placeholder="Select" id="parentId">
+          </ng-select>
+        </div>
+        <div class="col-10 text-md-right text-left">
+          <div class="form-group form-inline"></div>
+          <div *ngIf="addPermission">
+            <button type="button" class="btn btn-primary" (click)="onClick_AddEdit(0)">
+              <i class="fa fa-plus mr-1" aria-hidden="true"></i> Add New
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="card-content">
+    <div class="card-body pt-1">
+      <div class="table-responsive">
+        <table class="table table-striped table-sm table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Title</th>
+              <th>Title Arabic</th>
+              <th>Icon</th>
+              <th>Path</th>
+              <th class="text-center">Has Child</th>
+              <th class="text-center">Order</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dataList; let i = index">
+              <td data-title="#"> {{i+1}} </td>
+              <td data-title="Name"> {{ item.name }} </td>
+              <td data-title="Title"> {{ item.title }}</td>
+              <td data-title="Title Arabic"> {{ item.titleAr }}</td>
+              <td data-title="Icon">
+                <i class="{{item.icon}} mr-1"></i> {{item.icon}}
+              </td>
+              <td data-title="Path"> {{ item.path }}</td>
+              <td class="text-center" data-title="Has Child"> {{ item.class.includes('has-sub') ? 'Yes': 'No' }}</td>
+              <td class="text-center" data-title="Order">
+                <div class="btn-group" role="group">
+                  <button type="button" class="btn btn-outline-primary" (click)="moveUp(item, i)" data-toggle="tooltip" placement="left" ngbTooltip="Move Up">
+                    <i class="ft-arrow-up"></i>
+                  </button>
+                  <button type="button" class="btn btn-outline-primary" (click)="moveDown(item, i)" data-toggle="tooltip" placement="right" ngbTooltip="Move Down">
+                    <i class="ft-arrow-down"></i>
+                  </button>
+                </div>
+              </td>
+              <td>
+                <a (click)="onClick_AddEdit(item.id)" *ngIf="editPermission" class="warning"><i class="ft ft-edit mr-1"></i></a>
+                <a (click)="onClick_Permission(item.id,item.title )" *ngIf="!item.class.includes('has-sub')" class="primary"><i class="ft-eye font-medium mr-1"></i></a>
+                <a class="danger" (click)="onClick_Delete(item.id)" *ngIf="deletePermission"><i class="ft-x font-medium mr-1"></i></a>
+              </td>
+            </tr>
+            <tr *ngIf="dataList.length == 0">
+              <td colspan="9" class="text-center">
+                No record's found!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

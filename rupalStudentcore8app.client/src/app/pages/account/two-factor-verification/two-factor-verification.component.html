@@ -1,0 +1,102 @@
+<section id="two-factor-verification">
+  <div class="row auth-height full-height-vh m-0">
+    <div class="col-12 d-flex align-items-center justify-content-center">
+      <div class="card overflow-hidden">
+        <div class="card-content">
+          <div class="card-body auth-img">
+            <div class="row m-0">
+              <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center auth-img-bg p-3">
+                <img src="assets/image/gallery/login.png" alt="" class="img-fluid" width="300" height="230">
+              </div>
+              <div class="col-lg-6 col-12 px-4 py-3">
+                <h4 class="mb-2 card-title">Two-Factor Authentication</h4>
+                <p>We’ve sent a 6-digit verification code to your email or SMS. Please enter the code below to continue.</p>
+
+                <div *ngIf="alert.type">
+                  <ngb-alert [type]="alert.type" [dismissible]="false">
+                    <button type="button" class="close" aria-label="Close" (click)="closeAlert()">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span [innerHtml]="alert.message"></span>
+                  </ngb-alert>
+                </div>
+
+                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                  <!--Start: Two Factor Code-->
+                  <div class="form-group">
+                    <label class="form-label text-center d-block mb-3">Verification Code</label>
+
+                    <!-- OTP Input Container -->
+                    <div class="otp-container d-flex justify-content-center mb-3">
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 0)" (keydown)="onOtpKeyDown($event, 0)"
+                        (paste)="onOtpPaste($event)" #otp0 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 1)" (keydown)="onOtpKeyDown($event, 1)"
+                        (paste)="onOtpPaste($event)" #otp1 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 2)" (keydown)="onOtpKeyDown($event, 2)"
+                        (paste)="onOtpPaste($event)" #otp2 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 3)" (keydown)="onOtpKeyDown($event, 3)"
+                        (paste)="onOtpPaste($event)" #otp3 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 4)" (keydown)="onOtpKeyDown($event, 4)"
+                        (paste)="onOtpPaste($event)" #otp4 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                      <input type="text" class="otp-input form-control" maxlength="1" (input)="onOtpInput($event, 5)" (keydown)="onOtpKeyDown($event, 5)"
+                        (paste)="onOtpPaste($event)" #otp5 autocomplete="off"
+                        [ngClass]="{'is-invalid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid,'is-valid': form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.valid}" />
+                    </div>
+
+                    <!-- Hidden input for form control -->
+                    <input type="hidden" formControlName="twoFactorCode" />
+
+                    <small class="form-text text-muted text-center d-block">
+                      Enter the 6-digit code from your authenticator app
+                    </small>
+
+                    <div class="text-danger text-center mt-2" *ngIf="form.get('twoFactorCode')?.errors.required">
+                      <small>Verification code is required.</small>
+                    </div>
+                    <div class="text-danger text-center mt-2"
+                      *ngIf="form.get('twoFactorCode')?.touched && form.get('twoFactorCode')?.invalid && (form.get('twoFactorCode')?.errors?.pattern || form.get('twoFactorCode')?.errors?.minlength || form.get('twoFactorCode')?.errors?.maxlength)">
+                      <small>Please enter a valid 6-digit code.</small>
+                    </div>
+                  </div>
+                  <!--End: Two Factor Code-->
+
+                  <!--Start: Actions-->
+                  <div class="d-flex justify-content-between flex-sm-row flex-column">
+                    <button type="button" class="btn btn-outline-secondary mb-2 mb-sm-0" (click)="resendCode()" [disabled]="isLoading$ | async">
+                      Resend Code
+                    </button>
+                    <button type="submit" class="btn btn-primary" [disabled]="isLoading$ | async">
+                      <span *ngIf="!(isLoading$ | async)">
+                        <i class="fa fa-shield-alt mr-1"></i>
+                        Verify
+                      </span>
+                      <span *ngIf="isLoading$ | async">
+                        <i class="fa fa-spinner fa-spin mr-1"></i>
+                        Verifying...
+                      </span>
+                    </button>
+                  </div>
+                  <!--End: Actions-->
+
+                  <!--Start: Back to Login-->
+                  <div class="text-center mt-3">
+                    <a [routerLink]="['/auth/login']" class="text-muted">
+                      <i class="fa fa-arrow-left mr-1"></i>
+                      Back to Login
+                    </a>
+                  </div>
+                  <!--End: Back to Login-->
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
