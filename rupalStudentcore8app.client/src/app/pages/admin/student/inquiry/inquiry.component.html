@@ -56,20 +56,20 @@
               <td data-title="#">{{pageSize *(page-1)+i+1}}</td>
               <td data-title="Form Number">{{item.formNumber}}</td>
               <td data-title="Student Name">
-                {{item.studentName}}
-                <div *ngIf="item.studentNameGu" class="text-muted small">
-                  {{item.studentNameGu}}
+                {{item.studentNameGu}}
+                <div *ngIf="item.studentName" class="text-muted small">
+                  {{item.studentName}}
                 </div>
               </td>
-              <td data-title="Father Name">{{item.fatherName}}
-                <div *ngIf="item.fatherNameGu" class="text-muted small">
-                  {{item.fatherNameGu}}
+              <td data-title="Father Name">{{item.fatherNameGu}}
+                <div *ngIf="item.fatherName" class="text-muted small">
+                  {{item.fatherName}}
                 </div>
               </td>
               <td data-title="Mobile">{{item.mobile}}</td>
-              <td data-title="Family Name">{{item.familyName}}
-                <div *ngIf="item.familyNameGu" class="text-muted small">
-                  {{item.familyNameGu}}
+              <td data-title="Family Name">{{item.familyNameGu}}
+                <div *ngIf="item.familyName" class="text-muted small">
+                  {{item.familyName}}
                 </div>
               </td>
               <td data-title="Education">{{item.education}}</td>
