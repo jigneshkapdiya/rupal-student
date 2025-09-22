@@ -6,7 +6,10 @@
         <div class="row">
           <!-- Mobile Number -->
           <div class="col-md-6 form-group">
-            <label class="form-label">Mobile Number</label>
+            <div class="d-flex justify-content-between">
+              <label for="mobile">Mobile Number</label>
+              <label for="mobile">મોબાઇલ નંબર</label>
+            </div>
             <input type="text" class="form-control" formControlName="mobile" placeholder="Enter mobile number"
               [ngClass]="{'is-invalid': form.get('mobile')?.touched && form.get('mobile')?.invalid}">
             <div *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid" class="invalid-feedback d-block">
@@ -17,8 +20,8 @@
           <!-- Family Name -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="familyName" class="label-control mb-0">Surname</label>
-              <label for="familyName" class="label-control d-block text-muted small mb-0">તમારી શાખ</label>
+              <label for="familyName">Surname</label>
+              <label for="familyName">તમારી શાખે </label>
             </div>
             <ng-select id="familyName" formControlName="familyName" [items]="familyNameList" placeholder="Select" bindLabel="name" bindValue="name"
               (change)="onFamilyChange($event)"
@@ -35,8 +38,8 @@
           <!-- Student Name -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="studentName" class="label-control mb-0">Student Name In English</label>
-              <label for="studentName" class="label-control d-block text-muted small mb-0">વિદ્યાર્થીનું નામ</label>
+              <label for="studentName">Student Name In English</label>
+              <label for="studentName">વિદ્યાર્થીનું નામ અંગ્રેજીમાં</label>
             </div>
             <input type="text" class="form-control" formControlName="studentName" placeholder="Enter name in English"
               [ngClass]="{'is-invalid': form.get('studentName')?.touched && form.get('studentName')?.invalid,'is-valid': form.get('studentName')?.touched && form.get('studentName')?.valid }">
@@ -49,8 +52,8 @@
           <!-- Student Name In Gujarati -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="studentNameGu" class="label-control mb-0">Student Name In Gujarati</label>
-              <label for="studentNameGu" class="label-control d-block text-muted small mb-0">વિદ્યાર્થીનું નામ</label>
+              <label for="studentName">Student Name In Gujarati</label>
+              <label for="studentName">વિદ્યાર્થીનું નામ ગુજરાતીમાં</label>
             </div>
             <input type="text" class="form-control" formControlName="studentNameGu" placeholder="Enter name in Gujarati"
               [ngClass]="{'is-invalid': form.get('studentNameGu')?.touched && form.get('studentNameGu')?.invalid,'is-valid': form.get('studentNameGu')?.touched && form.get('studentNameGu')?.valid}">
@@ -63,8 +66,8 @@
           <!-- Father's Name -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="fatherName" class="label-control mb-0">Father Name In English</label>
-              <label for="fatherName" class="label-control d-block text-muted small mb-0">પિતાનું નામ</label>
+              <label for="fatherName">Father Name In English</label>
+              <label for="fatherName">પિતાનું નામ અંગ્રેજીમાં</label>
             </div>
             <input type="text" class="form-control" formControlName="fatherName" placeholder="Enter father's name in English" [ngClass]="{'is-invalid': form.get('fatherName')?.touched && form.get('fatherName')?.invalid,
                           'is-valid': form.get('fatherName')?.touched && form.get('fatherName')?.valid}">
@@ -77,8 +80,8 @@
           <!-- Father's Name In Gujarati -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="fatherName" class="label-control mb-0">Father Name In Gujarati</label>
-              <label for="fatherName" class="label-control d-block text-muted small mb-0">પિતાનું નામ</label>
+              <label for="fatherName">Father Name In Gujarati</label>
+              <label for="fatherName">પિતાનું નામ ગુજરાતીમાં </label>
             </div>
             <input type="text" class="form-control" formControlName="fatherNameGu" placeholder="Enter father's name in Gujarati"
               [ngClass]="{'is-invalid': form.get('fatherNameGu')?.touched && form.get('fatherNameGu')?.invalid,'is-valid': form.get('fatherNameGu')?.touched && form.get('fatherNameGu')?.valid}">
@@ -91,8 +94,8 @@
           <!-- School and Education -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="schoolName" class="label-control mb-0">School Name</label>
-              <label for="schoolName" class="label-control d-block text-muted small mb-0">શાળાનું નામ</label>
+              <label for="schoolName">School Name</label>
+              <label for="schoolName">શાળાનું નામ</label>
             </div>
             <input type="text" class="form-control" formControlName="schoolName" placeholder="Enter school name"
               [ngClass]="{'is-invalid': form.get('schoolName')?.touched && form.get('schoolName')?.invalid, 'is-valid': form.get('schoolName')?.touched &&  form.get('schoolName')?.valid }">
@@ -104,8 +107,8 @@
           <!-- Education -->
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
-              <label for="education" class="label-control mb-0">Education</label>
-              <label for="education" class="label-control d-block text-muted small mb-0">શિક્ષણ</label>
+              <label for="education">Education</label>
+              <label for="education">શિક્ષણ</label>
             </div>
             <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="Select Education" formControlName="education"
               [ngClass]="{'is-invalid': form.get('education')?.touched && form.get('education')?.invalid}">
@@ -120,7 +123,10 @@
         <div class="row">
           <!-- Percentage -->
           <div class="col-md-4">
-            <label class="form-label">Percentage</label>
+            <div class="d-flex justify-content-between">
+              <label for="education">Percentage</label>
+              <label for="education">ટકાવારી</label>
+            </div>
             <div class="input-group">
               <input type="number" class="form-control" formControlName="percentage" placeholder="0.00" step="0.01" min="0" max="100"
                 [ngClass]="{'is-invalid': (form.get('percentage')?.touched || form.get('percentage')?.dirty) && form.get('percentage')?.invalid}">
@@ -137,7 +143,10 @@
 
           <!-- SGPA -->
           <div class="col-md-4">
-            <label class="form-label">SGPA</label>
+            <div class="d-flex justify-content-between">
+              <label for="education">SGPA</label>
+              <label for="education">એસજીપીએ</label>
+            </div>
             <input type="number" class="form-control" formControlName="sgpa" placeholder="0.00" step="0.01" min="0" max="10"
               [ngClass]="{'is-invalid': (form.get('sgpa')?.touched || form.get('sgpa')?.dirty) && form.get('sgpa')?.invalid}">
             <div *ngIf="form.get('sgpa')?.touched || form.get('sgpa')?.dirty" class="text-danger small mt-1">
@@ -149,7 +158,10 @@
 
           <!-- CGPA -->
           <div class="col-md-4">
-            <label class="form-label">CGPA</label>
+            <div class="d-flex justify-content-between">
+              <label for="education">CGPA</label>
+              <label for="education">સીજીપીએ</label>
+            </div>
             <input type="number" class="form-control" formControlName="cgpa" placeholder="0.00" step="0.01" min="0" max="10"
               [ngClass]="{'is-invalid': (form.get('cgpa')?.touched || form.get('cgpa')?.dirty) && form.get('cgpa')?.invalid}">
             <div *ngIf="form.get('cgpa')?.touched || form.get('cgpa')?.dirty" class="text-danger small mt-1">
@@ -193,7 +205,7 @@
                       </td>
                       <td data-title="Description">{{item.description}}</td>
                       <td data-title="Action" class="text-center" [ngbTooltip]="'Delete Attachment'">
-                        <a class="danger p-0" (click)="onDeleteAttachment(item.id)">
+                        <a class="danger p-0" (click)="removeAttachment(item)">
                           <i class="ft-trash-2 font-medium-3"></i>
                         </a>
                       </td>
@@ -211,10 +223,13 @@
         <div class="row mb-4">
           <!-- Upload Section -->
           <div class="col-md-4">
-            <div ng2FileDrop [uploader]="uploader" class="border border-secondary border-dashed p-4 text-center rounded bg-light mb-2">
-              <strong>DRAG & DROP FILES HERE</strong>
-            </div>
-            <input type="file" ng2FileSelect [uploader]="uploader" multiple class="form-control-file mt-2" />
+            <label class="custom-file mb-3">
+              <div ng2FileDrop [uploader]="uploader" class="well well-lg my-drop-zone">
+                DRAG & DROP FILES HERE
+              </div>
+              <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+              <span class="custom-file-control"></span>
+            </label>
           </div>
 
           <!-- File List Section -->

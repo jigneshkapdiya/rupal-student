@@ -1,341 +1,359 @@
-<div class="card shadow rounded-4 mb-4">
-  <div class="card-header bg-light-info text-dark rounded-top-4">
-    <div class="d-flex align-items-center">
-      <img src="assets/image/user.png" alt="Profile" class="rounded-circle me-3" style="width: 60px; height: 60px; object-fit: cover;">
-      <h4 class="mb-0">રૂપાલ કેલવાણી મંડળ - માર્કશીટ રજીસ્ટ્રેશન {{currentYear}}</h4>
+<div class="container py-5">
+  <div class="card">
+    <!-- Header -->
+    <div class="card-header bg-light-primary text-center">
+      <h1 class="text-primary"><i class="fa-solid fa-award"></i> રૂપાલ કેળવણી મંડળ - માર્કશીટ રજીસ્ટ્રેશન
+        {{currentYear}}
+      </h1>
     </div>
-  </div>
-  <div class="card-body">
-    <p class="mb-3">
-      રૂપાલ કેલવાણી મંડળ દ્વારા સંચાલિત ઇનામ વિતરણ કાર્યક્રમ {{currentYear}} માં ભાગ લેવા જરૂરી માહિતી અને માર્કશીટ સાથે
-      આ ફોર્મ ભરૂં.
-    </p>
-    <!-- Note Section -->
-    <div class="alert alert-info mb-0">
-      <div class="d-flex">
-        <i class="fas fa-info-circle me-2 mt-1"></i>
-        <div>
-          <strong>નોધ :-</strong><br>
-          - એક વિદ્યાર્થી માટે એક જ વાર ફોર્મ ભરો.<br>
-          - નોંધણીની અંતિમ તારીખ 2/10/2025 રહેશે.<br>
-          - માર્કશીટ નો ફોટો કે PDFમાં અક્ષર વાંચાય એવી ફાઇલ અપલોડ કરવી.<br>
-          - વધુ માહિતી માટે સંપર્ક કરો - જિગ્નેશ જી પટેલ <i class="fas fa-phone ms-1"></i> 9979872208
+    <hr class="m-0">
+    <div class="card-body">
+      <p class="font-medium-3 text-dark">રૂપાલ કેળવણી મંડળ દ્વારા આયોજિત ઇનામ વિતરણ કાર્યક્રમ {{currentYear}} માં ભાગ
+        લેવા માટે જરૂરી
+        માહિતી અને માર્કશીટ સાથે આ ફોર્મ ભરો અને સબમિટ કરો.</p>
+
+      <h5><i class="fas fa-hand-point-right text-muted m-2"></i>ખાસ નોંધ:</h5>
+      <ul class="font-medium-2">
+        <li class="mb-1">
+          નોંધણીની અંતિમ તારીખ 02/10/2025 રહેશે. (દશેરા સુધી)
+        </li>
+        <li class="mb-1">
+          એક વિદ્યાર્થી માટે એક જ વાર ફોર્મ ભરવુ.
+        </li>
+        <li class="mb-1">
+          માર્કશીટ નો ફોટો કે PDFમાં અક્ષર વાંચાય એવી ફાઇલ અપલોડ કરવી.
+        </li>
+        <li class="mb-1">
+          વધુ માહિતી માટે સંપર્ક કરો -
+          <span class="text-warning text-bold-600"> જીજ્ઞેશ જે પટેલ <i class="fas fa-mobile mx-1"></i> +91 99798
+            72208</span>
+        </li>
+      </ul>
+    </div>
+    <hr class="m-0">
+    <!-- start: form -->
+    <form [formGroup]="form" (ngSubmit)="onClick_Submit()">
+      <div class="card-body">
+        <!-- Personal Information Section -->
+        <div class="row mb-3">
+          <div class="col-12 border-bottom ">
+            <h6 class="text-primary">
+              <i class="fas fa-user-circle mr-2"></i> વ્યક્તિગત માહિતી
+            </h6>
+          </div>
         </div>
+        <div class="row">
+          <!-- Mobile Number -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="mobile">Mobile Number</label>
+              <label for="mobile">મોબાઇલ નંબર</label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="mobile" placeholder="મોબાઇલ નંબર દાખલ કરો"
+                [ngClass]="{'is-invalid': form.get('mobile')?.touched && form.get('mobile')?.invalid}">
+            </div>
+            <small class="form-text text-danger" *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">
+              <ng-container *ngIf="form.get('mobile')?.errors as errors">
+                <span *ngIf="errors?.['required']">
+                  મોબાઇલ નંબર જરૂરી છે.
+                </span>
+                <span *ngIf="!errors?.['required'] && errors?.['pattern']">
+                  ફક્ત નંબર જ દાખલ કરો.
+                </span>
+                <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && errors?.['minlength']">
+                  મોબાઇલ નંબર ૧૦ અંકનો હોવો જોઈએ.
+                </span>
+                <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && !errors?.['minlength'] && errors?.['maxlength']">
+                  મોબાઇલ નંબર ૧૦ અંકનો હોવો જોઈએ.
+                </span>
+              </ng-container>
+            </small>
+          </div>
+          <!-- Family Name -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="familyName">Surname</label>
+              <label for="familyName">તમારી શાખ</label>
+            </div>
+            <ng-select id="familyName" formControlName="familyName" [items]="familyNameList" placeholder="તમારી શાખ પસંદ કરો" bindLabel="name" bindValue="name"
+              (change)="onFamilyChange($event)"
+              [ngClass]="{'is-invalid': form.get('familyName')?.touched && form.get('familyName')?.invalid,'is-valid': form.get('familyName')?.touched && form.get('familyName')?.valid}">
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.name }} - {{ item.nameGU }}
+              </ng-template>
+            </ng-select>
+            <small class="form-text text-muted danger" *ngIf="form.get('familyName')?.touched && form.get('familyName')?.invalid">
+              <span *ngIf="form.get('familyName').errors.required">શાખે જરૂરી છે.</span>
+            </small>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Student Name -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="studentName">Student Name (In English)</label>
+              <label for="studentName">વિદ્યાર્થીનું નામ (અંગ્રેજીમાં)</label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="studentName" placeholder="વિદ્યાર્થીનું નામ અંગ્રેજીમાં દાખલ કરો"
+                [ngClass]="{'is-invalid': form.get('studentName')?.touched && form.get('studentName')?.invalid,'is-valid': form.get('studentName')?.touched && form.get('studentName')?.valid}">
+            </div>
+            <small class="form-text text-muted danger" *ngIf="(form.get('studentName')?.touched || form.get('studentNameGU')?.touched)
+                    && (form.get('studentName')?.errors?.required || form.get('studentNameGU')?.errors?.required)">
+              વિદ્યાર્થીનું નામ અંગ્રેજીમાં અથવા વિદ્યાર્થીનું નામ ગુજરાતીમાં જરૂરી છે.
+            </small>
+          </div>
+
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="studentName">Student Name (In Gujarati)</label>
+              <label for="studentName">વિદ્યાર્થીનું નામ (ગુજરાતીમાં)</label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-language"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="studentNameGU" placeholder="વિદ્યાર્થીનું નામ ગુજરાતીમાં દાખલ કરો." [ngClass]="{'is-invalid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.invalid,'is-valid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.valid
+                        }">
+            </div>
+            <small class="form-text text-muted danger" *ngIf="(form.get('studentName')?.touched || form.get('studentNameGU')?.touched)
+                    && (form.get('studentName')?.errors?.required || form.get('studentNameGU')?.errors?.required)">
+              વિદ્યાર્થીનું નામ અંગ્રેજી અથવા વિદ્યાર્થી નામ ગુજરાતી હોવું જરૂરી છે.
+            </small>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Father's Name -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="fatherName">Father Name In English</label>
+              <label for="fatherName">પિતાનું નામ અંગ્રેજીમાં</label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-male"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="fatherName" placeholder="પિતાનું નામ અંગ્રેજીમાં લખો." [ngClass]="{
+                        'is-invalid': form.get('fatherName')?.touched && form.get('fatherName')?.invalid,
+                        'is-valid': form.get('fatherName')?.touched && form.get('fatherName')?.valid
+                      }">
+            </div>
+            <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
+                    && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
+              પિતાનું નામ અંગ્રેજી અથવા પિતાનું નામ ગુજરાતીમાં હોવું જરૂરી છે.
+            </small>
+          </div>
+
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="fatherName">Father Name In Gujarati</label>
+              <label for="fatherName">પિતાનું નામ ગુજરાતીમાં </label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-language"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="fatherNameGU" placeholder="પિતાનું નામ ગુજરાતીમાં લખો." [ngClass]="{
+                          'is-invalid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.invalid,
+                          'is-valid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.valid
+                        }">
+            </div>
+            <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
+                    && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
+              પિતાનું નામ અંગ્રેજી અથવા પિતાનું નામ ગુજરાતીમાં લખવું જરૂરી છે.
+            </small>
+          </div>
+        </div>
+        <div class="row">
+          <!-- School and Education -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="schoolName">School Name</label>
+              <label for="schoolName">શાળાનું નામ</label>
+            </div>
+            <div class="input-group input-group-lg">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-school"></i></span>
+              </div>
+              <input type="text" class="form-control" formControlName="schoolName" placeholder="શાળાનું નામ દાખલ કરો"
+                [ngClass]="{'is-invalid': form.get('schoolName')?.touched && form.get('schoolName')?.invalid, 'is-valid': form.get('schoolName')?.touched &&  form.get('schoolName')?.valid }">
+            </div>
+            <small class="form-text text-muted danger" *ngIf="form.get('schoolName')?.touched && form.get('schoolName')?.invalid">
+              શાળાનું નામ જરૂરી છે.
+            </small>
+          </div>
+
+          <!-- Education -->
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="education">Education</label>
+              <label for="education">શિક્ષણ</label>
+            </div>
+            <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="શિક્ષણ પસંદ કરો" formControlName="education" (change)="onEducationChange($event)"
+              [ngClass]="{'is-invalid': form.get('education')?.touched && form.get('education')?.invalid}">
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.name }} - {{ item.nameGu }}
+              </ng-template>
+            </ng-select>
+            <small class="form-text text-muted danger" *ngIf="form.get('education')?.touched && form.get('education')?.invalid">
+              <span *ngIf="form.get('education').errors.required">શિક્ષણ જરૂરી છે.</span>
+            </small>
+          </div>
+        </div>
+
+        <!-- Marks Section -->
+        <div class="row mt-2 mb-3">
+          <div class="col-12 border-bottom">
+            <h6 class="text-primary">
+              <i class="fas fa-hashtag mr-2"></i>મેળવેલ ગુણ %
+            </h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p>તમારી માર્કશીટ મુજબ મેળવેલ ટકાવારી (%) દાખલ કરો, જો ટકાવારી ના હોય તો SGPA અને CGPA દાખલ કરવા. </p>
+          </div>
+        </div>
+        <div class="row">
+          <!-- Percentage -->
+          <div class="col-md-3">
+            <div class="d-flex justify-content-between">
+              <label for="education">Percentage</label>
+              <label for="education">ટકાવારી</label>
+            </div>
+            <div class="input-group">
+              <input type="number" class="form-control" formControlName="percentage" placeholder="0.00" step="0.01" min="0" max="100"
+                [ngClass]="{'is-invalid': (form.get('percentage')?.touched || form.get('percentage')?.dirty) && form.get('percentage')?.invalid}">
+              <div class="input-group-append">
+                <span class="input-group-text">%</span>
+              </div>
+            </div>
+            <div *ngIf="form.get('percentage')?.touched || form.get('percentage')?.dirty" class="text-danger small mt-1">
+              <div *ngIf="form.get('percentage')?.hasError('pattern')">Invalid format (e.g., 75.50)</div>
+              <div *ngIf="form.get('percentage')?.hasError('min')">Cannot be less than 0</div>
+              <div *ngIf="form.get('percentage')?.hasError('max')">Cannot exceed 100</div>
+            </div>
+          </div>
+          <div class="col-md-3 text-center">
+            <p class="text-muted mt-2">અથવા</p>
+          </div>
+          <!-- SGPA -->
+          <div class="col-md-3">
+            <div class="d-flex justify-content-between">
+              <label for="education">SGPA</label>
+              <label for="education">એસજીપીએ</label>
+            </div>
+            <input type="number" class="form-control" formControlName="sgpa" placeholder="0.00" step="0.01" min="0" max="10"
+              [ngClass]="{'is-invalid': (form.get('sgpa')?.touched || form.get('sgpa')?.dirty) && form.get('sgpa')?.invalid}">
+            <div *ngIf="form.get('sgpa')?.touched || form.get('sgpa')?.dirty" class="text-danger small mt-1">
+              <div *ngIf="form.get('sgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
+              <div *ngIf="form.get('sgpa')?.hasError('min')">Cannot be less than 0</div>
+              <div *ngIf="form.get('sgpa')?.hasError('max')">Cannot exceed 10</div>
+            </div>
+          </div>
+
+          <!-- CGPA -->
+          <div class="col-md-3">
+            <div class="d-flex justify-content-between">
+              <label for="education">CGPA</label>
+              <label for="education">સીજીપીએ</label>
+            </div>
+            <input type="number" class="form-control" formControlName="cgpa" placeholder="0.00" step="0.01" min="0" max="10"
+              [ngClass]="{'is-invalid': (form.get('cgpa')?.touched || form.get('cgpa')?.dirty) && form.get('cgpa')?.invalid}">
+            <div *ngIf="form.get('cgpa')?.touched || form.get('cgpa')?.dirty" class="text-danger small mt-1">
+              <div *ngIf="form.get('cgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
+              <div *ngIf="form.get('cgpa')?.hasError('min')">Cannot be less than 0</div>
+              <div *ngIf="form.get('cgpa')?.hasError('max')">Cannot exceed 10</div>
+            </div>
+          </div>
+
+          <!-- At least one mark required message -->
+          <div class="col-12" *ngIf="showMarksError()">
+            <div class="alert alert-warning py-2 small">
+              <i class="fas fa-exclamation-triangle me-1"></i>
+              કૃપા કરીને ટકાવારી અથવા SGPA અને CGPA દાખલ કરો.
+            </div>
+          </div>
+        </div>
+        <div class="row mt-3 mb-3">
+          <div class="col-12 border-bottom">
+            <h6 class="text-primary">
+              <i class="fas fa-file-pdf mr-2"></i>માર્કશીટના ફોટો અથવા PDF ફાઈલ
+            </h6>
+          </div>
+        </div>
+        <!-- Attachment Section -->
+        <div class="row mt-2">
+          <!-- Upload Section -->
+          <div class="col-md-4 pb-3">
+            <label class="custom-file d-contents">
+              <div ng2FileDrop [uploader]="uploader" class="well well-lg my-drop-zone">
+                ફાઇલો અહીં ખેંચો અને છોડો
+              </div>
+              <input type="file" ng2FileSelect [uploader]="uploader" multiple>
+              <span class="custom-file-control"></span>
+            </label>
+          </div>
+
+          <!-- File List Section -->
+          <div class="col-md-8">
+            <div class="table-responsive">
+              <table class="table table-sm table-hover border-0">
+                <thead class="thead-light">
+                  <tr>
+                    <th class="w-40">File</th>
+                    <th class="w-40">Description</th>
+                    <th class="text-center w-20">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of attachmentList">
+                    <td>
+                      <a class="primary" href="#" (click)="openFile($event, item.fileUrl, item.fileName)">{{
+                        item?.fileName }}</a>
+                    </td>
+                    <td>
+                      <input type="text" class="form-control form-control-sm" [(ngModel)]="item.description" [ngModelOptions]="{ standalone: true }"
+                        placeholder="Enter description" />
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAttachment(item)" ngbTooltip="Remove">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="attachmentList?.length === 0">
+                    <td colspan="3" class="text-center text-muted">No attachments uploaded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </div>
-  </div>
-</div>
-<div class="container-fluid">
-  <div class="row justify-content-center">
-    <div class="col-12 col-xl-10">
-      <div class="card shadow-sm border-0">
-        <!-- Card Body -->
-        <div class="card-body p-4">
-          <form [formGroup]="form" (ngSubmit)="onClick_Submit()">
-            <!-- Personal Information Section -->
-            <div class="row g-3 mb-4">
-              <div class="col-12">
-                <h6 class="border-bottom pb-2 mb-3 text-primary">
-                  <i class="fas fa-user-circle me-2"></i> વ્યક્તિગત માહિતી
-                </h6>
-              </div>
-
-              <!-- Mobile Number -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="mobile">Mobile Number</label>
-                  <label for="mobile">મોબાઇલ નંબર</label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="mobile" placeholder="મોબાઇલ નંબર દાખલ કરો"
-                    [ngClass]="{'is-invalid': form.get('mobile')?.touched && form.get('mobile')?.invalid}">
-                </div>
-                <small class="form-text text-danger" *ngIf="form.get('mobile')?.touched && form.get('mobile')?.invalid">
-                  <ng-container *ngIf="form.get('mobile')?.errors as errors">
-                    <span *ngIf="errors?.['required']">
-                      મોબાઇલ નંબર જરૂરી છે.
-                    </span>
-                    <span *ngIf="!errors?.['required'] && errors?.['pattern']">
-                      ફક્ત અંક જ દાખલ કરો.
-                    </span>
-                    <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && errors?.['minlength']">
-                      મોબાઇલ નંબર ઓછામાં ઓછો ૧૦ અંકનો હોવો જોઈએ.
-                    </span>
-                    <span *ngIf="!errors?.['required'] && !errors?.['pattern'] && !errors?.['minlength'] && errors?.['maxlength']">
-                      મોબાઇલ નંબર વધારેમાં વધારે ૧૫ અંકનો હોવો જોઈએ.
-                    </span>
-                  </ng-container>
-                </small>
-              </div>
-
-              <!-- Family Name -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="familyName">Surname</label>
-                  <label for="familyName">તમારી શાખે </label>
-                </div>
-                <ng-select id="familyName" formControlName="familyName" [items]="familyNameList" placeholder="શાખે પસંદ કરો" bindLabel="name" bindValue="name"
-                  (change)="onFamilyChange($event)"
-                  [ngClass]="{'is-invalid': form.get('familyName')?.touched && form.get('familyName')?.invalid,'is-valid': form.get('familyName')?.touched && form.get('familyName')?.valid}">
-                  <ng-template ng-option-tmp let-item="item">
-                    {{ item.name }} - {{ item.nameGU }}
-                  </ng-template>
-                </ng-select>
-                <small class="form-text text-muted danger" *ngIf="form.get('familyName')?.touched && form.get('familyName')?.invalid">
-                  <span *ngIf="form.get('familyName').errors.required"> શાખે જરૂરી છે.</span>
-                </small>
-              </div>
-
-              <!-- Student Name -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="studentName">Student Name In English</label>
-                  <label for="studentName">વિદ્યાર્થીનું નામ અંગ્રેજીમાં</label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="studentName" placeholder="અંગ્રેજીમાં નામ દાખલ કરો" [ngClass]="{
-                      'is-invalid': form.get('studentName')?.touched && form.get('studentName')?.invalid,
-                      'is-valid': form.get('studentName')?.touched && form.get('studentName')?.valid
-                    }">
-                </div>
-                <small class="form-text text-muted danger" *ngIf="(form.get('studentName')?.touched || form.get('studentNameGU')?.touched)
-                && (form.get('studentName')?.errors?.required || form.get('studentNameGU')?.errors?.required)">
-                  વિદ્યાર્થીનું નામ અંગ્રેજી અથવા વિદ્યાર્થીનું નામ ગુજરાતી જરૂરી છે.
-                </small>
-              </div>
-
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="studentName">Student Name In Gujarati</label>
-                  <label for="studentName">વિદ્યાર્થીનું નામ ગુજરાતીમાં</label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-language"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="studentNameGU" placeholder="ગુજરાતીમાં નામ દાખલ કરો." [ngClass]="{'is-invalid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.invalid,'is-valid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.valid
-                    }">
-                </div>
-                <small class="form-text text-muted danger" *ngIf="(form.get('studentName')?.touched || form.get('studentNameGU')?.touched)
-                && (form.get('studentName')?.errors?.required || form.get('studentNameGU')?.errors?.required)">
-                  વિદ્યાર્થીનું નામ અંગ્રેજી અથવા વિદ્યાર્થી નામ ગુજરાતી હોવું જરૂરી છે.
-                </small>
-              </div>
-
-              <!-- Father's Name -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="fatherName">Father Name In English</label>
-                  <label for="fatherName">પિતાનું નામ અંગ્રેજીમાં</label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-male"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="fatherName" placeholder="પિતાનું નામ અંગ્રેજીમાં લખો." [ngClass]="{
-                    'is-invalid': form.get('fatherName')?.touched && form.get('fatherName')?.invalid,
-                    'is-valid': form.get('fatherName')?.touched && form.get('fatherName')?.valid
-                  }">
-                </div>
-                <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
-                && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
-                  પિતાનું નામ અંગ્રેજી અથવા પિતાનું નામ ગુજરાતીમાં હોવું જરૂરી છે.
-                </small>
-              </div>
-
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="fatherName">Father Name In Gujarati</label>
-                  <label for="fatherName">પિતાનું નામ ગુજરાતીમાં </label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-language"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="fatherNameGU" placeholder="પિતાનું નામ ગુજરાતીમાં લખો." [ngClass]="{
-                      'is-invalid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.invalid,
-                      'is-valid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.valid
-                    }">
-                </div>
-                <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
-                && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
-                  પિતાનું નામ અંગ્રેજી અથવા પિતાનું નામ ગુજરાતીમાં લખવું જરૂરી છે.
-                </small>
-              </div>
-
-              <!-- School and Education -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="schoolName">School Name</label>
-                  <label for="schoolName">શાળાનું નામ</label>
-                </div>
-                <div class="input-group mb-1">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text"><i class="fas fa-school"></i></span>
-                  </div>
-                  <input type="text" class="form-control" formControlName="schoolName" placeholder="શાળાનું નામ દાખલ કરો"
-                    [ngClass]="{'is-invalid': form.get('schoolName')?.touched && form.get('schoolName')?.invalid, 'is-valid': form.get('schoolName')?.touched &&  form.get('schoolName')?.valid }">
-                </div>
-                <small class="form-text text-muted danger" *ngIf="form.get('schoolName')?.touched && form.get('schoolName')?.invalid">
-                  શાળાનું નામ જરૂરી છે.
-                </small>
-              </div>
-
-              <!-- Education -->
-              <div class="col-md-6 form-group">
-                <div class="d-flex justify-content-between">
-                  <label for="education">Education</label>
-                  <label for="education">શિક્ષણ</label>
-                </div>
-                <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="શિક્ષણ પસંદ કરો" formControlName="education" (change)="onEducationChange($event)"
-                  [ngClass]="{'is-invalid': form.get('education')?.touched && form.get('education')?.invalid}">
-                  <ng-template ng-option-tmp let-item="item">
-                    {{ item.name }} - {{ item.nameGu }}
-                  </ng-template>
-                </ng-select>
-                <small class="form-text text-muted danger" *ngIf="form.get('education')?.touched && form.get('education')?.invalid">
-                  <span *ngIf="form.get('education').errors.required">શિક્ષણ જરૂરી છે.</span>
-                </small>
-              </div>
-            </div>
-
-            <!-- Marks Section -->
-            <div class="row g-3 mb-4">
-              <div class="col-12">
-                <h6 class="border-bottom pb-2 mb-3 text-primary">
-                  <i class="fas fa-percentage me-2"></i> મેળવેલા ગુણ
-                </h6>
-              </div>
-
-              <!-- Percentage -->
-              <div class="col-md-4">
-                <div class="d-flex justify-content-between">
-                  <label for="education">Percentage</label>
-                  <label for="education">ટકાવારી</label>
-                </div>
-                <div class="input-group">
-                  <input type="number" class="form-control" formControlName="percentage" placeholder="0.00" step="0.01" min="0" max="100"
-                    [ngClass]="{'is-invalid': (form.get('percentage')?.touched || form.get('percentage')?.dirty) && form.get('percentage')?.invalid}">
-                  <div class="input-group-append">
-                    <span class="input-group-text">%</span>
-                  </div>
-                </div>
-                <div *ngIf="form.get('percentage')?.touched || form.get('percentage')?.dirty" class="text-danger small mt-1">
-                  <div *ngIf="form.get('percentage')?.hasError('pattern')">Invalid format (e.g., 75.50)</div>
-                  <div *ngIf="form.get('percentage')?.hasError('min')">Cannot be less than 0</div>
-                  <div *ngIf="form.get('percentage')?.hasError('max')">Cannot exceed 100</div>
-                </div>
-              </div>
-
-              <!-- SGPA -->
-              <div class="col-md-4">
-                <div class="d-flex justify-content-between">
-                  <label for="education">SGPA</label>
-                  <label for="education">એસજીપીએ</label>
-                </div>
-                <input type="number" class="form-control" formControlName="sgpa" placeholder="0.00" step="0.01" min="0" max="10"
-                  [ngClass]="{'is-invalid': (form.get('sgpa')?.touched || form.get('sgpa')?.dirty) && form.get('sgpa')?.invalid}">
-                <div *ngIf="form.get('sgpa')?.touched || form.get('sgpa')?.dirty" class="text-danger small mt-1">
-                  <div *ngIf="form.get('sgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
-                  <div *ngIf="form.get('sgpa')?.hasError('min')">Cannot be less than 0</div>
-                  <div *ngIf="form.get('sgpa')?.hasError('max')">Cannot exceed 10</div>
-                </div>
-              </div>
-
-              <!-- CGPA -->
-              <div class="col-md-4">
-                <div class="d-flex justify-content-between">
-                  <label for="education">CGPA</label>
-                  <label for="education">સીજીપીએ</label>
-                </div>
-                <input type="number" class="form-control" formControlName="cgpa" placeholder="0.00" step="0.01" min="0" max="10"
-                  [ngClass]="{'is-invalid': (form.get('cgpa')?.touched || form.get('cgpa')?.dirty) && form.get('cgpa')?.invalid}">
-                <div *ngIf="form.get('cgpa')?.touched || form.get('cgpa')?.dirty" class="text-danger small mt-1">
-                  <div *ngIf="form.get('cgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
-                  <div *ngIf="form.get('cgpa')?.hasError('min')">Cannot be less than 0</div>
-                  <div *ngIf="form.get('cgpa')?.hasError('max')">Cannot exceed 10</div>
-                </div>
-              </div>
-
-              <!-- At least one mark required message -->
-              <div class="col-12" *ngIf="showMarksError()">
-                <div class="alert alert-warning py-2 small mb-0">
-                  <i class="fas fa-exclamation-triangle me-1"></i>
-                  કૃપા કરીને ટકાવારી અથવા SGPA અને CGPA દાખલ કરો.
-                </div>
-              </div>
-            </div>
-
-            <!-- Attachment Section -->
-            <div class="row mb-4">
-              <!-- Upload Section -->
-              <div class="col-md-4">
-                <label class="custom-file mb-3">
-                  <div ng2FileDrop [uploader]="uploader" class="well well-lg my-drop-zone">
-                    ફાઇલો અહીં ખેંચો અને છોડો
-                  </div>
-                  <input type="file" ng2FileSelect [uploader]="uploader" multiple>
-                  <span class="custom-file-control"></span>
-                </label>
-              </div>
-
-              <!-- File List Section -->
-              <div class="col-md-8">
-                <div class="table-responsive">
-                  <table class="table table-sm table-hover border-0">
-                    <thead class="thead-light">
-                      <tr>
-                        <th class="w-40">File</th>
-                        <th class="w-40">Description</th>
-                        <th class="text-center w-20">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of attachmentList">
-                        <td>
-                          <a class="primary" href="#" (click)="openFile($event, item.fileUrl, item.fileName)">{{
-                            item?.fileName }}</a>
-                        </td>
-                        <td>
-                          <input type="text" class="form-control form-control-sm" [(ngModel)]="item.description" [ngModelOptions]="{ standalone: true }"
-                            placeholder="Enter description" />
-                        </td>
-                        <td class="text-center">
-                          <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeAttachment(item)" ngbTooltip="Remove">
-                            <i class="ft-x-circle text-danger"></i>
-                          </button>
-                        </td>
-                      </tr>
-                      <tr *ngIf="attachmentList?.length === 0">
-                        <td colspan="3" class="text-center text-muted">No attachments uploaded</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top">
-              <button type="submit" class="btn btn-primary btn-lg">
-                <i class="fas fa-paper-plane me-1"></i> સબમિટ કરો
-              </button>
-            </div>
-          </form>
+      <hr class="m-0">
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary btn-lg">
+          <i class="fas fa-paper-plane mr-1"></i> સબમિટ કરો
+        </button>
+      </div>
+    </form>
+    <!-- end: form -->
+    <div class="card-footer bg-light text-center">
+      <div class="row py-2">
+        <div class="col">
+          <p class="text-left text-color-light opacity-5 text-3 mb-0">gdevtechnologies.com © 2025. All Rights Reserved.</p>
         </div>
-
-        <!-- Footer -->
-        <div class="card-footer bg-light text-center py-2">
-          <small class="text-muted">
-            Designed by Gdev Technologies & Developed by Omy Infotech, Surat
-          </small>
-        </div>
+        <div class="col text-end">Designed by&nbsp;<a target="_blank" class="text-decoration-none" href="https://gdevtechnologies.com">Gdev Technologies</a> <!-- -->&nbsp;&amp;
+          Developed by&nbsp;<a target="_blank" class="text-decoration-none" href="https://omyinfotech.com">Omy Infotech, Surat</a></div>
       </div>
     </div>
   </div>

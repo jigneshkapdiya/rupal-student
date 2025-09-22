@@ -40,10 +40,7 @@
             "main": "src/main.ts",
             "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
               "node_modules/perfect-scrollbar/css/perfect-scrollbar.css",
               "node_modules/prismjs/plugins/toolbar/prism-toolbar.css",
@@ -51,7 +48,8 @@
               "src/assets/css/demo.css",
               "src/assets/sass/core.scss",
               "src/styles.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "scripts": ["src/assets/vendor/pace/pace.min.js"],
             "baseHref": "/",
@@ -74,7 +72,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -140,7 +137,8 @@
             "styles": [
               "src/assets/css/demo.css",
               "src/assets/sass/app.scss",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
             ],
             "assets": ["src/assets", "src/favicon.ico"]
           }
@@ -149,7 +147,7 @@
     }
   },
   "cli": {
-    "analytics": "9e472cbb-4d61-46ce-9a7c-5eae6a406034",
+    "analytics": "false",
     "defaultProject": "rupalStudentcore8app.client"
   }
 }

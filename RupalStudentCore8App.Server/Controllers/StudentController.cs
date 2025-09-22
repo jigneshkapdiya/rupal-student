@@ -53,35 +53,57 @@ namespace RupalStudentCore8App.Server.Controllers
             using var transaction = await _Db.Database.BeginTransactionAsync();
             try
             {
-                // 1. Check if student already exists (for Edit case)
                 StudentMarkSheet entity;
+                entity = await _Db.StudentMarkSheets.Where(w => w.Id == vm.Id).FirstOrDefaultAsync();
 
-                // 2. Map data from ViewModel to Entity
-                entity = new StudentMarkSheet();
-                entity.Mobile = vm.Mobile;
-                entity.FamilyName = vm.FamilyName;
-                entity.FamilyNameGu = vm.FamilyNameGu;
-                entity.StudentName = vm.StudentName;
-                entity.StudentNameGu = vm.StudentNameGu;
-                entity.FatherName = vm.FatherName;
-                entity.FatherNameGu = vm.FatherNameGu;
-                entity.Education = vm.Education;
-                entity.EducationGu = vm.EducationGu;
-                entity.SchoolName = vm.SchoolName;
-                entity.Percentage = vm.Percentage;
-                entity.Sgpa = vm.Sgpa;
-                entity.Cgpa = vm.Cgpa;
-                entity.AcademicYear = DateTime.Now.Year.ToString();
-                entity.Status ="New";
-                entity.FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true);
-                _Db.StudentMarkSheets.Add(entity);
-                await _Db.SaveChangesAsync();
-
-                // 3. Handle Attachments
+                if (entity == null)
+                {
+                    entity = new StudentMarkSheet();
+                    entity.Mobile = vm.Mobile;
+                    entity.FamilyName = vm.FamilyName;
+                    entity.FamilyNameGu = vm.FamilyNameGu;
+                    entity.StudentName = vm.StudentName;
+                    entity.StudentNameGu = vm.StudentNameGu;
+                    entity.FatherName = vm.FatherName;
+                    entity.FatherNameGu = vm.FatherNameGu;
+                    entity.Education = vm.Education;
+                    entity.EducationGu = vm.EducationGu;
+                    entity.SchoolName = vm.SchoolName;
+                    entity.Percentage = vm.Percentage;
+                    entity.Sgpa = vm.Sgpa;
+                    entity.Cgpa = vm.Cgpa;
+                    entity.AcademicYear = DateTime.Now.Year.ToString();
+                    entity.Status = "New";
+                    entity.FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true);
+                    _Db.StudentMarkSheets.Add(entity);
+                    await _Db.SaveChangesAsync();
+                }
+                else
+                {
+                    entity.Mobile = vm.Mobile;
+                    entity.FamilyName = vm.FamilyName;
+                    entity.FamilyNameGu = vm.FamilyNameGu;
+                    entity.StudentName = vm.StudentName;
+                    entity.StudentNameGu = vm.StudentNameGu;
+                    entity.FatherName = vm.FatherName;
+                    entity.FatherNameGu = vm.FatherNameGu;
+                    entity.Education = vm.Education;
+                    entity.EducationGu = vm.EducationGu;
+                    entity.SchoolName = vm.SchoolName;
+                    entity.Percentage = vm.Percentage;
+                    entity.Sgpa = vm.Sgpa;
+                    entity.Cgpa = vm.Cgpa;
+                    entity.AcademicYear = DateTime.Now.Year.ToString();
+                    entity.Status = "New";
+                    _Db.StudentMarkSheets.Update(entity);
+                    await _Db.SaveChangesAsync();
+                }
                 if (vm.Attachments?.Any() == true)
                 {
-                    List<Attachment> newAttachments = new();
+                    var oldAttachment = _Db.Attachments.Where(w => w.ReferenceId == entity.Id && w.ReferenceType == AttachmentReferenceType.Student).ToList();
+                    _Db.Attachments.RemoveRange(oldAttachment);
 
+                    List<Attachment> newAttachments = new();
                     foreach (var item in vm.Attachments)
                     {
                         string fileName = item.File != null
@@ -97,13 +119,10 @@ namespace RupalStudentCore8App.Server.Controllers
                             FileUrl = fileName
                         });
                     }
-
                     await _Db.Attachments.AddRangeAsync(newAttachments);
                     await _Db.SaveChangesAsync();
                 }
-
                 await transaction.CommitAsync();
-
                 return Ok(entity.Id);
             }
             catch (Exception ex)

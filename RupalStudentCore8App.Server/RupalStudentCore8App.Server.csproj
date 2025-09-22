@@ -4,9 +4,9 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <SpaRoot>..\apex14core8app.client</SpaRoot>
+    <SpaRoot>..\rupalStudentcore8app.client</SpaRoot>
     <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:52000</SpaProxyServerUrl>
+    <SpaProxyServerUrl>http://localhost:52000</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\apex14core8app.client\apex14core8app.client.esproj">
+    <ProjectReference Include="..\rupalStudentcore8app.client\rupalStudentcore8app.client.esproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>

@@ -5,6 +5,7 @@ namespace RupalStudentCore8App.Server.ServiceModel
 {
     public class StudentViewModel
     {
+        public int Id { get; set; }
         public string Mobile { get; set; }
         public string FamilyName { get; set; }
         public string FamilyNameGu { get; set; }

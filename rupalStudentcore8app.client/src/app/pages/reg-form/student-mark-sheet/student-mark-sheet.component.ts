@@ -37,10 +37,34 @@ export class StudentMarkSheetComponent implements OnInit {
       disableMultipart: false,
       method: 'post',
       itemAlias: '',
+      // allowedFileType: ['pdf', 'image'], // Allow PDF and image files
+      // allowedMimeType: ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'], // Specific MIME types
     });
 
     uploader.onAfterAddingFile = (fileItem: FileItem) => {
       fileItem.withCredentials = false;
+
+      // Enhanced validation for file types
+      const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+      const fileExtension = this.getFileExtension(fileItem.file.name);
+
+      if (!allowedExtensions.includes(fileExtension)) {
+        this.toastr.warning(
+          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+        );
+        uploader.removeFromQueue(fileItem);
+        return;
+      }
+
+      // Check file size (optional - 10MB limit)
+      // const maxSizeInMB = 10;
+      // const fileSizeInMB = fileItem.file.size / (1024 * 1024);
+      // if (fileSizeInMB > maxSizeInMB) {
+      //   this.toastr.error(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ. (File size should be less than ${maxSizeInMB}MB)`);
+      //   uploader.removeFromQueue(fileItem);
+      //   return;
+      // }
+
       targetList.push({
         fileName: fileItem.file.name,
         documentType: this.getFileExtension(fileItem.file.name),
@@ -51,6 +75,27 @@ export class StudentMarkSheetComponent implements OnInit {
         description: ''
       });
     };
+
+    // Handle file validation errors from ng2-file-upload
+    uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
+      switch (filter.name) {
+        case 'fileType':
+          this.toastr.warning(
+            'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+          );
+          break;
+        case 'mimeType':
+          this.toastr.warning(
+            'ફક્ત PDF અને છબી ફાઇલોની જ મંજૂરી છે.'
+          );
+          break;
+        default:
+          this.toastr.warning(
+            'ફાઇલ અપલોડ કરવામાં ભૂલ આવી.'
+          );
+      }
+    };
+
     return uploader;
   }
 
@@ -59,7 +104,7 @@ export class StudentMarkSheetComponent implements OnInit {
       mobile: [null, Validators.compose([
         Validators.required,
         Validators.minLength(10),  // Minimum 10 digits
-        Validators.maxLength(15),  // Maximum 15 digits
+        Validators.maxLength(10),  // Maximum 10 digits
         Validators.pattern(/^[0-9]*$/) // Only numbers allowed
       ])],
       familyName: [null, Validators.required],
@@ -89,11 +134,34 @@ export class StudentMarkSheetComponent implements OnInit {
     });
 
     this.uploader = this.createUploader(this.attachmentList);
+
+    // Override the onAfterAddingFile to ensure consistent behavior
     this.uploader.onAfterAddingFile = (fileItem) => {
+      // Get file extension for validation
+      const fileExtension = this.getFileExtension(fileItem.file.name);
+      // Use helper method for file validation (adapted for FileLikeObject)
+      if (!this.isValidFileType(fileItem.file.name)) {
+        this.toastr.warning(
+          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+        );
+        this.uploader.removeFromQueue(fileItem);
+        return;
+      }
+
+      // Check file size (5MB limit)
+      // const maxSizeInMB = 5;
+      // const fileSizeInMB = fileItem.file.size / (1024 * 1024);
+      // if (fileSizeInMB > maxSizeInMB) {
+      //   this.toastr.error(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ. (File size should be less than ${maxSizeInMB}MB)`);
+      //   this.uploader.removeFromQueue(fileItem);
+      //   return;
+      // }
+
       const fileObj = {
         fileUrl: fileItem._file,
         fileName: fileItem.file.name,
-        description: ''
+        description: '',
+        documentType: fileExtension
       };
       this.attachmentList.push(fileObj);
     };
@@ -187,6 +255,26 @@ export class StudentMarkSheetComponent implements OnInit {
     return fileName.split('.').pop()?.toLowerCase() || '';
   }
 
+  isValidFileType(fileName: string): boolean {
+    const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+    const fileExtension = this.getFileExtension(fileName);
+    return allowedExtensions.includes(fileExtension);
+  }
+
+  validateFileType(file: File): boolean {
+    const allowedTypes = [
+      'application/pdf',
+      'image/jpeg',
+      'image/jpg',
+      'image/png'
+    ];
+
+    const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+    const fileExtension = this.getFileExtension(file.name);
+
+    return allowedTypes.includes(file.type) && allowedExtensions.includes(fileExtension);
+  }
+
   onFamilyChange(e: any) {
     if (e) {
       this.form.get('familyNameGu')?.setValue(this.familyNameList.find(item => item.name === e.name).nameGU);
@@ -197,6 +285,12 @@ export class StudentMarkSheetComponent implements OnInit {
     if (e) {
       this.form.get('educationGu')?.setValue(this.educationList.find(item => item.name === e.name).nameGu);
     }
+  }
+
+  // Test method to verify toaster is working
+  testToaster() {
+    this.toastr.error('Test error message', 'Test Error');
+    this.toastr.success('Test success message', 'Test Success');
   }
 
   removeAttachment(item: any): void {
