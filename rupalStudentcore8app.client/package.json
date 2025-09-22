@@ -4,7 +4,7 @@
   "license": "",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --base-href / --deploy-url / --serve-path / --open",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

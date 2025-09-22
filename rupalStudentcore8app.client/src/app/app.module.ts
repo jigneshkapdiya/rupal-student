@@ -1,40 +1,39 @@
+import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from "@angular/core";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { APP_BASE_HREF } from '@angular/common';
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireAuthModule } from "@angular/fire/auth";
 
+import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
-import { HttpClientModule, HttpClient } from "@angular/common/http";
-import { TranslateModule, TranslateLoader } from "@ngx-translate/core";
+import { TranslateLoader, TranslateModule } from "@ngx-translate/core";
 import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import {
-  PerfectScrollbarModule,
   PERFECT_SCROLLBAR_CONFIG,
-  PerfectScrollbarConfigInterface
+  PerfectScrollbarConfigInterface,
+  PerfectScrollbarModule
 } from 'ngx-perfect-scrollbar';
 
 import { AppRoutingModule } from "./app-routing.module";
-import { SharedModule } from "./shared/shared.module";
 import { AppComponent } from "./app.component";
 import { ContentLayoutComponent } from "./layouts/content/content-layout.component";
 import { FullLayoutComponent } from "./layouts/full/full-layout.component";
+import { SharedModule } from "./shared/shared.module";
 
-import { AuthService } from "./shared/auth/auth.service";
-import { AuthGuard } from "./shared/auth/auth-guard.service";
-import { WINDOW_PROVIDERS } from './shared/services/window.service';
-import { AccountLayoutComponent } from "./layouts/account/account-layout.component";
-import { ToastrModule } from "ngx-toastr";
-import { ErrorInterceptorProvider } from "./_services/error.interceptor";
-import { FileUploadModule } from "ng2-file-upload";
-import { NgSelectModule } from "@ng-select/ng-select";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { StudentMarkSheetComponent } from './pages/reg-form/student-mark-sheet/student-mark-sheet.component';
-import { ViewStudentMarkSheetComponent } from './pages/reg-form/view-student-mark-sheet/view-student-mark-sheet.component';
+import { NgSelectModule } from "@ng-select/ng-select";
+import { FileUploadModule } from "ng2-file-upload";
+import { ToastrModule } from "ngx-toastr";
+import { ErrorInterceptorProvider } from "./_services/error.interceptor";
+import { AccountLayoutComponent } from "./layouts/account/account-layout.component";
+import { StudentLayoutComponent } from "./layouts/student/student-layout.component";
+import { AuthGuard } from "./shared/auth/auth-guard.service";
+import { AuthService } from "./shared/auth/auth.service";
+import { WINDOW_PROVIDERS } from './shared/services/window.service';
 
 var firebaseConfig = {
   apiKey: "YOUR_API_KEY", //YOUR_API_KEY
@@ -58,7 +57,7 @@ export function createTranslateLoader(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, AccountLayoutComponent, StudentMarkSheetComponent, StudentMarkSheetComponent, ViewStudentMarkSheetComponent],
+  declarations: [AppComponent, FullLayoutComponent, ContentLayoutComponent, AccountLayoutComponent, StudentLayoutComponent],
   imports: [
     BrowserAnimationsModule,
     AppRoutingModule,
