@@ -286,7 +286,7 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end" *ngIf="this.status !== 'Approved'">
           <button type="submit" class="btn btn-primary m-1">
             <i class="ft-check-square mr-1" aria-hidden="true"></i> Save
           </button>

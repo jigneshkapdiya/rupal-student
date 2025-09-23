@@ -24,6 +24,7 @@ export class EditStudentComponent implements OnInit {
   attachmentList: any[] = [];
   studentAttachmentList: any[] = [];
   studentId: number;
+  status: any;
 
   constructor(
     public toastr: ToastrService,
@@ -194,6 +195,7 @@ export class EditStudentComponent implements OnInit {
             sgpa: res.sgpa,
             cgpa: res.cgpa,
           });
+          this.status = res.status;
           this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
           this.studentAttachmentList = res.attachmentList || [];
         }
