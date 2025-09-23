@@ -21,6 +21,7 @@ namespace RupalStudentCore8App.Server.ServiceModel
         public decimal? Cgpa { get; set; }
         public string AcademicYear { get; set; }
         public string Status { get; set; }
+        public bool IsApproved { get; set; }
         public List<AttachmentViewModel> Attachments { get; set; }
     }
 

@@ -255,23 +255,29 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Show newly uploaded files -->
                   <tr *ngFor="let item of attachmentList">
                     <td>
-                      <a class="primary" href="#" (click)="openFile($event, item.fileUrl, item.fileName)">{{
-                        item?.fileName }}</a>
+                      <i class="fas fa-file-alt me-2 text-primary"></i>
+                      {{ item?.fileName }}
                     </td>
                     <td>
                       <input type="text" class="form-control form-control-sm" [(ngModel)]="item.description" [ngModelOptions]="{ standalone: true }"
                         placeholder="Enter description" />
                     </td>
                     <td class="text-center">
-                      <button class="btn btn-sm btn-outline-danger" (click)="removeAttachment(item)" ngbTooltip="Remove">
-                        <i class="ft-x-circle"></i>
+                      <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeNewAttachment(item)" ngbTooltip="Remove">
+                        <i class="fas fa-trash-alt"></i>
                       </button>
                     </td>
                   </tr>
+
+                  <!-- Show message if no files -->
                   <tr *ngIf="attachmentList?.length === 0">
-                    <td colspan="3" class="text-center text-muted">No attachments uploaded</td>
+                    <td colspan="3" class="text-center text-muted">
+                      <i class="fas fa-upload me-2"></i>
+                      No new attachments uploaded
+                    </td>
                   </tr>
                 </tbody>
               </table>

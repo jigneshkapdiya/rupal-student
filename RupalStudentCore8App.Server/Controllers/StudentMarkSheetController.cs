@@ -129,8 +129,6 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
-
-
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

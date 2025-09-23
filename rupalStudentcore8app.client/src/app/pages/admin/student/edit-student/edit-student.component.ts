@@ -63,15 +63,29 @@ export class EditStudentComponent implements OnInit {
         uploader.removeFromQueue(fileItem);
         return;
       }
-      targetList.push({
+
+      // Check file size (5MB limit)
+      const maxSizeInMB = 5;
+      const fileSizeInMB = fileItem.file.size / (1024 * 1024);
+      if (fileSizeInMB > maxSizeInMB) {
+        this.toastr.warning(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ.`);
+        uploader.removeFromQueue(fileItem);
+        return;
+      }
+
+      // Add to attachment list for display
+      const newAttachment = {
+        id: Date.now(), // Temporary ID for new files
         fileName: fileItem.file.name,
         documentType: this.getFileExtension(fileItem.file.name),
         file: fileItem._file,
         isNew: true,
         fileItem: fileItem,
         fileUrl: null,
-        description: ''
-      });
+        description: '',
+        referenceType: 'Document'
+      };
+      targetList.push(newAttachment);
     };
 
     // Handle file validation errors from ng2-file-upload
@@ -132,18 +146,6 @@ export class EditStudentComponent implements OnInit {
     });
 
     this.uploader = this.createUploader(this.attachmentList);
-    this.uploader.onAfterAddingFile = (fileItem) => {
-      // Get file extension for validation
-      const fileExtension = this.getFileExtension(fileItem.file.name);
-      // Use helper method for file validation (adapted for FileLikeObject)
-      if (!this.isValidFileType(fileItem.file.name)) {
-        this.toastr.warning(
-          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
-        );
-        this.uploader.removeFromQueue(fileItem);
-        return;
-      }
-    };
 
     if (this.studentId > 0) {
       this.getById();
@@ -190,8 +192,9 @@ export class EditStudentComponent implements OnInit {
             education: res.education,
             percentage: res.percentage,
             sgpa: res.sgpa,
-            cgpa: res.cgpa
+            cgpa: res.cgpa,
           });
+          this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
           this.studentAttachmentList = res.attachmentList || [];
         }
       },
@@ -242,27 +245,62 @@ export class EditStudentComponent implements OnInit {
       this.toastr.warning("Enter valid form details.");
       return;
     }
+
     const formData = new FormData();
-    formData.append('mobile', this.form.get('mobile')?.value);
-    formData.append('familyName', this.form.get('familyName')?.value);
-    formData.append('familyNameGu', this.form.get('familyNameGu')?.value || '');
-    formData.append('studentName', this.form.get('studentName')?.value || '');
-    formData.append('studentNameGU', this.form.get('studentNameGU')?.value || '');
-    formData.append('fatherName', this.form.get('fatherName')?.value || '');
-    formData.append('fatherNameGU', this.form.get('fatherNameGU')?.value || '');
-    formData.append('schoolName', this.form.get('schoolName')?.value || '');
-    formData.append('education', this.form.get('education')?.value || '');
-    formData.append('educationGu', this.form.get('educationGu')?.value || '');
-    formData.append('percentage', this.form.get('percentage')?.value || '');
-    formData.append('sgpa', this.form.get('sgpa')?.value || '');
-    formData.append('cgpa', this.form.get('cgpa')?.value || '');
-    formData.append('id', this.studentId.toString());
+
+    // Main student fields matching StudentViewModel
+    formData.append('Id', this.studentId.toString());
+    formData.append('Mobile', this.form.get('mobile')?.value || '');
+    formData.append('FamilyName', this.form.get('familyName')?.value || '');
+    formData.append('FamilyNameGu', this.form.get('familyNameGu')?.value || '');
+    formData.append('StudentName', this.form.get('studentName')?.value || '');
+    formData.append('StudentNameGu', this.form.get('studentNameGu')?.value || '');
+    formData.append('FatherName', this.form.get('fatherName')?.value || '');
+    formData.append('FatherNameGu', this.form.get('fatherNameGu')?.value || '');
+    formData.append('SchoolName', this.form.get('schoolName')?.value || '');
+    formData.append('Education', this.form.get('education')?.value || '');
+    formData.append('EducationGu', this.form.get('educationGu')?.value || '');
+    formData.append('Percentage', this.form.get('percentage')?.value || '');
+    formData.append('Sgpa', this.form.get('sgpa')?.value || '');
+    formData.append('Cgpa', this.form.get('cgpa')?.value || '');
+    formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
+
+    // Combine both existing and new attachments according to AttachmentViewModel
+    let attachmentIndex = 0;
+
+    // Add existing attachments (from studentAttachmentList)
+    this.studentAttachmentList.forEach((item) => {
+      // For existing attachments, we only send metadata (file already exists on server)
+      formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
+      formData.append(`Attachments[${attachmentIndex}].FileUrl`, item.fileUrl || '');
+      formData.append(`Attachments[${attachmentIndex}].ReferenceType`, item.referenceType || 'Student');
+      formData.append(`Attachments[${attachmentIndex}].Description`, item.description || '');
+      // No File property for existing attachments
+      attachmentIndex++;
+    });
+
+    // Add new attachments (from attachmentList)
+    this.attachmentList.forEach((item) => {
+      if (item.file) {
+        // For new attachments, send the actual file
+        formData.append(`Attachments[${attachmentIndex}].File`, item.file, item.fileName);
+        formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
+        formData.append(`Attachments[${attachmentIndex}].ReferenceType`, 'Student');
+        formData.append(`Attachments[${attachmentIndex}].Description`, item.description || '');
+        // FileUrl will be generated by backend after upload
+        attachmentIndex++;
+      }
+    });
     this.spinner.show();
     this.studentService.saveStudentMarkSheet(formData).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res: any) => {
         if (res) {
           this.toastr.success("Student details updated successfully.");
-          // this.router.navigate(['/reg-form/view/', res]);
+          this.router.navigate(['/student/inquiry']);
+          this.attachmentList = [];
+          if (this.studentId > 0) {
+            this.getById();
+          }
         } else {
           this.toastr.error(res.message || "Failed to update student details.");
         }
@@ -279,5 +317,27 @@ export class EditStudentComponent implements OnInit {
       month: 'short',
       day: 'numeric'
     });
+  }
+
+  openFile(event: Event, fileUrl: string, fileName: string): void {
+    event.preventDefault();
+    if (fileUrl) {
+      window.open(fileUrl, '_blank');
+    } else {
+      this.toastr.warning('File URL not available for preview');
+    }
+  }
+
+  removeNewAttachment(item: any): void {
+    const index = this.attachmentList.findIndex(att => att.id === item.id);
+    if (index > -1) {
+      // Remove from uploader queue if it exists
+      if (item.fileItem) {
+        this.uploader.removeFromQueue(item.fileItem);
+      }
+      // Remove from attachmentList
+      this.attachmentList.splice(index, 1);
+      this.toastr.success('Attachment removed successfully');
+    }
   }
 }
