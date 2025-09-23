@@ -46,6 +46,7 @@ namespace RupalStudentCore8App.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> AddEdit([FromForm] StudentViewModel vm)
         {
@@ -147,94 +148,6 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
-
-
-        //[HttpPost]
-        //public async Task<IActionResult> AddEdit([FromForm] StudentViewModel vm)
-        //{
-        //    using var transaction = await _Db.Database.BeginTransactionAsync();
-        //    try
-        //    {
-        //        StudentMarkSheet entity;
-        //        entity = await _Db.StudentMarkSheets.Where(w => w.Id == vm.Id).FirstOrDefaultAsync();
-
-        //        if (entity == null)
-        //        {
-        //            entity = new StudentMarkSheet();
-        //            entity.Mobile = vm.Mobile;
-        //            entity.FamilyName = vm.FamilyName;
-        //            entity.FamilyNameGu = vm.FamilyNameGu;
-        //            entity.StudentName = vm.StudentName;
-        //            entity.StudentNameGu = vm.StudentNameGu;
-        //            entity.FatherName = vm.FatherName;
-        //            entity.FatherNameGu = vm.FatherNameGu;
-        //            entity.Education = vm.Education;
-        //            entity.EducationGu = vm.EducationGu;
-        //            entity.SchoolName = vm.SchoolName;
-        //            entity.Percentage = vm.Percentage;
-        //            entity.Sgpa = vm.Sgpa;
-        //            entity.Cgpa = vm.Cgpa;
-        //            entity.AcademicYear = DateTime.Now.Year.ToString();
-        //            entity.Status = StudentStatus.New;
-        //            entity.FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true);
-        //            entity.CreatedOn = DateTime.Now;
-        //            _Db.StudentMarkSheets.Add(entity);
-        //            await _Db.SaveChangesAsync();
-        //        }
-        //        else
-        //        {
-        //            entity.Mobile = vm.Mobile;
-        //            entity.FamilyName = vm.FamilyName;
-        //            entity.FamilyNameGu = vm.FamilyNameGu;
-        //            entity.StudentName = vm.StudentName;
-        //            entity.StudentNameGu = vm.StudentNameGu;
-        //            entity.FatherName = vm.FatherName;
-        //            entity.FatherNameGu = vm.FatherNameGu;
-        //            entity.Education = vm.Education;
-        //            entity.EducationGu = vm.EducationGu;
-        //            entity.SchoolName = vm.SchoolName;
-        //            entity.Percentage = vm.Percentage;
-        //            entity.Sgpa = vm.Sgpa;
-        //            entity.Cgpa = vm.Cgpa;
-        //            entity.AcademicYear = DateTime.Now.Year.ToString();
-        //            entity.Status = vm.IsApproved ? StudentStatus.Approved : StudentStatus.New;
-        //            _Db.StudentMarkSheets.Update(entity);
-        //            await _Db.SaveChangesAsync();
-        //        }
-        //        if (vm.Attachments?.Any() == true)
-        //        {
-        //            var oldAttachment = _Db.Attachments.Where(w => w.ReferenceId == entity.Id && w.ReferenceType == AttachmentReferenceType.Student).ToList();
-        //            _Db.Attachments.RemoveRange(oldAttachment);
-
-        //            List<Attachment> newAttachments = new();
-        //            foreach (var item in vm.Attachments)
-        //            {
-        //                string fileName = item.File != null
-        //                    ? _IUtility.UploadFile(item.File, FilePath.Student)
-        //                    : (!string.IsNullOrEmpty(item.FileUrl) ? Path.GetFileName(item.FileUrl) : null);
-
-        //                newAttachments.Add(new Attachment
-        //                {
-        //                    ReferenceId = entity.Id,
-        //                    ReferenceType = item.ReferenceType,
-        //                    FileName = item.File.FileName,
-        //                    Description = item.Description,
-        //                    FileUrl = fileName
-        //                });
-        //            }
-        //            await _Db.Attachments.AddRangeAsync(newAttachments);
-        //            await _Db.SaveChangesAsync();
-        //        }
-        //        await transaction.CommitAsync();
-        //        return Ok(entity.Id);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        await transaction.RollbackAsync();
-        //        return BadRequest(new { error = ex.Message });
-        //    }
-        //}
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> AttachmentDelete(int id)
         {
@@ -262,7 +175,32 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
-   
+        [HttpDelete("Student/{id}")]
+        public async Task<IActionResult> DeleteStudent(int id)
+        {
+            try
+            {
+                var attachmentList = await _Db.Attachments.Where(w => w.ReferenceId == id).ToListAsync();
+                _Db.Attachments.RemoveRange(attachmentList);
+
+                StudentMarkSheet studentMarkSheet = await _Db.StudentMarkSheets.FindAsync(id);
+                if(studentMarkSheet != null)
+                {
+                    _Db.StudentMarkSheets.Remove(studentMarkSheet);
+                    await _Db.SaveChangesAsync();
+                    return Ok(true);
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to delete data.");
+            }
+        }
 
     }
 }

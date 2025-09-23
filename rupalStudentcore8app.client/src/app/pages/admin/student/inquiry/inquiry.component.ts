@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageSize, PageSizeList, StudentStatusList } from 'app/shared/data/global-constant';
+import { PageSize, PageSizeList, StudentStatusList, swalDelete } from 'app/shared/data/global-constant';
 import { StudentService } from '../../_services/student.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -101,6 +101,28 @@ export class InquiryComponent implements OnInit {
   getEndIndex(): number {
     const endIndex = this.page * this.pageSize;
     return endIndex > this.totalRecord ? this.totalRecord : endIndex;
+  }
+
+  onDelete(id: number) {
+    // this.spinner.show();
+    swalDelete.fire().then((result) => {
+      if (result.value) {
+        this.spinner.show();
+        this.studentService.deleteStudentMarkSheet(id).pipe(finalize(() => this.spinner.hide()))
+          .subscribe((res: any) => {
+            if (res) {
+              this.toastr.success("Deleted successfully.");
+              this.getList();
+            } else {
+              this.toastr.error(res || "Failed to delete.");
+            }
+          }, (err) => {
+            this.toastr.error(err, "Failed to delete.");
+          });
+      } else {
+        this.spinner.hide();
+      }
+    });
   }
 
 }

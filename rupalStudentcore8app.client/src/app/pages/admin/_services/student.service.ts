@@ -29,4 +29,7 @@ export class StudentService {
   deleteAttachment(id: number) {
     return this.http.delete(this.ApiURL + "Student/" + id);
   }
+  deleteStudentMarkSheet(id: number) {
+    return this.http.delete(this.ApiURL + "Student/Student/" + id);
+  }
 }
