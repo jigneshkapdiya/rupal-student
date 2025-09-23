@@ -37,8 +37,6 @@ export class StudentMarkSheetComponent implements OnInit {
       disableMultipart: false,
       method: 'post',
       itemAlias: '',
-      // allowedFileType: ['pdf', 'image'], // Allow PDF and image files
-      // allowedMimeType: ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'], // Specific MIME types
     });
 
     uploader.onAfterAddingFile = (fileItem: FileItem) => {
@@ -49,22 +47,10 @@ export class StudentMarkSheetComponent implements OnInit {
       const fileExtension = this.getFileExtension(fileItem.file.name);
 
       if (!allowedExtensions.includes(fileExtension)) {
-        this.toastr.warning(
-          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
-        );
+        this.toastr.warning('ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.');
         uploader.removeFromQueue(fileItem);
         return;
       }
-
-      // Check file size (optional - 10MB limit)
-      // const maxSizeInMB = 10;
-      // const fileSizeInMB = fileItem.file.size / (1024 * 1024);
-      // if (fileSizeInMB > maxSizeInMB) {
-      //   this.toastr.error(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ. (File size should be less than ${maxSizeInMB}MB)`);
-      //   uploader.removeFromQueue(fileItem);
-      //   return;
-      // }
-
       targetList.push({
         fileName: fileItem.file.name,
         documentType: this.getFileExtension(fileItem.file.name),
@@ -80,22 +66,15 @@ export class StudentMarkSheetComponent implements OnInit {
     uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
       switch (filter.name) {
         case 'fileType':
-          this.toastr.warning(
-            'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
-          );
+          this.toastr.warning('ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.');
           break;
         case 'mimeType':
-          this.toastr.warning(
-            'ફક્ત PDF અને છબી ફાઇલોની જ મંજૂરી છે.'
-          );
+          this.toastr.warning('ફક્ત PDF અને છબી ફાઇલોની જ મંજૂરી છે.');
           break;
         default:
-          this.toastr.warning(
-            'ફાઇલ અપલોડ કરવામાં ભૂલ આવી.'
-          );
+          this.toastr.warning('ફાઇલ અપલોડ કરવામાં ભૂલ આવી.');
       }
     };
-
     return uploader;
   }
 
@@ -147,15 +126,6 @@ export class StudentMarkSheetComponent implements OnInit {
         this.uploader.removeFromQueue(fileItem);
         return;
       }
-
-      // Check file size (5MB limit)
-      // const maxSizeInMB = 5;
-      // const fileSizeInMB = fileItem.file.size / (1024 * 1024);
-      // if (fileSizeInMB > maxSizeInMB) {
-      //   this.toastr.error(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ. (File size should be less than ${maxSizeInMB}MB)`);
-      //   this.uploader.removeFromQueue(fileItem);
-      //   return;
-      // }
 
       const fileObj = {
         fileUrl: fileItem._file,

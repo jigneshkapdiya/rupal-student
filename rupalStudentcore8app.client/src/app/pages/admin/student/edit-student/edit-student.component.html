@@ -110,7 +110,7 @@
               <label for="education">Education</label>
               <label for="education">શિક્ષણ</label>
             </div>
-            <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="Select Education" formControlName="education"
+            <ng-select [items]="educationList" bindLabel="name" bindValue="name" placeholder="Select Education" formControlName="education" (change)="onEducationChange($event)"
               [ngClass]="{'is-invalid': form.get('education')?.touched && form.get('education')?.invalid}">
             </ng-select>
             <div *ngIf="form.get('education')?.touched && form.get('education')?.invalid" class="text-danger small mt-1">

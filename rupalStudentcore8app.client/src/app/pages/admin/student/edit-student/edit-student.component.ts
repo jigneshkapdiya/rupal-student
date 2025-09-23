@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'app/shared/auth/auth.service';
 import { StudentShakhList } from 'app/shared/data/global-constant';
+import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { StudentService } from '../../_services/student.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import swal from "sweetalert2";
-import { environment } from 'environments/environment';
-import { AuthService } from 'app/shared/auth/auth.service';
+import { StudentService } from '../../_services/student.service';
 
 @Component({
   selector: 'edit-student',
@@ -33,14 +33,15 @@ export class EditStudentComponent implements OnInit {
     private studentService: StudentService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
   ) {
     if (this.activatedRoute.snapshot.params) {
       this.studentId = Number(this.activatedRoute.snapshot.params.id) || 0;
     } else {
       this.studentId = 0;
     }
+    this.getStudentEducationList();
   }
+
 
   createUploader(targetList: any[]): FileUploader {
     const uploader = new FileUploader({
@@ -53,7 +54,6 @@ export class EditStudentComponent implements OnInit {
     uploader.onAfterAddingFile = (fileItem: FileItem) => {
       fileItem.withCredentials = false;
 
-      // Enhanced validation for file types
       const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
       const fileExtension = this.getFileExtension(fileItem.file.name);
 
@@ -64,16 +64,6 @@ export class EditStudentComponent implements OnInit {
         uploader.removeFromQueue(fileItem);
         return;
       }
-
-      // Check file size (5MB limit)
-      const maxSizeInMB = 5;
-      const fileSizeInMB = fileItem.file.size / (1024 * 1024);
-      if (fileSizeInMB > maxSizeInMB) {
-        this.toastr.warning(`ફાઇલનું કદ ${maxSizeInMB}MB કરતાં ઓછું હોવું જોઈએ.`);
-        uploader.removeFromQueue(fileItem);
-        return;
-      }
-
       // Add to attachment list for display
       const newAttachment = {
         id: Date.now(), // Temporary ID for new files
@@ -128,6 +118,7 @@ export class EditStudentComponent implements OnInit {
       fatherNameGu: [null],
       schoolName: [null, Validators.required],
       education: [null, Validators.required],
+      educationGu: [null],
       percentage: [null, [
         Validators.min(0),
         Validators.max(2),
@@ -150,6 +141,24 @@ export class EditStudentComponent implements OnInit {
 
     if (this.studentId > 0) {
       this.getById();
+    }
+  }
+
+  getStudentEducationList() {
+    this.spinner.show();
+    this.studentService.getStudentEducationList().pipe(finalize(() => this.spinner.hide())).subscribe({
+      next: (res: any) => {
+        this.educationList = res;
+      },
+      error: (err) => {
+        this.toastr.error('Error while fetching education list');
+      }
+    });
+  }
+
+  onEducationChange(e: any) {
+    if (e) {
+      this.form.get('educationGu')?.setValue(this.educationList.find(item => item.name === e.name).nameGu);
     }
   }
 
@@ -267,29 +276,22 @@ export class EditStudentComponent implements OnInit {
     formData.append('Cgpa', this.form.get('cgpa')?.value || '');
     formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
 
-    // Combine both existing and new attachments according to AttachmentViewModel
     let attachmentIndex = 0;
-
-    // Add existing attachments (from studentAttachmentList)
     this.studentAttachmentList.forEach((item) => {
-      // For existing attachments, we only send metadata (file already exists on server)
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
       formData.append(`Attachments[${attachmentIndex}].FileUrl`, item.fileUrl || '');
       formData.append(`Attachments[${attachmentIndex}].ReferenceType`, item.referenceType || 'Student');
       formData.append(`Attachments[${attachmentIndex}].Description`, item.description || '');
-      // No File property for existing attachments
       attachmentIndex++;
     });
 
     // Add new attachments (from attachmentList)
     this.attachmentList.forEach((item) => {
       if (item.file) {
-        // For new attachments, send the actual file
         formData.append(`Attachments[${attachmentIndex}].File`, item.file, item.fileName);
         formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
         formData.append(`Attachments[${attachmentIndex}].ReferenceType`, 'Student');
         formData.append(`Attachments[${attachmentIndex}].Description`, item.description || '');
-        // FileUrl will be generated by backend after upload
         attachmentIndex++;
       }
     });
@@ -304,11 +306,11 @@ export class EditStudentComponent implements OnInit {
             this.getById();
           }
         } else {
-          this.toastr.error(res.message || "Failed to update student details.");
+          this.toastr.error(res, "Failed to update student details.");
         }
       },
       error: (err: any) => {
-        this.toastr.error(err || "Failed to update student details.");
+        this.toastr.error(err, "Failed to update student details.");
       }
     });
   }

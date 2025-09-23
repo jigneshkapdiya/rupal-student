@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,14 @@ export class StudentService {
   deleteAttachment(id: number) {
     return this.http.delete(this.ApiURL + "Student/" + id);
   }
+
   deleteStudentMarkSheet(id: number) {
     return this.http.delete(this.ApiURL + "Student/Student/" + id);
+  }
+
+  getStudentExportToExcel(filterData: any): Observable<any> {
+    return this.http.post(this.ApiURL + "Student/ExportStudentList", filterData, {
+      responseType: "arraybuffer",
+    });
   }
 }
