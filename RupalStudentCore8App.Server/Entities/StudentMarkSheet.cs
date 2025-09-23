@@ -9,7 +9,7 @@ namespace RupalStudentCore8App.Server.Entities
         [Key]
         public int Id { get; set; }
         [StringLength(10)]
-        public string FormNumber { get; set; }
+        public string? FormNumber { get; set; }
 
         [Required]
         [StringLength(15)]
@@ -19,18 +19,15 @@ namespace RupalStudentCore8App.Server.Entities
         [StringLength(50)]
         public string FamilyName { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string FamilyNameGu { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string StudentName { get; set; }
 
         [StringLength(50)]
         public string StudentNameGu { get; set; }
 
-        [Required]
         [StringLength(50)]
         public string FatherName { get; set; }
 
@@ -58,6 +55,7 @@ namespace RupalStudentCore8App.Server.Entities
 
         [StringLength(10)]
         public string AcademicYear { get; set; }
+        public DateTime? CreatedOn { get; set; }
 
         [StringLength(20)]
         public string Status { get; set; }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StudentShakhList } from 'app/shared/data/global-constant';
-import { FileUploader } from 'ng2-file-upload';
+import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { StudentService } from '../../_services/student.service';
@@ -20,17 +20,7 @@ export class EditStudentComponent implements OnInit {
   form: FormGroup;
   familyNameList = StudentShakhList;
   educationList: any[] = [];
-
-  uploader: FileUploader = new FileUploader({
-    url: environment.ApiURL + 'Attachment',
-    disableMultipart: false,
-    autoUpload: false,
-    method: 'post',
-    itemAlias: '',
-    // allowedFileType: ['image', 'pdf', 'doc', 'xls'],
-    authToken: 'Bearer ' + this.authService.getAccessToken(),
-  });
-
+  uploader: FileUploader;;
   attachmentList: any[] = [];
   studentAttachmentList: any[] = [];
   studentId: number;
@@ -49,6 +39,67 @@ export class EditStudentComponent implements OnInit {
     } else {
       this.studentId = 0;
     }
+  }
+
+  createUploader(targetList: any[]): FileUploader {
+    const uploader = new FileUploader({
+      url: environment.ApiURL + 'Attachment',
+      disableMultipart: false,
+      method: 'post',
+      itemAlias: '',
+    });
+
+    uploader.onAfterAddingFile = (fileItem: FileItem) => {
+      fileItem.withCredentials = false;
+
+      // Enhanced validation for file types
+      const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+      const fileExtension = this.getFileExtension(fileItem.file.name);
+
+      if (!allowedExtensions.includes(fileExtension)) {
+        this.toastr.warning(
+          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+        );
+        uploader.removeFromQueue(fileItem);
+        return;
+      }
+      targetList.push({
+        fileName: fileItem.file.name,
+        documentType: this.getFileExtension(fileItem.file.name),
+        file: fileItem._file,
+        isNew: true,
+        fileItem: fileItem,
+        fileUrl: null,
+        description: ''
+      });
+    };
+
+    // Handle file validation errors from ng2-file-upload
+    uploader.onWhenAddingFileFailed = (item: any, filter: any, options: any) => {
+      switch (filter.name) {
+        case 'fileType':
+          this.toastr.warning(
+            'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+          );
+          break;
+        case 'mimeType':
+          this.toastr.warning(
+            'ફક્ત PDF અને છબી ફાઇલોની જ મંજૂરી છે.'
+          );
+          break;
+        default:
+          this.toastr.warning(
+            'ફાઇલ અપલોડ કરવામાં ભૂલ આવી.'
+          );
+      }
+    };
+
+    return uploader;
+  }
+
+  getFileExtension(fileName?: string): string {
+    if (!fileName || !fileName.includes('.')) return '';
+    return fileName.split('.').pop()?.toLowerCase() || '';
   }
 
   ngOnInit(): void {
@@ -76,11 +127,33 @@ export class EditStudentComponent implements OnInit {
         Validators.min(0),
         Validators.max(10),
         Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
-      ]]
+      ]],
+      isApproved: [false] // Default to false (not approved)
     });
+
+    this.uploader = this.createUploader(this.attachmentList);
+    this.uploader.onAfterAddingFile = (fileItem) => {
+      // Get file extension for validation
+      const fileExtension = this.getFileExtension(fileItem.file.name);
+      // Use helper method for file validation (adapted for FileLikeObject)
+      if (!this.isValidFileType(fileItem.file.name)) {
+        this.toastr.warning(
+          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
+        );
+        this.uploader.removeFromQueue(fileItem);
+        return;
+      }
+    };
+
     if (this.studentId > 0) {
       this.getById();
     }
+  }
+
+  isValidFileType(fileName: string): boolean {
+    const allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png'];
+    const fileExtension = this.getFileExtension(fileName);
+    return allowedExtensions.includes(fileExtension);
   }
 
   showMarksError(): boolean {
@@ -189,7 +262,7 @@ export class EditStudentComponent implements OnInit {
       next: (res: any) => {
         if (res) {
           this.toastr.success("Student details updated successfully.");
-          this.router.navigate(['/reg-form/view/', res]);
+          // this.router.navigate(['/reg-form/view/', res]);
         } else {
           this.toastr.error(res.message || "Failed to update student details.");
         }
@@ -197,6 +270,14 @@ export class EditStudentComponent implements OnInit {
       error: (err: any) => {
         this.toastr.error(err || "Failed to update student details.");
       }
+    });
+  }
+
+  getCurrentDate(): string {
+    return new Date().toLocaleDateString('en-IN', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
     });
   }
 }

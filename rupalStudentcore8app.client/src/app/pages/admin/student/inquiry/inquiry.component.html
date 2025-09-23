@@ -17,7 +17,7 @@
           <!--Start: Status-->
           <div class="col-md-2 col-lg-3 col-xl-2 col-xxl-2 mt-1 pl-1 pr-0">
             <label for="status">Status</label>
-            <ng-select formControlName="status" id="status" [items]="statusList" bindLabel="name" bindValue="value" placeholder="Select">
+            <ng-select formControlName="status" id="status" [items]="statusList" bindLabel="name" bindValue="name" placeholder="Select">
             </ng-select>
           </div>
           <!--End: Status-->
@@ -37,16 +37,26 @@
           <thead class="text-left">
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Form Number</th>
+              <th scope="col" class="text-left" (click)="sortData('createdOn')">
+                <app-sorting [isAscending]="isAscending" name="createdOn" [sortBy]="sortBy" [title]="'Date'"></app-sorting>
+              </th>
+              <th scope="col" class="text-left" (click)="sortData('formNumber')">
+                <app-sorting [isAscending]="isAscending" name="formNumber" [sortBy]="sortBy" [title]="'NO.'"></app-sorting>
+              </th>
               <th scope="col">Student Name</th>
               <th scope="col">Father Name</th>
               <th scope="col">Mobile</th>
               <th scope="col">Family Name</th>
               <th scope="col">Education</th>
-              <th scope="col">School Name</th>
-              <th scope="col">Percentage</th>
-              <th scope="col">CGPA</th>
-              <th scope="col">SGPA</th>
+              <th scope="col" class="text-right" (click)="sortData('percentage')">
+                <app-sorting [isAscending]="isAscending" name="percentage" [sortBy]="sortBy" [title]="'Percentage'"></app-sorting>
+              </th>
+              <th scope="col" class="text-right" (click)="sortData('cgpa')">
+                <app-sorting [isAscending]="isAscending" name="cgpa" [sortBy]="sortBy" [title]="'CGPA'"></app-sorting>
+              </th>
+              <th scope="col" class="text-right" (click)="sortData('sgpa')">
+                <app-sorting [isAscending]="isAscending" name="sgpa" [sortBy]="sortBy" [title]="'SGPA'"></app-sorting>
+              </th>
               <th scope="col">Status</th>
               <th>Action</th>
             </tr>
@@ -54,9 +64,9 @@
           <tbody class="text-left">
             <tr *ngFor="let item of dataList  let i = index">
               <td data-title="#">{{pageSize *(page-1)+i+1}}</td>
+              <td data-title="Date">{{item.createdOn | date:'dd/MM/yyyy'}}</td>
               <td data-title="Form Number">{{item.formNumber}}</td>
-              <td data-title="Student Name">
-                {{item.studentNameGu}}
+              <td data-title="Student Name">{{item.studentNameGu}}
                 <div *ngIf="item.studentName" class="text-muted small">
                   {{item.studentName}}
                 </div>
@@ -72,11 +82,14 @@
                   {{item.familyName}}
                 </div>
               </td>
-              <td data-title="Education">{{item.education}}</td>
-              <td data-title="School Name">{{item.schoolName}}</td>
-              <td data-title="Percentage">{{item.percentage}}</td>
-              <td data-title="CGPA">{{item.cgpa}}</td>
-              <td data-title="SGPA">{{item.sgpa}}</td>
+              <td data-title="Education">{{item.education}}
+                <div *ngIf="item.schoolName" class="text-muted small">
+                  {{item.schoolName}}
+                </div>
+              </td>
+              <td data-title="Percentage" class="text-right">{{item.percentage | number: '1.2-2'}}</td>
+              <td data-title="CGPA" class="text-right">{{item.cgpa | number: '1.2-2'}}</td>
+              <td data-title="SGPA" class="text-right">{{item.sgpa | number: '1.2-2'}}</td>
               <td data-title="Status">
                 <span
                   [ngClass]="item.status === 'New' ? 'badge badge-primary' : (item.status === 'In Process' ? 'badge badge-warning' : (item.status === 'Closed' ? 'badge badge-success' : 'badge badge-secondary'))">

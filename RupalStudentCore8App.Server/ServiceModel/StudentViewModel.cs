@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using RupalStudentCore8App.Server.Models.Auth;
+using System.ComponentModel.DataAnnotations;
 
 namespace RupalStudentCore8App.Server.ServiceModel
 {
@@ -35,6 +35,13 @@ namespace RupalStudentCore8App.Server.ServiceModel
 
         [StringLength(300)]
         public string Description { get; set; }
+    }
+
+    public class StudentFilterViewModel : PageModel
+    {
+        public string SortBy { get; set; }
+        public bool IsAscending { get; set; }
+        public string Status { get; set; }
     }
 
 }

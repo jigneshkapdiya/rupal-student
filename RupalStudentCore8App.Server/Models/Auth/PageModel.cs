@@ -6,5 +6,6 @@
         public int PageSize { get; set; }
         public string SearchText { get; set; }
         public bool? Status { get; set; }
+    
     }
 }

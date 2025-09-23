@@ -24,6 +24,12 @@
             public const string Admin = "Admin";
             public const string User = "User";
         }
+
+        public static class StudentStatus
+        {
+            public const string New = "New";
+            public const string Approved = "Approved";
+        }
         public static class FilePath
         {
             public const string Default = "/Upload/";

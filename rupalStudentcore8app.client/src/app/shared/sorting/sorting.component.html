@@ -1,0 +1,10 @@
+<div class="d-flex align-items-center">
+  <div class="mr-1">
+    <i class="fa-solid fa-right-left text-muted" style="transform: rotate(90deg);" *ngIf="name!= sortBy"></i>
+    <i class="fa-solid fa-arrow-down-wide-short" *ngIf="name==sortBy && isAscending"></i>
+    <i class="fa-solid fa-arrow-up-wide-short" *ngIf="name==sortBy && !isAscending"></i>
+  </div>
+  <div>
+    {{title}}
+  </div>
+</div>

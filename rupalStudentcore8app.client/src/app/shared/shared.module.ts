@@ -31,54 +31,57 @@ import { TopMenuLinkDirective } from './directives/topmenu-link.directive';
 import { TopMenuDropdownDirective } from './directives/topmenu-dropdown.directive';
 import { TopMenuAnchorToggleDirective } from './directives/topmenu-anchor-toggle.directive';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { SortingComponent } from './sorting/sorting.component';
 
 
 @NgModule({
-    exports: [
-        CommonModule,
-        FooterComponent,
-        NavbarComponent,
-        VerticalMenuComponent,
-        HorizontalMenuComponent,
-        CustomizerComponent,
-        NotificationSidebarComponent,
-        ToggleFullscreenDirective,
-        SidebarDirective,
-        TopMenuDirective,
-        NgbModule,
-        TranslateModule,
-        NgxSpinnerModule
-    ],
-    imports: [
-        RouterModule,
-        CommonModule,
-        NgbModule,
-        TranslateModule,
-        FormsModule,
-        OverlayModule,
-        ReactiveFormsModule ,
-        PerfectScrollbarModule,
-        ClickOutsideModule,
-        AutocompleteModule,
-        PipeModule,
-        NgxSpinnerModule
-    ],
-    declarations: [
-        FooterComponent,
-        NavbarComponent,
-        VerticalMenuComponent,
-        HorizontalMenuComponent,
-        CustomizerComponent,
-        NotificationSidebarComponent,
-        ToggleFullscreenDirective,
-        SidebarLinkDirective,
-        SidebarDropdownDirective,
-        SidebarAnchorToggleDirective,
-        SidebarDirective,
-        TopMenuLinkDirective,
-        TopMenuDropdownDirective,
-        TopMenuAnchorToggleDirective,
-        TopMenuDirective,
-    ]
+  exports: [
+    CommonModule,
+    FooterComponent,
+    NavbarComponent,
+    VerticalMenuComponent,
+    HorizontalMenuComponent,
+    CustomizerComponent,
+    NotificationSidebarComponent,
+    ToggleFullscreenDirective,
+    SidebarDirective,
+    TopMenuDirective,
+    NgbModule,
+    TranslateModule,
+    NgxSpinnerModule,
+    SortingComponent
+  ],
+  imports: [
+    RouterModule,
+    CommonModule,
+    NgbModule,
+    TranslateModule,
+    FormsModule,
+    OverlayModule,
+    ReactiveFormsModule,
+    PerfectScrollbarModule,
+    ClickOutsideModule,
+    AutocompleteModule,
+    PipeModule,
+    NgxSpinnerModule
+  ],
+  declarations: [
+    FooterComponent,
+    NavbarComponent,
+    VerticalMenuComponent,
+    HorizontalMenuComponent,
+    CustomizerComponent,
+    NotificationSidebarComponent,
+    ToggleFullscreenDirective,
+    SidebarLinkDirective,
+    SidebarDropdownDirective,
+    SidebarAnchorToggleDirective,
+    SidebarDirective,
+    TopMenuLinkDirective,
+    TopMenuDropdownDirective,
+    TopMenuAnchorToggleDirective,
+    TopMenuDirective,
+    SortingComponent
+  ]
 })
 export class SharedModule { }

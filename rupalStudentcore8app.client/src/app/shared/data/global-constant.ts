@@ -47,6 +47,11 @@ export const StudentShakhList = [
   { name: "Other", nameGU: "અન્ય" }
 ]
 
+export const StudentStatusList = [
+  { name: 'New' },
+  { name: 'Approved' },
+]
+
 
 
 

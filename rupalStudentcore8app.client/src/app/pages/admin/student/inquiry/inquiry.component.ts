@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { PageSize, PageSizeList } from 'app/shared/data/global-constant';
+import { PageSize, PageSizeList, StudentStatusList } from 'app/shared/data/global-constant';
 import { StudentService } from '../../_services/student.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -13,13 +13,16 @@ import { finalize } from 'rxjs/operators';
 })
 export class InquiryComponent implements OnInit {
   form: FormGroup;
-  statusList: any[] = [];
+  statusList = StudentStatusList;
   dataList: any[] = [];
 
   totalRecord: number = 0;
   page: number = 1;
   pageSize = PageSize;
   pageSizeList = PageSizeList;
+
+  isAscending: boolean = true;
+  sortBy: string = '';
 
   constructor(private formBuilder: FormBuilder,
     private studentService: StudentService,
@@ -35,12 +38,24 @@ export class InquiryComponent implements OnInit {
     this.getList();
   }
 
+  sortData(column: string) {
+    if (this.sortBy === column) {
+      this.isAscending = !this.isAscending;
+    } else {
+      this.sortBy = column;
+      this.isAscending = true;
+    }
+    this.getList();
+  }
+
   getList() {
     const data = {
       searchText: this.form.get('searchText')?.value,
       status: this.form.get('status')?.value,
       page: this.page,
-      pageSize: this.pageSize
+      pageSize: this.pageSize,
+      sortBy: this.sortBy,  // Column to sort by
+      isAscending: this.isAscending,
     };
     this.spinner.show();
     this.studentService.getStudentMarkSheet(data).pipe(finalize(() => this.spinner.hide()))

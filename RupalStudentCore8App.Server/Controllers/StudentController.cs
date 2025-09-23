@@ -73,8 +73,9 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Sgpa = vm.Sgpa;
                     entity.Cgpa = vm.Cgpa;
                     entity.AcademicYear = DateTime.Now.Year.ToString();
-                    entity.Status = "New";
+                    entity.Status = StudentStatus.New;
                     entity.FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true);
+                    entity.CreatedOn = DateTime.Now;
                     _Db.StudentMarkSheets.Add(entity);
                     await _Db.SaveChangesAsync();
                 }
@@ -158,6 +159,8 @@ namespace RupalStudentCore8App.Server.Controllers
                 return BadRequest("Fail to delete data.");
             }
         }
+
+   
 
     }
 }
