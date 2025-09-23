@@ -132,5 +132,32 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> AttachmentDelete(int id)
+        {
+            try
+            {
+                using (var db = _Db)
+                {
+                    Attachment entity = await db.Attachments.FindAsync(id);
+                    if (entity != null)
+                    {
+                        db.Remove(entity);
+                        await db.SaveChangesAsync();
+                        return Ok(true);
+                    }
+                    else
+                    {
+                        return NotFound();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to delete data.");
+            }
+        }
+
     }
 }

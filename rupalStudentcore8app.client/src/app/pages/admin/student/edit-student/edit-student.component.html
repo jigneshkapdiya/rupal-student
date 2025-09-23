@@ -205,7 +205,7 @@
                       </td>
                       <td data-title="Description">{{item.description}}</td>
                       <td data-title="Action" class="text-center" [ngbTooltip]="'Delete Attachment'">
-                        <a class="danger p-0" (click)="removeAttachment(item)">
+                        <a class="danger p-0" (click)="removeAttachment(item.id)">
                           <i class="ft-trash-2 font-medium-3"></i>
                         </a>
                       </td>

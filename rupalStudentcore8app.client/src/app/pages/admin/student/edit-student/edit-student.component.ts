@@ -7,6 +7,9 @@ import { ToastrService } from 'ngx-toastr';
 import { StudentService } from '../../_services/student.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
+import swal from "sweetalert2";
+import { environment } from 'environments/environment';
+import { AuthService } from 'app/shared/auth/auth.service';
 
 @Component({
   selector: 'edit-student',
@@ -17,11 +20,20 @@ export class EditStudentComponent implements OnInit {
   form: FormGroup;
   familyNameList = StudentShakhList;
   educationList: any[] = [];
-  uploader: FileUploader;
+
+  uploader: FileUploader = new FileUploader({
+    url: environment.ApiURL + 'Attachment',
+    disableMultipart: false,
+    autoUpload: false,
+    method: 'post',
+    itemAlias: '',
+    // allowedFileType: ['image', 'pdf', 'doc', 'xls'],
+    authToken: 'Bearer ' + this.authService.getAccessToken(),
+  });
+
   attachmentList: any[] = [];
   studentAttachmentList: any[] = [];
   studentId: number;
-
 
   constructor(
     public toastr: ToastrService,
@@ -29,7 +41,8 @@ export class EditStudentComponent implements OnInit {
     private fb: FormBuilder,
     private studentService: StudentService,
     private activatedRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     if (this.activatedRoute.snapshot.params) {
       this.studentId = Number(this.activatedRoute.snapshot.params.id) || 0;
@@ -115,12 +128,39 @@ export class EditStudentComponent implements OnInit {
     });
   }
 
-  removeAttachment(item: any): void {
-    console.log('item', item);
-    const index = this.attachmentList.indexOf(item);
-    if (index > -1) {
-      this.attachmentList.splice(index, 1);
-    }
+  removeAttachment(id: any) {
+    swal
+      .fire({
+        title: "Are You Sure?",
+        text: "You will not be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+        customClass: {
+          confirmButton: "btn btn-danger m-1",
+          cancelButton: "btn btn-secondary m-1",
+        },
+        buttonsStyling: false,
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.spinner.show();
+          this.studentService.deleteAttachment(id).pipe(finalize(() => this.spinner.hide())).subscribe({
+            next: (res: any) => {
+              if (res) {
+                this.toastr.success("Attachment deleted successfully.");
+                this.studentAttachmentList = this.studentAttachmentList.filter(x => x.id !== id);
+              } else {
+                this.toastr.error(res || "Failed to delete attachment.");
+              }
+            },
+            error: (err: any) => {
+              this.toastr.error(err || "Failed to delete attachment.");
+            }
+          });
+        }
+      });
   }
 
   onClick_Submit() {

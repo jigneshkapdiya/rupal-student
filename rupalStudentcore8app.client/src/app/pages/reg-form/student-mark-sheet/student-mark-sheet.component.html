@@ -77,9 +77,9 @@
           <div class="col-md-6 form-group">
             <div class="d-flex justify-content-between">
               <label for="familyName">Surname</label>
-              <label for="familyName">તમારી શાખ</label>
+              <label for="familyName">તમારી શાખે</label>
             </div>
-            <ng-select id="familyName" formControlName="familyName" [items]="familyNameList" placeholder="તમારી શાખ પસંદ કરો" bindLabel="name" bindValue="name"
+            <ng-select id="familyName" formControlName="familyName" [items]="familyNameList" placeholder="તમારી શાખે પસંદ કરો" bindLabel="name" bindValue="name"
               (change)="onFamilyChange($event)"
               [ngClass]="{'is-invalid': form.get('familyName')?.touched && form.get('familyName')?.invalid,'is-valid': form.get('familyName')?.touched && form.get('familyName')?.valid}">
               <ng-template ng-option-tmp let-item="item">

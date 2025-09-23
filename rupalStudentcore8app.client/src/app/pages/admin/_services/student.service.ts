@@ -25,4 +25,8 @@ export class StudentService {
   getStudentMarkSheetById(id: number) {
     return this.http.get(this.ApiURL + "StudentMarkSheet/" + id);
   }
+
+  deleteAttachment(id: number) {
+    return this.http.delete(this.ApiURL + "Student/" + id);
+  }
 }
