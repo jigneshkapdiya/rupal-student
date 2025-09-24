@@ -58,9 +58,7 @@ export class EditStudentComponent implements OnInit {
       const fileExtension = this.getFileExtension(fileItem.file.name);
 
       if (!allowedExtensions.includes(fileExtension)) {
-        this.toastr.warning(
-          'ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.'
-        );
+        this.toastr.warning('ફક્ત PDF, JPG, JPEG અને PNG ફાઇલોની જ મંજૂરી છે.');
         uploader.removeFromQueue(fileItem);
         return;
       }

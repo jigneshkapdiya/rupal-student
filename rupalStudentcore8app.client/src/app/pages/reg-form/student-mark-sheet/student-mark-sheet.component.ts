@@ -95,21 +95,9 @@ export class StudentMarkSheetComponent implements OnInit {
       schoolName: [null, Validators.required],
       education: [null, Validators.required],
       educationGu: [null],
-      percentage: [null, [
-        Validators.min(0),
-        Validators.max(2),
-        Validators.pattern(/^(100(\.0{0,2})?|\d{1,2}(\.\d{1,2})?)$/),
-      ]],
-      sgpa: [null, [
-        Validators.min(0),
-        Validators.max(10),
-        Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
-      ]],
-      cgpa: [null, [
-        Validators.min(0),
-        Validators.max(10),
-        Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
-      ]]
+      percentage: [null],
+      sgpa: [null],
+      cgpa: [null]
     });
 
     this.uploader = this.createUploader(this.attachmentList);
@@ -257,12 +245,6 @@ export class StudentMarkSheetComponent implements OnInit {
     }
   }
 
-  // Test method to verify toaster is working
-  testToaster() {
-    this.toastr.error('Test error message', 'Test Error');
-    this.toastr.success('Test success message', 'Test Success');
-  }
-
   removeAttachment(item: any): void {
     const index = this.attachmentList.indexOf(item);
     if (index > -1) {
@@ -316,5 +298,4 @@ export class StudentMarkSheetComponent implements OnInit {
       }
     });
   }
-
 }

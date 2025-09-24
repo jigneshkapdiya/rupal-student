@@ -30,13 +30,8 @@ namespace RupalStudentCore8App.Server.Data
         //public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Attachment> Attachments { get; set; }
         public virtual DbSet<AutoIncrement> AutoIncrements { get; set; }
-       
         public virtual DbSet<Country> Countries { get; set; }
-       
-        public virtual DbSet<Item> Items { get; set; }
-        
         public virtual DbSet<LoginHistory> LoginHistories { get; set; }
-
         public virtual DbSet<StudentMarkSheet> StudentMarkSheets { get; set; }
         public virtual DbSet<UserDevice> UserDevices { get; set; }
         public virtual DbSet<StudentEducation> StudentEducations { get; set; }

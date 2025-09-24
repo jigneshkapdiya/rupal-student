@@ -120,8 +120,8 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-language"></i></span>
               </div>
-              <input type="text" class="form-control" formControlName="studentNameGU" placeholder="વિદ્યાર્થીનું નામ ગુજરાતીમાં દાખલ કરો." [ngClass]="{'is-invalid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.invalid,'is-valid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.valid
-                        }">
+              <input type="text" class="form-control" formControlName="studentNameGU" placeholder="વિદ્યાર્થીનું નામ ગુજરાતીમાં દાખલ કરો."
+                [ngClass]="{'is-invalid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.invalid,'is-valid': form.get('studentNameGU')?.touched && form.get('studentNameGU')?.valid}">
             </div>
             <small class="form-text text-muted danger" *ngIf="(form.get('studentName')?.touched || form.get('studentNameGU')?.touched)
                     && (form.get('studentName')?.errors?.required || form.get('studentNameGU')?.errors?.required)">
@@ -140,10 +140,8 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-male"></i></span>
               </div>
-              <input type="text" class="form-control" formControlName="fatherName" placeholder="પિતાનું નામ અંગ્રેજીમાં લખો." [ngClass]="{
-                        'is-invalid': form.get('fatherName')?.touched && form.get('fatherName')?.invalid,
-                        'is-valid': form.get('fatherName')?.touched && form.get('fatherName')?.valid
-                      }">
+              <input type="text" class="form-control" formControlName="fatherName" placeholder="પિતાનું નામ અંગ્રેજીમાં લખો."
+                [ngClass]="{'is-invalid': form.get('fatherName')?.touched && form.get('fatherName')?.invalid,'is-valid': form.get('fatherName')?.touched && form.get('fatherName')?.valid}">
             </div>
             <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
                     && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
@@ -160,10 +158,8 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-language"></i></span>
               </div>
-              <input type="text" class="form-control" formControlName="fatherNameGU" placeholder="પિતાનું નામ ગુજરાતીમાં લખો." [ngClass]="{
-                          'is-invalid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.invalid,
-                          'is-valid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.valid
-                        }">
+              <input type="text" class="form-control" formControlName="fatherNameGU" placeholder="પિતાનું નામ ગુજરાતીમાં લખો."
+                [ngClass]="{ 'is-invalid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.invalid, 'is-valid': form.get('fatherNameGU')?.touched && form.get('fatherNameGU')?.valid}">
             </div>
             <small class="form-text text-muted danger" *ngIf="(form.get('fatherName')?.touched || form.get('fatherNameGU')?.touched)
                     && (form.get('fatherName')?.errors?.required || form.get('fatherNameGU')?.errors?.required)">
@@ -229,16 +225,11 @@
               <label for="education">ટકાવારી</label>
             </div>
             <div class="input-group">
-              <input type="number" class="form-control" formControlName="percentage" placeholder="0.00" step="0.01" min="0" max="100"
+              <input type="number" class="form-control" formControlName="percentage" placeholder="0.00"
                 [ngClass]="{'is-invalid': (form.get('percentage')?.touched || form.get('percentage')?.dirty) && form.get('percentage')?.invalid}">
               <div class="input-group-append">
                 <span class="input-group-text">%</span>
               </div>
-            </div>
-            <div *ngIf="form.get('percentage')?.touched || form.get('percentage')?.dirty" class="text-danger small mt-1">
-              <div *ngIf="form.get('percentage')?.hasError('pattern')">Invalid format (e.g., 75.50)</div>
-              <div *ngIf="form.get('percentage')?.hasError('min')">Cannot be less than 0</div>
-              <div *ngIf="form.get('percentage')?.hasError('max')">Cannot exceed 100</div>
             </div>
           </div>
           <div class="col-md-3 text-center">
@@ -250,13 +241,8 @@
               <label for="education">SGPA</label>
               <label for="education">એસજીપીએ</label>
             </div>
-            <input type="number" class="form-control" formControlName="sgpa" placeholder="0.00" step="0.01" min="0" max="10"
+            <input type="number" class="form-control" formControlName="sgpa" placeholder="0.00"
               [ngClass]="{'is-invalid': (form.get('sgpa')?.touched || form.get('sgpa')?.dirty) && form.get('sgpa')?.invalid}">
-            <div *ngIf="form.get('sgpa')?.touched || form.get('sgpa')?.dirty" class="text-danger small mt-1">
-              <div *ngIf="form.get('sgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
-              <div *ngIf="form.get('sgpa')?.hasError('min')">Cannot be less than 0</div>
-              <div *ngIf="form.get('sgpa')?.hasError('max')">Cannot exceed 10</div>
-            </div>
           </div>
 
           <!-- CGPA -->
@@ -265,13 +251,8 @@
               <label for="education">CGPA</label>
               <label for="education">સીજીપીએ</label>
             </div>
-            <input type="number" class="form-control" formControlName="cgpa" placeholder="0.00" step="0.01" min="0" max="10"
+            <input type="number" class="form-control" formControlName="cgpa" placeholder="0.00"
               [ngClass]="{'is-invalid': (form.get('cgpa')?.touched || form.get('cgpa')?.dirty) && form.get('cgpa')?.invalid}">
-            <div *ngIf="form.get('cgpa')?.touched || form.get('cgpa')?.dirty" class="text-danger small mt-1">
-              <div *ngIf="form.get('cgpa')?.hasError('pattern')">Invalid format (e.g., 8.75)</div>
-              <div *ngIf="form.get('cgpa')?.hasError('min')">Cannot be less than 0</div>
-              <div *ngIf="form.get('cgpa')?.hasError('max')">Cannot exceed 10</div>
-            </div>
           </div>
 
           <!-- At least one mark required message -->

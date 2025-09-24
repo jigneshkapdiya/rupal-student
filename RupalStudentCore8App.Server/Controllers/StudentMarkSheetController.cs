@@ -1,12 +1,8 @@
 ﻿using log4net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using RupalStudentCore8App.Server.Data;
 using RupalStudentCore8App.Server.Entities;
-using RupalStudentCore8App.Server.Models.Auth;
 using RupalStudentCore8App.Server.ServiceModel;
 using RupalStudentCore8App.Server.Services;
 using System.Reflection;
