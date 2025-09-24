@@ -1,4 +1,7 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using iText.Kernel.Pdf;
 using log4net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -465,5 +468,141 @@ namespace RupalStudentCore8App.Server.Controllers
                 return list; // Return unsorted list if an error occurs
             }
         }
+
+        //[HttpGet("export-pdf")]
+        //public async Task<IActionResult> GetStudentExportPdf([FromQuery] StudentFilterViewModel vm)
+        //{
+        //    try
+        //    {
+        //        // Get filtered student data (similar to your Excel export logic)
+        //        var query = _Db.StudentMarkSheets.Where(w =>
+        //         (string.IsNullOrWhiteSpace(vm.SearchText)
+        //          || w.FormNumber.Contains(vm.SearchText.Trim())
+        //          || w.Mobile.Contains(vm.SearchText.Trim())
+        //          || w.FamilyName.Contains(vm.SearchText.Trim())
+        //          || w.FatherName.Contains(vm.SearchText.Trim())
+        //          || w.StudentName.Contains(vm.SearchText.Trim()))
+        //         && (vm.Status == null || w.Status == vm.Status)
+        //     );
+
+        //        int totalRecord = await query.CountAsync();
+
+        //        // Step 1: get paged data from DB (unsorted)
+        //        var students = await query
+        //            .Skip((vm.Page - 1) * vm.PageSize)
+        //            .Take(vm.PageSize)
+        //            .Select(s => new StudentMarkSheet
+        //            {
+        //                Id = s.Id,
+        //                FormNumber = s.FormNumber,
+        //                Mobile = s.Mobile,
+        //                FamilyName = s.FamilyName,
+        //                FamilyNameGu = s.FamilyNameGu,
+        //                FatherNameGu = s.FatherNameGu,
+        //                FatherName = s.FatherName,
+        //                StudentName = s.StudentName,
+        //                StudentNameGu = s.StudentNameGu,
+        //                Education = s.Education,
+        //                EducationGu = s.EducationGu,
+        //                SchoolName = s.SchoolName,
+        //                Percentage = s.Percentage,
+        //                Sgpa = s.Sgpa,
+        //                Cgpa = s.Cgpa,
+        //                Status = s.Status,
+        //                CreatedOn = s.CreatedOn
+        //            }).OrderByDescending(o => o.FormNumber)
+        //            .ToListAsync();
+
+        //        // Step 2: sort in memory
+        //        students = ApplySorting(students, vm.SortBy, vm.IsAscending);
+
+        //        if (students == null || !students.Any())
+        //        {
+        //            return BadRequest("No student data found.");
+        //        }
+
+        //        // Create PDF document
+        //        using (MemoryStream ms = new MemoryStream())
+        //        {
+        //            var writer = new PdfWriter(ms);
+        //            var pdfDoc = new PdfDocument(writer);
+        //            var document = new Document(pdfDoc, PageSize.A4.Rotate()); // Landscape for better table fit
+
+        //            // Add title
+        //            document.Add(new Paragraph("Student Inquiry Report")
+        //                .SetTextAlignment(TextAlignment.CENTER)
+        //                .SetFontSize(16)
+        //                .SetBold());
+
+        //            document.Add(new Paragraph($"Generated on: {DateTime.Now:yyyy-MM-dd HH:mm}")
+        //                .SetTextAlignment(TextAlignment.CENTER)
+        //                .SetFontSize(10)
+        //                .SetFontColor(ColorConstants.GRAY));
+
+        //            document.Add(new Paragraph(" ")); // Empty line
+
+        //            // Create table with columns matching your Excel export
+        //            Table table = new Table(11, false); // 11 columns
+        //            table.SetWidth(UnitValue.CreatePercentValue(100));
+
+        //            // Define column widths (adjust as needed)
+        //            float[] columnWidths = { 5, 5, 10, 10, 8, 10, 10, 6, 5, 5, 6 };
+        //            table.SetWidths(columnWidths);
+
+        //            // Add table headers
+        //            string[] headers = {
+        //        "Date", "Form Number", "Student Name", "Father Name", "Mobile",
+        //        "Family Name", "Education", "Percentage", "CGPA", "SGPA", "Status"
+        //    };
+
+        //            foreach (var header in headers)
+        //            {
+        //                table.AddHeaderCell(new Cell()
+        //                    .Add(new Paragraph(header))
+        //                    .SetBold()
+        //                    .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+        //                    .SetTextAlignment(TextAlignment.CENTER));
+        //            }
+
+        //            // Add student data rows
+        //            foreach (var student in students)
+        //            {
+        //                table.AddCell(new Cell().Add(new Paragraph(student.CreatedOn?.ToString("dd-MM-yyyy") ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.FormNumber ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.StudentName ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.FatherName ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Mobile ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.FamilyName ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Education ?? "")));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Percentage?.ToString() ?? ""))
+        //                    .SetTextAlignment(TextAlignment.RIGHT));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Cgpa?.ToString() ?? ""))
+        //                    .SetTextAlignment(TextAlignment.RIGHT));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Sgpa?.ToString() ?? ""))
+        //                    .SetTextAlignment(TextAlignment.RIGHT));
+        //                table.AddCell(new Cell().Add(new Paragraph(student.Status ?? "")));
+        //            }
+
+        //            document.Add(table);
+
+        //            // Add summary/footer
+        //            document.Add(new Paragraph($"Total Records: {students.Count}")
+        //                .SetFontSize(10)
+        //                .SetItalic()
+        //                .SetTextAlignment(TextAlignment.RIGHT));
+
+        //            document.Close();
+
+        //            byte[] pdfBytes = ms.ToArray();
+        //            return File(pdfBytes, "application/pdf", $"Students_Report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError(ex, "Failed to generate student PDF report");
+        //        return BadRequest("Failed to generate PDF report.");
+        //    }
+        //}
+
     }
 }

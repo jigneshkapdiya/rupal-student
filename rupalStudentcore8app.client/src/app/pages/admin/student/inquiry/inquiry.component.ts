@@ -150,4 +150,6 @@ export class InquiryComponent implements OnInit {
         this.toastr.error(err, "Failed to download.");
       });
   }
+
+  exportToPdf() { }
 }
