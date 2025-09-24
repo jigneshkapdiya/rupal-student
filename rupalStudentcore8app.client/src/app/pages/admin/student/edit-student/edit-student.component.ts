@@ -117,11 +117,7 @@ export class EditStudentComponent implements OnInit {
       schoolName: [null, Validators.required],
       education: [null, Validators.required],
       educationGu: [null],
-      percentage: [null, [
-        Validators.min(0),
-        Validators.max(2),
-        Validators.pattern(/^(100(\.0{0,2})?|\d{1,2}(\.\d{1,2})?)$/),
-      ]],
+      percentage: [null],
       sgpa: [null, [
         Validators.min(0),
         Validators.max(10),

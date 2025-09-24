@@ -47,7 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\V1\" />
     <Folder Include="Models\V1\" />
   </ItemGroup>
 

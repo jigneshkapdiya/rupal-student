@@ -134,11 +134,6 @@
                 <span class="input-group-text">%</span>
               </div>
             </div>
-            <div *ngIf="form.get('percentage')?.touched || form.get('percentage')?.dirty" class="text-danger small mt-1">
-              <div *ngIf="form.get('percentage')?.hasError('pattern')">Invalid format (e.g., 75.50)</div>
-              <div *ngIf="form.get('percentage')?.hasError('min')">Cannot be less than 0</div>
-              <div *ngIf="form.get('percentage')?.hasError('max')">Cannot exceed 100</div>
-            </div>
           </div>
 
           <!-- SGPA -->

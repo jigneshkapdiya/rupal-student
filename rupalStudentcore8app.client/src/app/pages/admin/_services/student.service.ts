@@ -20,11 +20,11 @@ export class StudentService {
   }
 
   getStudentMarkSheet(data: any) {
-    return this.http.post(this.ApiURL + "StudentMarkSheet/GetList", data);
+    return this.http.post(this.ApiURL + "Student/GetList", data);
   }
 
   getStudentMarkSheetById(id: number) {
-    return this.http.get(this.ApiURL + "StudentMarkSheet/" + id);
+    return this.http.get(this.ApiURL + "Student/" + id);
   }
 
   deleteAttachment(id: number) {

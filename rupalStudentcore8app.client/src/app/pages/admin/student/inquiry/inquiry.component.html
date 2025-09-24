@@ -2,11 +2,11 @@
   <div class="card-content">
     <div class="card-body">
       <form [formGroup]="form" (ngSubmit)="onFilter()">
-        <div class="row align-items-end ml-1 mr-1">
+        <div class="row d-flex align-items-center">
           <!--Start: Search-->
-          <div class="col-md-4 col-lg-3 col-xl-2 col-xxl-2 pr-0 pl-0 mt-1">
+          <div class="col-md-4">
             <label for="searchText">Search</label>
-            <div class="input-group m-0">
+            <div class="input-group mb-3">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fa fa-search"></i></span>
               </div>
@@ -15,19 +15,19 @@
           </div>
           <!--End: Search-->
           <!--Start: Status-->
-          <div class="col-md-2 col-lg-3 col-xl-2 col-xxl-2 mt-1 pl-1 pr-0">
+          <div class="col-md-2 mb-3">
             <label for="status">Status</label>
             <ng-select formControlName="status" id="status" [items]="statusList" bindLabel="name" bindValue="name" placeholder="Select">
             </ng-select>
           </div>
           <!--End: Status-->
           <!--Start : Filter-->
-          <div class="col-md-4 mt-3 pl-1">
-            <button type="submit" class="btn btn-warning">
+          <div class="col-md-4">
+            <button type="submit" class="btn btn-warning mb-1">
               <i class="fa fa-search mr-1"></i>Filter</button>
-            <button class="btn btn-secondary ml-1" (click)="onClearFilter()">
+            <button class="btn btn-secondary mb-1 ml-1" (click)="onClearFilter()">
               <i class="fa fa-times mr-1"></i>Clear</button>
-            <button type="button" class="btn btn-success m-1" (click)="exportToExcel()">
+            <button type="button" class="btn btn-success mb-1 ml-1" (click)="exportToExcel()">
               <i class="fas fa-file-excel mr-1"></i> Download Excel
             </button>
           </div>
@@ -90,9 +90,9 @@
                   {{item.schoolName}}
                 </div>
               </td>
-              <td data-title="Percentage" class="text-right">{{item.percentage | number: '1.2-2'}}</td>
-              <td data-title="CGPA" class="text-right">{{item.cgpa | number: '1.2-2'}}</td>
-              <td data-title="SGPA" class="text-right">{{item.sgpa | number: '1.2-2'}}</td>
+              <td data-title="Percentage" class="text-center">{{item.percentage | number: '1.2-2'}}</td>
+              <td data-title="CGPA" class="text-center">{{item.cgpa | number: '1.2-2'}}</td>
+              <td data-title="SGPA" class="text-center">{{item.sgpa | number: '1.2-2'}}</td>
               <td data-title="Status">
                 <span
                   [ngClass]="item.status === 'New' ? 'badge badge-primary' : (item.status === 'In Process' ? 'badge badge-warning' : (item.status === 'Closed' ? 'badge badge-success' : 'badge badge-secondary'))">

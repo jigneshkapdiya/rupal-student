@@ -7,7 +7,6 @@ using RupalStudentCore8App.Server.Data;
 using RupalStudentCore8App.Server.Entities;
 using RupalStudentCore8App.Server.ServiceModel;
 using RupalStudentCore8App.Server.Services;
-using System.Drawing;
 using System.Reflection;
 using static RupalStudentCore8App.Server.Class.GlobalConstant;
 
@@ -25,28 +24,6 @@ namespace RupalStudentCore8App.Server.Controllers
         {
             _Db = Db;
             _IUtility = utility;
-        }
-
-        [HttpGet("StudentEducation/Name")]
-        public async Task<IActionResult> StudentEductionNameList()
-        {
-            try
-            {
-                using (var db = _Db)
-                {
-                    return Ok(await db.StudentEducations.Select(s => new
-                    {
-                        s.Id,
-                        s.Name,
-                        s.NameGu
-                    }).ToListAsync());
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-                return BadRequest(ex.Message);
-            }
         }
 
         [HttpPost]
@@ -150,6 +127,126 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
+        [HttpGet("StudentEducation/Name")]
+        public async Task<IActionResult> StudentEductionNameList()
+        {
+            try
+            {
+                using (var db = _Db)
+                {
+                    return Ok(await db.StudentEducations.Select(s => new
+                    {
+                        s.Id,
+                        s.Name,
+                        s.NameGu
+                    }).ToListAsync());
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var list = await _Db.StudentMarkSheets.Where(w => w.Id == id).Select(s => new
+                {
+                    s.Id,
+                    s.FormNumber,
+                    s.Mobile,
+                    s.FamilyName,
+                    s.FamilyNameGu,
+                    s.StudentName,
+                    s.StudentNameGu,
+                    s.FatherName,
+                    s.FatherNameGu,
+                    s.Education,
+                    s.EducationGu,
+                    s.SchoolName,
+                    s.Percentage,
+                    s.Sgpa,
+                    s.Cgpa,
+                    s.AcademicYear,
+                    s.Status,
+                    AttachmentList = _Db.Attachments.Where(w => w.ReferenceId == s.Id && w.ReferenceType == AttachmentReferenceType.Student).Select(s => new
+                    {
+                        s.Id,
+                        s.ReferenceId,
+                        s.ReferenceType,
+                        s.FileName,
+                        FileUrl = _IUtility.GetFileUrl(s.FileUrl, s.ReferenceType),
+                        s.Description,
+                    }).ToList()
+                }).FirstOrDefaultAsync();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to get data.");
+            }
+        }
+
+        [HttpPost("GetList")]
+        public async Task<IActionResult> GetList(StudentFilterViewModel vm)
+        {
+            try
+            {
+                var query = _Db.StudentMarkSheets.Where(w =>
+                    (string.IsNullOrWhiteSpace(vm.SearchText)
+                     || w.FormNumber.Contains(vm.SearchText.Trim())
+                     || w.Mobile.Contains(vm.SearchText.Trim())
+                     || w.FamilyName.Contains(vm.SearchText.Trim())
+                     || w.FatherName.Contains(vm.SearchText.Trim())
+                     || w.StudentName.Contains(vm.SearchText.Trim()))
+                    && (vm.Status == null || w.Status == vm.Status)
+                );
+
+                int totalRecord = await query.CountAsync();
+
+                // Step 1: get paged data from DB (unsorted)
+                var pageData = await query
+                    .Skip((vm.Page - 1) * vm.PageSize)
+                    .Take(vm.PageSize)
+                    .Select(s => new StudentMarkSheet
+                    {
+                        Id = s.Id,
+                        FormNumber = s.FormNumber,
+                        Mobile = s.Mobile,
+                        FamilyName = s.FamilyName,
+                        FamilyNameGu = s.FamilyNameGu,
+                        FatherNameGu = s.FatherNameGu,
+                        FatherName = s.FatherName,
+                        StudentName = s.StudentName,
+                        StudentNameGu = s.StudentNameGu,
+                        Education = s.Education,
+                        EducationGu = s.EducationGu,
+                        SchoolName = s.SchoolName,
+                        Percentage = s.Percentage,
+                        Sgpa = s.Sgpa,
+                        Cgpa = s.Cgpa,
+                        Status = s.Status,
+                        CreatedOn = s.CreatedOn
+                    }).OrderByDescending(o => o.FormNumber)
+                    .ToListAsync();
+
+                // Step 2: sort in memory
+                pageData = ApplySorting(pageData, vm.SortBy, vm.IsAscending);
+
+                return Ok(new { dataList = pageData, totalRecord });
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to get data.");
+            }
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> AttachmentDelete(int id)
         {
@@ -209,32 +306,43 @@ namespace RupalStudentCore8App.Server.Controllers
         {
             try
             {
-                var query = _Db.StudentMarkSheets.Where(w => (string.IsNullOrWhiteSpace(vm.SearchText) || w.FormNumber.Contains(vm.SearchText.Trim()) || w.Mobile.Contains(vm.SearchText.Trim()) || w.FamilyName.Contains(vm.SearchText.Trim())
-                                || w.FatherName.Contains(vm.SearchText.Trim()) || w.StudentName.Contains(vm.SearchText.Trim())) && (vm.Status == null || w.Status == vm.Status));
+                var query = _Db.StudentMarkSheets.Where(w =>
+                    (string.IsNullOrWhiteSpace(vm.SearchText) ||
+                     w.FormNumber.Contains(vm.SearchText.Trim()) ||
+                     w.Mobile.Contains(vm.SearchText.Trim()) ||
+                     w.FamilyName.Contains(vm.SearchText.Trim()) ||
+                     w.FatherName.Contains(vm.SearchText.Trim()) ||
+                     w.StudentName.Contains(vm.SearchText.Trim())) &&
+                    (vm.Status == null || w.Status == vm.Status));
 
                 int totalRecord = await query.CountAsync();
 
-                // Step 1: get paged data from DB (unsorted)
-                var pageData = await query.Skip((vm.Page - 1) * vm.PageSize).Take(vm.PageSize).Select(s => new StudentMarkSheet
-                {
-                    Id = s.Id,
-                    FormNumber = s.FormNumber,
-                    Mobile = s.Mobile,
-                    FamilyName = s.FamilyName,
-                    FamilyNameGu = s.FamilyNameGu,
-                    FatherNameGu = s.FatherNameGu,
-                    FatherName = s.FatherName,
-                    StudentName = s.StudentName,
-                    StudentNameGu = s.StudentNameGu,
-                    Education = s.Education,
-                    EducationGu = s.EducationGu,
-                    SchoolName = s.SchoolName,
-                    Percentage = s.Percentage,
-                    Sgpa = s.Sgpa,
-                    Cgpa = s.Cgpa,
-                    Status = s.Status,
-                    CreatedOn = s.CreatedOn
-                }).OrderByDescending(o => o.FormNumber).ToListAsync();
+                // Step 1: get paged data
+                var pageData = await query
+                    .Skip((vm.Page - 1) * vm.PageSize)
+                    .Take(vm.PageSize)
+                    .Select(s => new StudentMarkSheet
+                    {
+                        Id = s.Id,
+                        FormNumber = s.FormNumber,
+                        Mobile = s.Mobile,
+                        FamilyName = s.FamilyName,
+                        FamilyNameGu = s.FamilyNameGu,
+                        FatherNameGu = s.FatherNameGu,
+                        FatherName = s.FatherName,
+                        StudentName = s.StudentName,
+                        StudentNameGu = s.StudentNameGu,
+                        Education = s.Education,
+                        EducationGu = s.EducationGu,
+                        SchoolName = s.SchoolName,
+                        Percentage = s.Percentage,
+                        Sgpa = s.Sgpa,
+                        Cgpa = s.Cgpa,
+                        Status = s.Status,
+                        CreatedOn = s.CreatedOn
+                    })
+                    .OrderByDescending(o => o.FormNumber)
+                    .ToListAsync();
 
                 // Step 2: sort in memory
                 pageData = ApplySorting(pageData, vm.SortBy, vm.IsAscending);
@@ -249,7 +357,7 @@ namespace RupalStudentCore8App.Server.Controllers
 
                     // Headers
                     worksheet.Cell(currentRow, 1).Value = "Date";
-                    worksheet.Cell(currentRow, 2).Value = "NO.";
+                    worksheet.Cell(currentRow, 2).Value = "Form Number";
                     worksheet.Cell(currentRow, 3).Value = "Student Name";
                     worksheet.Cell(currentRow, 4).Value = "Father Name";
                     worksheet.Cell(currentRow, 5).Value = "Mobile";
@@ -258,52 +366,49 @@ namespace RupalStudentCore8App.Server.Controllers
                     worksheet.Cell(currentRow, 8).Value = "Percentage";
                     worksheet.Cell(currentRow, 9).Value = "CGPA";
                     worksheet.Cell(currentRow, 10).Value = "SGPA";
-                    worksheet.Cell(currentRow, 11).Value = "Status"; // Fixed duplicate column index
+                    worksheet.Cell(currentRow, 11).Value = "Status";
 
+                    // Data rows
                     for (int i = 0; i < pageData.Count; i++)
                     {
                         currentRow++;
 
                         worksheet.Cell(currentRow, 1).Value = pageData[i].CreatedOn;
                         worksheet.Cell(currentRow, 1).Style.DateFormat.Format = "dd/MM/yyyy";
-                        worksheet.Cell(currentRow, 2).Value = pageData[i].FormNumber?.ToString(); // Use ToString() for text format
-                        worksheet.Cell(currentRow, 3).Value = pageData[i].StudentName;
-                        worksheet.Cell(currentRow, 4).Value = pageData[i].FatherName; // Fixed column index
+
+                        worksheet.Cell(currentRow, 2).Value = pageData[i].FormNumber?.ToString();
+
+                        // Student Name (Gujarati + English in same cell)
+                        worksheet.Cell(currentRow, 3).Value = pageData[i].StudentNameGu + Environment.NewLine + pageData[i].StudentName;
+                        worksheet.Cell(currentRow, 3).Style.Alignment.WrapText = true;
+
+                        // Father Name
+                        worksheet.Cell(currentRow, 4).Value = pageData[i].FatherNameGu + Environment.NewLine + pageData[i].FatherName;
+                        worksheet.Cell(currentRow, 4).Style.Alignment.WrapText = true;
+
+                        // Mobile
                         worksheet.Cell(currentRow, 5).Value = pageData[i].Mobile;
-                        worksheet.Cell(currentRow, 6).Value = pageData[i].FamilyName;
-                        worksheet.Cell(currentRow, 7).Value = pageData[i].Education;
+
+                        // Family Name
+                        worksheet.Cell(currentRow, 6).Value = pageData[i].FamilyNameGu + Environment.NewLine + pageData[i].FamilyName;
+                        worksheet.Cell(currentRow, 6).Style.Alignment.WrapText = true;
+
+                        // Education
+                        worksheet.Cell(currentRow, 7).Value = pageData[i].EducationGu + Environment.NewLine + pageData[i].Education;
+                        worksheet.Cell(currentRow, 7).Style.Alignment.WrapText = true;
+
+                        // Other fields
                         worksheet.Cell(currentRow, 8).Value = pageData[i].Percentage;
                         worksheet.Cell(currentRow, 9).Value = pageData[i].Cgpa;
                         worksheet.Cell(currentRow, 10).Value = pageData[i].Sgpa;
-                        worksheet.Cell(currentRow, 11).Value = pageData[i].Status; // Fixed column index
-
-                        // If you need to set specific format for certain columns, use Style.NumberFormat
-                        worksheet.Cell(currentRow, 2).Style.NumberFormat.Format = "@"; // Text format for FormNumber
-                        worksheet.Cell(currentRow, 5).Style.NumberFormat.Format = "@"; // Text format for Mobile
-
-                        // Format percentage column
-                        if (pageData[i].Percentage.HasValue)
-                        {
-                            worksheet.Cell(currentRow, 8).Style.NumberFormat.Format = "0.00";
-                        }
-
-                        // Format CGPA/SGPA columns
-                        if (pageData[i].Cgpa.HasValue)
-                        {
-                            worksheet.Cell(currentRow, 9).Style.NumberFormat.Format = "0.00";
-                        }
-
-                        if (pageData[i].Sgpa.HasValue)
-                        {
-                            worksheet.Cell(currentRow, 10).Style.NumberFormat.Format = "0.00";
-                        }
+                        worksheet.Cell(currentRow, 11).Value = pageData[i].Status;
                     }
 
-                    // Auto-fit columns for better visibility
+                    // Auto-fit columns
                     worksheet.Columns().AdjustToContents();
 
-                    // Setting borders to each used cell in excel
-                    var dataRange = worksheet.Range(worksheet.Cell(1, 1), worksheet.Cell(currentRow, 11));
+                    // Borders
+                    var dataRange = worksheet.Range(worksheet.Cell(1, 1), worksheet.Cell(currentRow, 12));
                     dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                     dataRange.Style.Border.BottomBorderColor = XLColor.Black;
@@ -315,6 +420,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     workbook.SaveAs(stream);
                     finalResult = stream.ToArray();
                 }
+
                 return File(finalResult, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Student.xlsx");
             }
             catch (Exception ex)
@@ -323,8 +429,6 @@ namespace RupalStudentCore8App.Server.Controllers
                 return BadRequest("Fail to get data.");
             }
         }
-
-
         private List<StudentMarkSheet> ApplySorting(List<StudentMarkSheet> list, string sortBy, bool isAscending)
         {
             try
@@ -361,6 +465,5 @@ namespace RupalStudentCore8App.Server.Controllers
                 return list; // Return unsorted list if an error occurs
             }
         }
-
     }
 }
