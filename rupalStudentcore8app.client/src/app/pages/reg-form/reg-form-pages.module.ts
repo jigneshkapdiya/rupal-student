@@ -9,9 +9,10 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { RegFormPagesRoutingModule } from "./reg-form-pages-routing.module";
 import { StudentMarkSheetComponent } from "./student-mark-sheet/student-mark-sheet.component";
 import { ViewStudentMarkSheetComponent } from "./view-student-mark-sheet/view-student-mark-sheet.component";
+import { InquiryRegFormComponent } from './inquiry-reg-form/inquiry-reg-form.component';
 
 @NgModule({
-  declarations: [StudentMarkSheetComponent, ViewStudentMarkSheetComponent],
+  declarations: [StudentMarkSheetComponent, ViewStudentMarkSheetComponent, InquiryRegFormComponent],
   imports: [
     RegFormPagesRoutingModule,
     CommonModule,

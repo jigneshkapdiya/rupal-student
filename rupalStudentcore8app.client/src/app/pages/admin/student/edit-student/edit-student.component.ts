@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from 'app/shared/auth/auth.service';
 import { StudentShakhList } from 'app/shared/data/global-constant';
 import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';

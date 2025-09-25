@@ -9,6 +9,7 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using log4net;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RupalStudentCore8App.Server.Class;
@@ -133,6 +134,41 @@ namespace RupalStudentCore8App.Server.Controllers
             {
                 await transaction.RollbackAsync();
                 return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpGet("GetStudentList")]
+        public async Task<IActionResult> GetStudentList()
+        {
+            try
+            {
+                var list = await _Db.StudentMarkSheets.Select(s => new
+                {
+                    s.Id,
+                    s.FormNumber,
+                    s.Mobile,
+                    s.FamilyName,
+                    s.FamilyNameGu,
+                    s.StudentName,
+                    s.StudentNameGu,
+                    s.FatherName,
+                    s.FatherNameGu,
+                    s.Education,
+                    s.EducationGu,
+                    s.SchoolName,
+                    s.Percentage,
+                    s.Sgpa,
+                    s.Cgpa,
+                    s.AcademicYear,
+                    s.Status,
+                    s.CreatedOn
+                }).OrderByDescending(o => o.FormNumber).ToListAsync();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to get data.");
             }
         }
 

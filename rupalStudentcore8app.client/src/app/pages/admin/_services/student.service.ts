@@ -46,4 +46,8 @@ export class StudentService {
       responseType: 'blob'
     });
   }
+
+  getStudentInquiryList() {
+    return this.http.get(this.ApiURL + "Student/GetStudentList");
+  }
 }
