@@ -280,7 +280,8 @@ namespace RupalStudentCore8App.Server.Controllers
                         Sgpa = s.Sgpa,
                         Cgpa = s.Cgpa,
                         Status = s.Status,
-                        CreatedOn = s.CreatedOn
+                        CreatedOn = s.CreatedOn,
+                        Semester = s.Semester
                     }).OrderByDescending(o => o.FormNumber)
                     .ToListAsync();
 

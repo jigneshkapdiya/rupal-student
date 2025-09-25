@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StudentShakhList } from 'app/shared/data/global-constant';
+import { StudentSemesterList, StudentShakhList } from 'app/shared/data/global-constant';
 import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,6 +18,7 @@ import { StudentService } from '../../_services/student.service';
 export class EditStudentComponent implements OnInit {
   form: FormGroup;
   familyNameList = StudentShakhList;
+  semesterList = StudentSemesterList
   educationList: any[] = [];
   uploader: FileUploader;;
   attachmentList: any[] = [];
@@ -117,6 +118,7 @@ export class EditStudentComponent implements OnInit {
       education: [null, Validators.required],
       educationGu: [null],
       percentage: [null],
+      semester: [null],
       sgpa: [null, [
         Validators.min(0),
         Validators.max(10),
@@ -173,6 +175,21 @@ export class EditStudentComponent implements OnInit {
     return anyTouched && allEmpty;
   }
 
+  shouldShowSemester(): boolean {
+    const education = this.form.get('education')?.value;
+    if (!education) return false;
+
+    // List of education values that are Standard 12 or below
+    const schoolLevelEducations = ['KG',
+      'Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5',
+      'Standard 6', 'Standard 7', 'Standard 8', 'Standard 9', 'Standard 10',
+      'Standard 11', 'Standard 12'
+    ];
+
+    // Show semester only if education is NOT in the school level list
+    return !schoolLevelEducations.includes(education);
+  }
+
   onFamilyChange(e: any) {
     if (e) {
       this.form.get('familyNameGu')?.setValue(this.familyNameList.find(item => item.name === e.name).nameGU);
@@ -197,6 +214,7 @@ export class EditStudentComponent implements OnInit {
             percentage: res.percentage,
             sgpa: res.sgpa,
             cgpa: res.cgpa,
+            semester: res.semester,
           });
           this.status = res.status;
           this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
@@ -271,6 +289,7 @@ export class EditStudentComponent implements OnInit {
     formData.append('Cgpa', this.form.get('cgpa')?.value || '');
     formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
     formData.append('IsRejected', this.form.get('isRejected')?.value ? 'true' : 'false');
+    formData.append('Semester', this.form.get('semester')?.value || '');
     let attachmentIndex = 0;
     this.studentAttachmentList.forEach((item) => {
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
