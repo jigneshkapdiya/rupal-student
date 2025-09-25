@@ -68,6 +68,7 @@ export const StudentSemesterList = [
 export const StudentStatusList = [
   { name: 'New' },
   { name: 'Approved' },
+  { name: 'Rejected' },
 ]
 
 
