@@ -258,6 +258,8 @@ namespace RupalStudentCore8App.Server.Controllers
 
                 int totalRecord = await query.CountAsync();
 
+                query = query.OrderByDescending(o => o.FormNumber);
+
                 // Step 1: get paged data from DB (unsorted)
                 var pageData = await query
                     .Skip((vm.Page - 1) * vm.PageSize)
@@ -282,12 +284,10 @@ namespace RupalStudentCore8App.Server.Controllers
                         Status = s.Status,
                         CreatedOn = s.CreatedOn,
                         Semester = s.Semester
-                    }).OrderByDescending(o => o.FormNumber)
-                    .ToListAsync();
+                    }).ToListAsync();
 
                 // Step 2: sort in memory
                 pageData = ApplySorting(pageData, vm.SortBy, vm.IsAscending);
-
                 return Ok(new { dataList = pageData, totalRecord });
             }
             catch (Exception ex)
