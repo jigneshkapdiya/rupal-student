@@ -1,7 +1,13 @@
 ﻿using ClosedXML.Excel;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
+using iText.IO.Font;
+using iText.IO.Font.Constants;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using log4net;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -98,7 +104,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     {
                         string fileName = item.File != null
                             ? _IUtility.UploadFile(item.File, FilePath.Student) // returns relative filename
-                            : (!string.IsNullOrEmpty(item.FileUrl) ? Path.GetFileName(item.FileUrl) : null);
+                            : (string.IsNullOrEmpty(item.FileUrl) ? null : System.IO.Path.GetFileName(item.FileUrl));
 
                         if (!string.IsNullOrEmpty(fileName))
                         {
@@ -469,140 +475,195 @@ namespace RupalStudentCore8App.Server.Controllers
             }
         }
 
-        //[HttpGet("export-pdf")]
-        //public async Task<IActionResult> GetStudentExportPdf([FromQuery] StudentFilterViewModel vm)
-        //{
-        //    try
-        //    {
-        //        // Get filtered student data (similar to your Excel export logic)
-        //        var query = _Db.StudentMarkSheets.Where(w =>
-        //         (string.IsNullOrWhiteSpace(vm.SearchText)
-        //          || w.FormNumber.Contains(vm.SearchText.Trim())
-        //          || w.Mobile.Contains(vm.SearchText.Trim())
-        //          || w.FamilyName.Contains(vm.SearchText.Trim())
-        //          || w.FatherName.Contains(vm.SearchText.Trim())
-        //          || w.StudentName.Contains(vm.SearchText.Trim()))
-        //         && (vm.Status == null || w.Status == vm.Status)
-        //     );
+        [HttpPost("ExportPDF")]
+        public async Task<IActionResult> GetStudentExportPdf(StudentFilterViewModel vm)
+        {
+            try
+            {
+                // Get filtered student data
+                var query = _Db.StudentMarkSheets.Where(w =>
+                    (string.IsNullOrWhiteSpace(vm.SearchText)
+                     || w.FormNumber.Contains(vm.SearchText.Trim())
+                     || w.Mobile.Contains(vm.SearchText.Trim())
+                     || w.FamilyName.Contains(vm.SearchText.Trim())
+                     || w.FatherName.Contains(vm.SearchText.Trim())
+                     || w.StudentName.Contains(vm.SearchText.Trim()))
+                    && (vm.Status == null || w.Status == vm.Status)
+                );
 
-        //        int totalRecord = await query.CountAsync();
+                int totalRecord = await query.CountAsync();
 
-        //        // Step 1: get paged data from DB (unsorted)
-        //        var students = await query
-        //            .Skip((vm.Page - 1) * vm.PageSize)
-        //            .Take(vm.PageSize)
-        //            .Select(s => new StudentMarkSheet
-        //            {
-        //                Id = s.Id,
-        //                FormNumber = s.FormNumber,
-        //                Mobile = s.Mobile,
-        //                FamilyName = s.FamilyName,
-        //                FamilyNameGu = s.FamilyNameGu,
-        //                FatherNameGu = s.FatherNameGu,
-        //                FatherName = s.FatherName,
-        //                StudentName = s.StudentName,
-        //                StudentNameGu = s.StudentNameGu,
-        //                Education = s.Education,
-        //                EducationGu = s.EducationGu,
-        //                SchoolName = s.SchoolName,
-        //                Percentage = s.Percentage,
-        //                Sgpa = s.Sgpa,
-        //                Cgpa = s.Cgpa,
-        //                Status = s.Status,
-        //                CreatedOn = s.CreatedOn
-        //            }).OrderByDescending(o => o.FormNumber)
-        //            .ToListAsync();
+                // Get paged data from DB
+                var students = await query
+                    .Skip((vm.Page - 1) * vm.PageSize)
+                    .Take(vm.PageSize)
+                    .Select(s => new StudentMarkSheet
+                    {
+                        Id = s.Id,
+                        FormNumber = s.FormNumber,
+                        Mobile = s.Mobile,
+                        FamilyName = s.FamilyName,
+                        FamilyNameGu = s.FamilyNameGu,
+                        FatherNameGu = s.FatherNameGu,
+                        FatherName = s.FatherName,
+                        StudentName = s.StudentName,
+                        StudentNameGu = s.StudentNameGu,
+                        Education = s.Education,
+                        EducationGu = s.EducationGu,
+                        SchoolName = s.SchoolName,
+                        Percentage = s.Percentage,
+                        Sgpa = s.Sgpa,
+                        Cgpa = s.Cgpa,
+                        Status = s.Status,
+                        CreatedOn = s.CreatedOn
+                    })
+                    .OrderByDescending(o => o.FormNumber)
+                    .ToListAsync();
 
-        //        // Step 2: sort in memory
-        //        students = ApplySorting(students, vm.SortBy, vm.IsAscending);
+                // Sort in memory
+                students = ApplySorting(students, vm.SortBy, vm.IsAscending);
 
-        //        if (students == null || !students.Any())
-        //        {
-        //            return BadRequest("No student data found.");
-        //        }
+                if (students == null || !students.Any())
+                {
+                    return BadRequest("No student data found.");
+                }
 
-        //        // Create PDF document
-        //        using (MemoryStream ms = new MemoryStream())
-        //        {
-        //            var writer = new PdfWriter(ms);
-        //            var pdfDoc = new PdfDocument(writer);
-        //            var document = new Document(pdfDoc, PageSize.A4.Rotate()); // Landscape for better table fit
+                // Create PDF document
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    var writer = new PdfWriter(ms);
+                    var pdfDoc = new PdfDocument(writer);
+                    var document = new Document(pdfDoc, PageSize.A4.Rotate());
 
-        //            // Add title
-        //            document.Add(new Paragraph("Student Inquiry Report")
-        //                .SetTextAlignment(TextAlignment.CENTER)
-        //                .SetFontSize(16)
-        //                .SetBold());
+                    // Add title
+                    document.Add(new Paragraph("Students MarkSheet Reports")
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetFontSize(16)
+                        .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD)));
 
-        //            document.Add(new Paragraph($"Generated on: {DateTime.Now:yyyy-MM-dd HH:mm}")
-        //                .SetTextAlignment(TextAlignment.CENTER)
-        //                .SetFontSize(10)
-        //                .SetFontColor(ColorConstants.GRAY));
+                    document.Add(new Paragraph($"Generated on: {DateTime.Now:yyyy-MM-dd HH:mm}")
+                        .SetTextAlignment(TextAlignment.CENTER)
+                        .SetFontSize(10)
+                        .SetFontColor(ColorConstants.GRAY));
 
-        //            document.Add(new Paragraph(" ")); // Empty line
+                    document.Add(new Paragraph(" ")); // Empty line
 
-        //            // Create table with columns matching your Excel export
-        //            Table table = new Table(11, false); // 11 columns
-        //            table.SetWidth(UnitValue.CreatePercentValue(100));
+                    // Create table with 11 columns
+                    Table table = new Table(11, false);
+                    table.SetWidth(UnitValue.CreatePercentValue(100));
 
-        //            // Define column widths (adjust as needed)
-        //            float[] columnWidths = { 5, 5, 10, 10, 8, 10, 10, 6, 5, 5, 6 };
-        //            table.SetWidths(columnWidths);
+                    // Add table headers
+                    string[] headers = { "Date", "Form Number", "Student Name", "Father Name", "Mobile", "Family Name", "Education", "Percentage", "CGPA", "SGPA", "Status" };
 
-        //            // Add table headers
-        //            string[] headers = {
-        //        "Date", "Form Number", "Student Name", "Father Name", "Mobile",
-        //        "Family Name", "Education", "Percentage", "CGPA", "SGPA", "Status"
-        //    };
+                    foreach (var header in headers)
+                    {
+                        table.AddHeaderCell(new Cell()
+                            .Add(new Paragraph(header))
+                            .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_BOLD))
+                            .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
+                            .SetTextAlignment(TextAlignment.CENTER));
+                    }
 
-        //            foreach (var header in headers)
-        //            {
-        //                table.AddHeaderCell(new Cell()
-        //                    .Add(new Paragraph(header))
-        //                    .SetBold()
-        //                    .SetBackgroundColor(ColorConstants.LIGHT_GRAY)
-        //                    .SetTextAlignment(TextAlignment.CENTER));
-        //            }
+                    // Add student data rows with dual language support
+                    foreach (var student in students)
+                    {
+                        // Date cell
+                        table.AddCell(CreateDualLanguageCell(student.CreatedOn?.ToString("dd-MM-yyyy") ?? "", ""));
 
-        //            // Add student data rows
-        //            foreach (var student in students)
-        //            {
-        //                table.AddCell(new Cell().Add(new Paragraph(student.CreatedOn?.ToString("dd-MM-yyyy") ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.FormNumber ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.StudentName ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.FatherName ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Mobile ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.FamilyName ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Education ?? "")));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Percentage?.ToString() ?? ""))
-        //                    .SetTextAlignment(TextAlignment.RIGHT));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Cgpa?.ToString() ?? ""))
-        //                    .SetTextAlignment(TextAlignment.RIGHT));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Sgpa?.ToString() ?? ""))
-        //                    .SetTextAlignment(TextAlignment.RIGHT));
-        //                table.AddCell(new Cell().Add(new Paragraph(student.Status ?? "")));
-        //            }
+                        // Form Number cell
+                        table.AddCell(CreateDualLanguageCell(student.FormNumber ?? "", ""));
 
-        //            document.Add(table);
+                        // Student Name cell - Gujarati above English
+                        table.AddCell(CreateDualLanguageCell(student.StudentNameGu ?? "", student.StudentName ?? ""));
 
-        //            // Add summary/footer
-        //            document.Add(new Paragraph($"Total Records: {students.Count}")
-        //                .SetFontSize(10)
-        //                .SetItalic()
-        //                .SetTextAlignment(TextAlignment.RIGHT));
+                        // Father Name cell - Gujarati above English
+                        table.AddCell(CreateDualLanguageCell(student.FatherNameGu ?? "", student.FatherName ?? ""));
 
-        //            document.Close();
+                        // Mobile cell
+                        table.AddCell(CreateDualLanguageCell(student.Mobile ?? "", ""));
 
-        //            byte[] pdfBytes = ms.ToArray();
-        //            return File(pdfBytes, "application/pdf", $"Students_Report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, "Failed to generate student PDF report");
-        //        return BadRequest("Failed to generate PDF report.");
-        //    }
-        //}
+                        // Family Name cell - Gujarati above English
+                        table.AddCell(CreateDualLanguageCell(student.FamilyNameGu ?? "", student.FamilyName ?? ""));
+
+                        // Education cell - Gujarati above English
+                        table.AddCell(CreateDualLanguageCell(student.EducationGu ?? "", student.Education ?? ""));
+
+                        // Percentage cell
+                        table.AddCell(new Cell()
+                            .Add(new Paragraph(student.Percentage?.ToString() ?? ""))
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // CGPA cell
+                        table.AddCell(new Cell()
+                            .Add(new Paragraph(student.Cgpa?.ToString() ?? ""))
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // SGPA cell
+                        table.AddCell(new Cell()
+                            .Add(new Paragraph(student.Sgpa?.ToString() ?? ""))
+                            .SetTextAlignment(TextAlignment.RIGHT));
+
+                        // Status cell
+                        table.AddCell(CreateDualLanguageCell(student.Status ?? "", ""));
+                    }
+
+                    document.Add(table);
+
+                    // Add summary/footer
+                    document.Add(new Paragraph($"Total Records: {students.Count}")
+                        .SetFontSize(10)
+                        .SetFont(PdfFontFactory.CreateFont(StandardFonts.HELVETICA_OBLIQUE))
+                        .SetTextAlignment(TextAlignment.RIGHT));
+
+                    document.Close();
+
+                    byte[] pdfBytes = ms.ToArray();
+                    ms.Close();
+                    return File(pdfBytes, "application/pdf", $"Students_Report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex.Message);
+                return BadRequest("Fail to download data.");
+            }
+        }
+
+        // Helper method to create cells with dual language text (Gujarati above English)
+        private Cell CreateDualLanguageCell(string gujaratiText, string englishText)
+        {
+            var cell = new Cell();
+
+            // Combine Gujarati and English in one paragraph vertically
+            if (!string.IsNullOrEmpty(gujaratiText))
+            {
+                var guText = new Paragraph(gujaratiText)
+                    .SetFontSize(10)
+                    .SetBold() // Gujarati can be bold
+                    .SetTextAlignment(TextAlignment.LEFT);
+                cell.Add(guText);
+            }
+
+            if (!string.IsNullOrEmpty(englishText))
+            {
+                var enText = new Paragraph(englishText)
+                    .SetFontSize(9)
+                    .SetFontColor(ColorConstants.DARK_GRAY)
+                    .SetTextAlignment(TextAlignment.LEFT);
+                cell.Add(enText);
+            }
+
+            // If both are empty, add empty paragraph
+            if (string.IsNullOrEmpty(gujaratiText) && string.IsNullOrEmpty(englishText))
+            {
+                cell.Add(new Paragraph(""));
+            }
+
+            // Optional: add padding to make it look neat
+            cell.SetPadding(5);
+
+            return cell;
+        }
 
     }
 }

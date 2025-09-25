@@ -151,5 +151,30 @@ export class InquiryComponent implements OnInit {
       });
   }
 
-  exportToPdf() { }
+  exportToPdf() {
+    const data = {
+      searchText: this.form.get('searchText')?.value,
+      status: this.form.get('status')?.value,
+      page: this.page,
+      pageSize: this.pageSize,
+      sortBy: this.sortBy,  // Column to sort by
+      isAscending: this.isAscending,
+    };
+    this.spinner.show();
+    this.studentService.printStandardInvoice(data).pipe(finalize(() => this.spinner.hide()))
+      .subscribe((res: any) => {
+        const blob = new Blob([res], {
+          type: "application/pdf",
+        });
+        const anchor = window.document.createElement("a");
+        anchor.href = window.URL.createObjectURL(blob);
+        anchor.download = "Student.pdf";
+        document.body.appendChild(anchor);
+        anchor.click();
+        document.body.removeChild(anchor);
+        window.URL.revokeObjectURL(anchor.href);
+      }, (err) => {
+        this.toastr.error(err, "Failed to download.");
+      });
+  }
 }

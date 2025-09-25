@@ -40,4 +40,10 @@ export class StudentService {
       responseType: "arraybuffer",
     });
   }
+
+  printStandardInvoice(data: any): Observable<any> {
+    return this.http.post(this.ApiURL + "Student/ExportPDF", data, {
+      responseType: 'blob'
+    });
+  }
 }
