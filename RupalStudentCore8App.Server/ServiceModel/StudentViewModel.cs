@@ -1,5 +1,6 @@
 ﻿using RupalStudentCore8App.Server.Models.Auth;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 
 namespace RupalStudentCore8App.Server.ServiceModel
 {
@@ -23,6 +24,7 @@ namespace RupalStudentCore8App.Server.ServiceModel
         public string Status { get; set; }
         public bool IsApproved { get; set; }
         public bool IsRejected { get; set; }
+        public string Semester { get; set; }
         public List<AttachmentViewModel> Attachments { get; set; }
     }
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { StudentService } from 'app/pages/admin/_services/student.service';
-import { StudentShakhList } from 'app/shared/data/global-constant';
+import { StudentSemesterList, StudentShakhList } from 'app/shared/data/global-constant';
 import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -17,6 +17,7 @@ import { finalize } from 'rxjs/operators';
 export class StudentMarkSheetComponent implements OnInit {
   form: FormGroup;
   familyNameList = StudentShakhList;
+  semesterList = StudentSemesterList
   educationList: any[] = [];
   uploader: FileUploader;
   attachmentList: any[] = [];
@@ -96,6 +97,7 @@ export class StudentMarkSheetComponent implements OnInit {
       education: [null, Validators.required],
       educationGu: [null],
       percentage: [null],
+      semester: [null],
       sgpa: [null],
       cgpa: [null]
     });
@@ -196,6 +198,21 @@ export class StudentMarkSheetComponent implements OnInit {
     return anyTouched && allEmpty;
   }
 
+  shouldShowSemester(): boolean {
+    const education = this.form.get('education')?.value;
+    if (!education) return false;
+
+    // List of education values that are Standard 12 or below
+    const schoolLevelEducations = ['KG',
+      'Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5',
+      'Standard 6', 'Standard 7', 'Standard 8', 'Standard 9', 'Standard 10',
+      'Standard 11', 'Standard 12'
+    ];
+
+    // Show semester only if education is NOT in the school level list
+    return !schoolLevelEducations.includes(education);
+  }
+
   getStudentEducationList() {
     this.spinner.show();
     this.studentService.getStudentEducationList().pipe(finalize(() => this.spinner.hide())).subscribe({
@@ -277,6 +294,7 @@ export class StudentMarkSheetComponent implements OnInit {
     formData.append('percentage', this.form.get('percentage')?.value || '');
     formData.append('sgpa', this.form.get('sgpa')?.value || '');
     formData.append('cgpa', this.form.get('cgpa')?.value || '');
+    formData.append('semester', this.form.get('semester')?.value || '');
 
     this.attachmentList.forEach((item, index) => {
       if (item.fileUrl) {

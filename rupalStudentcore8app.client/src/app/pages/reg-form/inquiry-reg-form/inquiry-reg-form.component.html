@@ -13,6 +13,7 @@
               <th scope="col">Father Name</th>
               <th scope="col">Family Name</th>
               <th scope="col">Education</th>
+              <th scope="col">Semester</th>
               <th scope="col" class="text-center">Percentage</th>
               <th scope="col" class="text-center">CGPA</th>
               <th scope="col" class="text-center">SGPA</th>
@@ -48,6 +49,7 @@
                   {{item.schoolName}}
                 </div>
               </td>
+              <td>{{item.semester}}</td>
               <td class="text-center">{{item.percentage | number: '1.2-2'}}</td>
               <td class="text-center">{{item.cgpa | number: '1.2-2'}}</td>
               <td class="text-center">{{item.sgpa | number: '1.2-2'}}</td>

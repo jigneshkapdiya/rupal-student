@@ -55,6 +55,7 @@ namespace RupalStudentCore8App.Server.Entities
 
         [StringLength(10)]
         public string AcademicYear { get; set; }
+        public string Semester { get; set; }
         public DateTime? CreatedOn { get; set; }
 
         [StringLength(20)]

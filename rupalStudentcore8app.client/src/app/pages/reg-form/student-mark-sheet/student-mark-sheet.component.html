@@ -1,5 +1,5 @@
 <div class="container py-5">
-  <div class="card">
+  <div class="card shadow">
     <!-- Header -->
     <div class="card-header bg-light-primary text-center">
       <h1 class="text-primary"><i class="fa-solid fa-award"></i> રૂપાલ કેળવણી મંડળ - માર્કશીટ રજીસ્ટ્રેશન
@@ -42,6 +42,7 @@
             </h6>
           </div>
         </div>
+
         <div class="row">
           <!-- Mobile Number -->
           <div class="col-md-6 form-group">
@@ -91,6 +92,7 @@
             </small>
           </div>
         </div>
+
         <div class="row">
           <!-- Student Name -->
           <div class="col-md-6 form-group">
@@ -129,6 +131,7 @@
             </small>
           </div>
         </div>
+
         <div class="row">
           <!-- Father's Name -->
           <div class="col-md-6 form-group">
@@ -167,6 +170,7 @@
             </small>
           </div>
         </div>
+
         <div class="row">
           <!-- School and Education -->
           <div class="col-md-6 form-group">
@@ -201,6 +205,21 @@
             <small class="form-text text-muted danger" *ngIf="form.get('education')?.touched && form.get('education')?.invalid">
               <span *ngIf="form.get('education').errors.required">શિક્ષણ જરૂરી છે.</span>
             </small>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="shouldShowSemester()">
+          <div class="col-md-6 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="education">Semester</label>
+              <label for="education">સેમેસ્ટર</label>
+            </div>
+            <ng-select [items]="semesterList" bindLabel="name" bindValue="name" placeholder="સેમેસ્ટર પસંદ કરો" formControlName="semester"
+              [ngClass]="{'is-invalid': form.get('semester')?.touched && form.get('semester')?.invalid}">
+              <ng-template ng-option-tmp let-item="item">
+                {{ item.name }} - {{ item.nameGU }}
+              </ng-template>
+            </ng-select>
           </div>
         </div>
 

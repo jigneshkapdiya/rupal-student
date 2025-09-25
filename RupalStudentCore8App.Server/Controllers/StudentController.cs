@@ -65,7 +65,8 @@ namespace RupalStudentCore8App.Server.Controllers
                         AcademicYear = DateTime.Now.Year.ToString(),
                         Status = StudentStatus.New,
                         FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true),
-                        CreatedOn = DateTime.Now
+                        CreatedOn = DateTime.Now,
+                        Semester = vm.Semester,
                     };
                     _Db.StudentMarkSheets.Add(entity);
                     await _Db.SaveChangesAsync();
@@ -87,6 +88,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Cgpa = vm.Cgpa;
                     entity.AcademicYear = DateTime.Now.Year.ToString();
                     entity.Status = vm.IsApproved ? StudentStatus.Approved : (vm.IsRejected ? StudentStatus.Rejected: StudentStatus.New);
+                    entity.Semester = vm.Semester;
                     _Db.StudentMarkSheets.Update(entity);
                     await _Db.SaveChangesAsync();
                 }
@@ -161,7 +163,8 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.Cgpa,
                     s.AcademicYear,
                     s.Status,
-                    s.CreatedOn
+                    s.CreatedOn,
+                    s.Semester
                 }).OrderByDescending(o => o.FormNumber).ToListAsync();
                 return Ok(list);
             }
@@ -218,6 +221,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.Cgpa,
                     s.AcademicYear,
                     s.Status,
+                    s.Semester,
                     AttachmentList = _Db.Attachments.Where(w => w.ReferenceId == s.Id && w.ReferenceType == AttachmentReferenceType.Student).Select(s => new
                     {
                         s.Id,

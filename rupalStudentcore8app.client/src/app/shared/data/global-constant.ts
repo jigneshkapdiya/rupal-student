@@ -47,6 +47,24 @@ export const StudentShakhList = [
   { name: "Other", nameGU: "અન્ય" }
 ]
 
+export const StudentSemesterList = [
+  { name: "1st Year", nameGU: "પ્રથમ વર્ષ" },
+  { name: "2nd Year", nameGU: "બીજું વર્ષ" },
+  { name: "3rd Year", nameGU: "ત્રીજું વર્ષ" },
+  { name: "4th Year", nameGU: "ચોથું વર્ષ" },
+  { name: "1st Semester", nameGU: "પ્રથમ સેમેસ્ટર" },
+  { name: "2nd Semester", nameGU: "બીજું સેમેસ્ટર" },
+  { name: "3rd Semester", nameGU: "ત્રીજું સેમેસ્ટર" },
+  { name: "4th Semester", nameGU: "ચોથું સેમેસ્ટર" },
+  { name: "5th Semester", nameGU: "પાંચમું સેમેસ્ટર" },
+  { name: "6th Semester", nameGU: "છઠ્ઠું સેમેસ્ટર" },
+  { name: "7th Semester", nameGU: "સાતમું સેમેસ્ટર" },
+  { name: "8th Semester", nameGU: "આઠમું સેમેસ્ટર" },
+  { name: "9th Semester", nameGU: "નવમું સેમેસ્ટર" },
+  { name: "10th Semester", nameGU: "દસમું સેમેસ્ટર" },
+];
+
+
 export const StudentStatusList = [
   { name: 'New' },
   { name: 'Approved' },
