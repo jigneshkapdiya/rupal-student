@@ -97,8 +97,7 @@
               <td data-title="CGPA" class="text-center">{{item.cgpa | number: '1.2-2'}}</td>
               <td data-title="SGPA" class="text-center">{{item.sgpa | number: '1.2-2'}}</td>
               <td data-title="Status">
-                <span
-                  [ngClass]="item.status === 'New' ? 'badge badge-primary' : (item.status === 'In Process' ? 'badge badge-warning' : (item.status === 'Closed' ? 'badge badge-success' : 'badge badge-secondary'))">
+                <span [ngClass]="item.status === 'New' ? 'badge badge-primary' : (item.status === 'Rejected' ? 'badge badge-danger' : 'badge badge-success')">
                   {{item.status}}
                 </span>
               </td>

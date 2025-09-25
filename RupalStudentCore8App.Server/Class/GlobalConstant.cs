@@ -29,6 +29,7 @@
         {
             public const string New = "New";
             public const string Approved = "Approved";
+            public const string Rejected = "Rejected";
         }
         public static class FilePath
         {

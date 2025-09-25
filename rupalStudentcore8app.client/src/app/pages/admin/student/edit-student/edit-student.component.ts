@@ -128,7 +128,8 @@ export class EditStudentComponent implements OnInit {
         Validators.max(10),
         Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
       ]],
-      isApproved: [false] // Default to false (not approved)
+      isApproved: [false],// Default to false (not approved)
+      isRejected: [false] // Default to false (not rejected)
     });
 
     this.uploader = this.createUploader(this.attachmentList);
@@ -200,6 +201,7 @@ export class EditStudentComponent implements OnInit {
           });
           this.status = res.status;
           this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
+          this.form.get('isRejected')?.setValue(res.status === 'Rejected' ? true : false);
           this.studentAttachmentList = res.attachmentList || [];
         }
       },
@@ -269,7 +271,7 @@ export class EditStudentComponent implements OnInit {
     formData.append('Sgpa', this.form.get('sgpa')?.value || '');
     formData.append('Cgpa', this.form.get('cgpa')?.value || '');
     formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
-
+    formData.append('IsRejected', this.form.get('isRejected')?.value ? 'true' : 'false');
     let attachmentIndex = 0;
     this.studentAttachmentList.forEach((item) => {
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');

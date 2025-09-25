@@ -85,7 +85,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Sgpa = vm.Sgpa;
                     entity.Cgpa = vm.Cgpa;
                     entity.AcademicYear = DateTime.Now.Year.ToString();
-                    entity.Status = vm.IsApproved ? StudentStatus.Approved : StudentStatus.New;
+                    entity.Status = vm.IsApproved ? StudentStatus.Approved : (vm.IsRejected ? StudentStatus.Rejected: StudentStatus.New);
                     _Db.StudentMarkSheets.Update(entity);
                     await _Db.SaveChangesAsync();
                 }
