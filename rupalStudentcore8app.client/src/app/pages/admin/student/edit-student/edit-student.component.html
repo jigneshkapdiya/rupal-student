@@ -142,7 +142,7 @@
               <label for="education">Semester</label>
               <label for="education">સેમેસ્ટર</label>
             </div>
-            <ng-select [items]="semesterList" bindLabel="name" bindValue="name" placeholder="સેમેસ્ટર પસંદ કરો" formControlName="semester" (change)="onSemesterChange($event)"
+            <ng-select [items]="semesterList" bindLabel="name" bindValue="name" placeholder="સેમેસ્ટર પસંદ કરો" formControlName="semester"
               [ngClass]="{'is-invalid': form.get('semester')?.touched && form.get('semester')?.invalid}">
               <ng-template ng-option-tmp let-item="item">
                 {{ item.name }} - {{ item.nameGU }}
@@ -221,6 +221,23 @@
             <div class="custom-control custom-switch d-flex justify-content-end">
               <input type="checkbox" class="custom-control-input custom-control-danger" id="isRejectedToggle" formControlName="isRejected">
               <label class="custom-control-label custom-control-danger" for="isRejectedToggle"></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sequence Number Section - Only show when approved -->
+        <div class="row mt-3 mb-3" *ngIf="form.get('isApproved')?.value">
+          <div class="col-md-6">
+            <div class="d-flex justify-content-between">
+              <label for="sequenceNumber">Sequence Number</label>
+              <label for="sequenceNumber">અનુક્રમ નંબર</label>
+            </div>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+              </div>
+              <input type="number" class="form-control" id="sequenceNumber" formControlName="sequenceNumber" placeholder="અનુક્રમ નંબર દાખલ કરો" min="1"
+                [ngClass]="{'is-invalid': form.get('sequenceNumber')?.touched && form.get('sequenceNumber')?.invalid}">
             </div>
           </div>
         </div>
@@ -318,7 +335,7 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="d-flex justify-content-end" *ngIf="this.status !== 'Approved'">
+        <div class="d-flex justify-content-end">
           <button type="submit" class="btn btn-primary m-1">
             <i class="ft-check-square mr-1" aria-hidden="true"></i> Save
           </button>

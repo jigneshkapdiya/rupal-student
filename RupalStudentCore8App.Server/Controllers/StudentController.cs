@@ -1,5 +1,4 @@
 ﻿using ClosedXML.Excel;
-using iText.IO.Font;
 using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
@@ -9,7 +8,6 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using log4net;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RupalStudentCore8App.Server.Class;
@@ -44,6 +42,16 @@ namespace RupalStudentCore8App.Server.Controllers
             {
                 StudentMarkSheet entity = await _Db.StudentMarkSheets
                     .FirstOrDefaultAsync(w => w.Id == vm.Id);
+                // Get max sequence as integer for the same education
+                int maxGroupSeq = _Db.StudentMarkSheets
+      .Where(s => s.Education == vm.Education)
+      .AsEnumerable() // switch to LINQ-to-Objects (in memory)
+      .Select(s => string.IsNullOrEmpty(s.GroupSequenceNumber) ? 0 : int.Parse(s.GroupSequenceNumber))
+      .DefaultIfEmpty(0)
+      .Max();
+
+                // Set new GroupSequenceNumber as string
+
 
                 if (entity == null)
                 {
@@ -67,6 +75,7 @@ namespace RupalStudentCore8App.Server.Controllers
                         FormNumber = _IUtility.AutoIncrement(GlobalConstant.AutoIncrement.Student, true),
                         CreatedOn = DateTime.Now,
                         Semester = vm.Semester,
+                        SequenceNumber = vm.SequenceNumber,
                     };
                     _Db.StudentMarkSheets.Add(entity);
                     await _Db.SaveChangesAsync();
@@ -89,6 +98,10 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.AcademicYear = DateTime.Now.Year.ToString();
                     entity.Status = vm.IsApproved ? StudentStatus.Approved : (vm.IsRejected ? StudentStatus.Rejected: StudentStatus.New);
                     entity.Semester = vm.Semester;
+                    entity.SequenceNumber = vm.SequenceNumber;
+                    if (vm.SequenceNumber != null) {
+                    entity.GroupSequenceNumber = (maxGroupSeq + 1).ToString();
+                    }
                     _Db.StudentMarkSheets.Update(entity);
                     await _Db.SaveChangesAsync();
                 }
@@ -222,6 +235,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.AcademicYear,
                     s.Status,
                     s.Semester,
+                    s.SequenceNumber,
                     AttachmentList = _Db.Attachments.Where(w => w.ReferenceId == s.Id && w.ReferenceType == AttachmentReferenceType.Student).Select(s => new
                     {
                         s.Id,

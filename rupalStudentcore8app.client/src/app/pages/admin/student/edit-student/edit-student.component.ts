@@ -6,7 +6,7 @@ import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
-import { finalize } from 'rxjs/operators';
+import { finalize, mapTo } from 'rxjs/operators';
 import swal from "sweetalert2";
 import { StudentService } from '../../_services/student.service';
 
@@ -131,11 +131,10 @@ export class EditStudentComponent implements OnInit {
         Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
       ]],
       isApproved: [false],// Default to false (not approved)
-      isRejected: [false] // Default to false (not rejected)
+      isRejected: [false], // Default to false (not rejected)
+      sequenceNumber: [null] // Sequence number for approved students
     });
-
     this.uploader = this.createUploader(this.attachmentList);
-
     if (this.studentId > 0) {
       this.getById();
     }
@@ -195,11 +194,6 @@ export class EditStudentComponent implements OnInit {
 
   }
 
-  onSemesterChange(e: any) {
-    console.log('e', e)
-
-  }
-
   onFamilyChange(e: any) {
     if (e) {
       this.form.get('familyNameGu')?.setValue(this.familyNameList.find(item => item.name === e.name).nameGU);
@@ -212,6 +206,13 @@ export class EditStudentComponent implements OnInit {
       next: (res: any) => {
         if (res) {
           this.formNumber = res.formNumber; // Static for now if not provided
+          let sequenceNumber = null;
+          if (res.sequenceNumber !== null && res.sequenceNumber !== undefined && res.sequenceNumber !== '') {
+            sequenceNumber = Number(res.sequenceNumber);
+            if (isNaN(sequenceNumber)) {
+              sequenceNumber = null;
+            }
+          }
           this.form.patchValue({
             mobile: res.mobile,
             familyName: res.familyName,
@@ -226,6 +227,7 @@ export class EditStudentComponent implements OnInit {
             sgpa: res.sgpa,
             cgpa: res.cgpa,
             semester: res.semester,
+            sequenceNumber: sequenceNumber
           });
           this.status = res.status;
           this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
@@ -301,6 +303,7 @@ export class EditStudentComponent implements OnInit {
     formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
     formData.append('IsRejected', this.form.get('isRejected')?.value ? 'true' : 'false');
     formData.append('Semester', this.form.get('semester')?.value || '');
+    formData.append('SequenceNumber', this.form.get('sequenceNumber')?.value || '');
     let attachmentIndex = 0;
     this.studentAttachmentList.forEach((item) => {
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
