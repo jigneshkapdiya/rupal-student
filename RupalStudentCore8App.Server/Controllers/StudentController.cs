@@ -258,12 +258,12 @@ namespace RupalStudentCore8App.Server.Controllers
 
                 int totalRecord = await query.CountAsync();
 
-                query = query.OrderByDescending(o => o.FormNumber);
+                // Get education order from StudentEducation table
+                var educationOrder = await _Db.StudentEducations
+                    .ToDictionaryAsync(e => e.Name, e => e.Id);
 
-                // Step 1: get paged data from DB (unsorted)
-                var pageData = await query
-                    .Skip((vm.Page - 1) * vm.PageSize)
-                    .Take(vm.PageSize)
+                // Simple grouping logic - always apply education order first
+                var allRecords = await query
                     .Select(s => new StudentMarkSheet
                     {
                         Id = s.Id,
@@ -284,10 +284,24 @@ namespace RupalStudentCore8App.Server.Controllers
                         Status = s.Status,
                         CreatedOn = s.CreatedOn,
                         Semester = s.Semester
-                    }).ToListAsync();
+                    })
+                    .ToListAsync();
 
-                // Step 2: sort in memory
-                pageData = ApplySorting(pageData, vm.SortBy, vm.IsAscending);
+                // Apply education order sorting first, then other sorting
+                var sortedRecords = allRecords
+                    .OrderBy(r => educationOrder.ContainsKey(r.Education) ? educationOrder[r.Education] : int.MaxValue)
+                    .ThenBy(r => r.Education)
+                    .ToList();
+
+                // Apply your existing sorting
+                sortedRecords = ApplySorting(sortedRecords, vm.SortBy, vm.IsAscending);
+
+                // Pagination
+                var pageData = sortedRecords
+                    .Skip((vm.Page - 1) * vm.PageSize)
+                    .Take(vm.PageSize)
+                    .ToList();
+
                 return Ok(new { dataList = pageData, totalRecord });
             }
             catch (Exception ex)

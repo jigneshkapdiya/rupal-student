@@ -142,7 +142,7 @@
               <label for="education">Semester</label>
               <label for="education">સેમેસ્ટર</label>
             </div>
-            <ng-select [items]="semesterList" bindLabel="name" bindValue="name" placeholder="સેમેસ્ટર પસંદ કરો" formControlName="semester"
+            <ng-select [items]="semesterList" bindLabel="name" bindValue="name" placeholder="સેમેસ્ટર પસંદ કરો" formControlName="semester" (change)="onSemesterChange($event)"
               [ngClass]="{'is-invalid': form.get('semester')?.touched && form.get('semester')?.invalid}">
               <ng-template ng-option-tmp let-item="item">
                 {{ item.name }} - {{ item.nameGU }}

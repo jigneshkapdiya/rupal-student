@@ -187,8 +187,17 @@ export class EditStudentComponent implements OnInit {
       'Standard 11', 'Standard 12'
     ];
 
+    if (schoolLevelEducations.includes(education)) {
+      this.form.get('semester')?.setValue(null);
+    }
     // Show semester only if education is NOT in the school level list
     return !schoolLevelEducations.includes(education);
+
+  }
+
+  onSemesterChange(e: any) {
+    console.log('e', e)
+
   }
 
   onFamilyChange(e: any) {

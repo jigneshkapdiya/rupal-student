@@ -54,7 +54,6 @@
               <th scope="col">Mobile</th>
               <th scope="col">Family Name</th>
               <th scope="col">Education</th>
-              <th scope="col">Semester</th>
               <th scope="col" class="text-right" (click)="sortData('percentage')">
                 <app-sorting [isAscending]="isAscending" name="percentage" [sortBy]="sortBy" [title]="'Percentage'"></app-sorting>
               </th>
@@ -89,12 +88,11 @@
                   {{item.familyName}}
                 </div>
               </td>
-              <td data-title="Education">{{item.education}}
+              <td data-title="Education">{{item.education}}<span *ngIf="item.semester" class="ml-2"> {{item.semester}}</span>
                 <div *ngIf="item.schoolName" class="text-muted small">
                   {{item.schoolName}}
                 </div>
               </td>
-              <td data-title="Semester">{{item.semester}}</td>
               <td data-title="Percentage" class="text-center">{{item.percentage | number: '1.2-2'}}</td>
               <td data-title="CGPA" class="text-center">{{item.cgpa | number: '1.2-2'}}</td>
               <td data-title="SGPA" class="text-center">{{item.sgpa | number: '1.2-2'}}</td>
