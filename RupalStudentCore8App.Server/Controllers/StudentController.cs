@@ -40,18 +40,10 @@ namespace RupalStudentCore8App.Server.Controllers
             using var transaction = await _Db.Database.BeginTransactionAsync();
             try
             {
-                StudentMarkSheet entity = await _Db.StudentMarkSheets
-                    .FirstOrDefaultAsync(w => w.Id == vm.Id);
+                StudentMarkSheet entity = await _Db.StudentMarkSheets.FirstOrDefaultAsync(w => w.Id == vm.Id);
                 // Get max sequence as integer for the same education
-                int maxGroupSeq = _Db.StudentMarkSheets
-      .Where(s => s.Education == vm.Education)
-      .AsEnumerable() // switch to LINQ-to-Objects (in memory)
-      .Select(s => string.IsNullOrEmpty(s.GroupSequenceNumber) ? 0 : int.Parse(s.GroupSequenceNumber))
-      .DefaultIfEmpty(0)
-      .Max();
-
-                // Set new GroupSequenceNumber as string
-
+                int maxGroupSeq = _Db.StudentMarkSheets.Where(s => s.Education == vm.Education).AsEnumerable().Select(s => string.IsNullOrEmpty(s.GroupSequenceNumber) ? 0 : int.Parse(s.GroupSequenceNumber)).DefaultIfEmpty(0)
+                .Max();
 
                 if (entity == null)
                 {
@@ -96,11 +88,12 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Sgpa = vm.Sgpa;
                     entity.Cgpa = vm.Cgpa;
                     entity.AcademicYear = DateTime.Now.Year.ToString();
-                    entity.Status = vm.IsApproved ? StudentStatus.Approved : (vm.IsRejected ? StudentStatus.Rejected: StudentStatus.New);
+                    entity.Status = vm.IsApproved ? StudentStatus.Approved : (vm.IsRejected ? StudentStatus.Rejected : StudentStatus.New);
                     entity.Semester = vm.Semester;
                     entity.SequenceNumber = vm.SequenceNumber;
-                    if (vm.SequenceNumber != null) {
-                    entity.GroupSequenceNumber = (maxGroupSeq + 1).ToString();
+                    if (vm.SequenceNumber != null)
+                    {
+                        entity.GroupSequenceNumber = (maxGroupSeq + 1).ToString();
                     }
                     _Db.StudentMarkSheets.Update(entity);
                     await _Db.SaveChangesAsync();
