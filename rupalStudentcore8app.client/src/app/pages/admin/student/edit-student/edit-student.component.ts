@@ -25,6 +25,7 @@ export class EditStudentComponent implements OnInit {
   studentAttachmentList: any[] = [];
   studentId: number;
   status: any;
+  formNumber: string; // Static form number for now
 
   constructor(
     public toastr: ToastrService,
@@ -201,6 +202,7 @@ export class EditStudentComponent implements OnInit {
     this.studentService.getStudentMarkSheetById(this.studentId).pipe(finalize(() => this.spinner.hide())).subscribe({
       next: (res: any) => {
         if (res) {
+          this.formNumber = res.formNumber; // Static for now if not provided
           this.form.patchValue({
             mobile: res.mobile,
             familyName: res.familyName,
