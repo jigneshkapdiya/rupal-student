@@ -1,1 +1,95 @@
-<p>dashboard works!</p>
+<div class="row">
+  <div class="col-xl-3 col-lg-6 col-12">
+    <div class="card card-inverse bg-warning">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media">
+            <div class="media-body text-left">
+              <h3 class="card-text">{{this.allStudents}}</h3>
+              <span>All Students</span>
+            </div>
+            <div class="media-right align-self-center">
+              <i class="ft-briefcase font-large-2 float-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-12">
+    <div class="card card-inverse bg-success">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media">
+            <div class="media-body text-left">
+              <h3 class="card-text">{{this.approvedStudents}}</h3>
+              <span>Approved Students</span>
+            </div>
+            <div class="media-right align-self-center">
+              <i class="ft-user font-large-2 float-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-12">
+    <div class="card card-inverse bg-primary">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media">
+            <div class="media-body text-left">
+              <h3 class="card-text">{{this.pendingStudents}}</h3>
+              <span>Pending Students</span>
+            </div>
+            <div class="media-right align-self-center">
+              <i class="ft-life-buoy font-large-2 float-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-3 col-lg-6 col-12">
+    <div class="card card-inverse bg-danger">
+      <div class="card-content">
+        <div class="card-body">
+          <div class="media">
+            <div class="media-body text-left">
+              <h3 class="card-text">{{this.rejectedStudents}} </h3>
+              <span>Rejected Students</span>
+            </div>
+            <div class="media-right align-self-center">
+              <i class="ft-pie-chart font-large-2 float-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-sm m-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Education</th>
+              <th>Students</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of studentCountList; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.studentCount }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
