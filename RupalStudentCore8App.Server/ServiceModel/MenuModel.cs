@@ -1,4 +1,6 @@
-﻿namespace RupalStudentCore8App.Server.ServiceModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RupalStudentCore8App.Server.ServiceModels
 {
     public class MenuModel
     {
@@ -46,5 +48,15 @@
         }
         public string Name { get; set; }
         public bool Selected { get; set; }
+    }
+
+    public class ChangePasswordViewModel
+    {
+        [Required(ErrorMessage = "New Password is required.")]
+        [MinLength(8, ErrorMessage = "Password must be 8 to 20 character long")]
+        [MaxLength(20, ErrorMessage = "Password must be 8 to 20 character long")]
+        public required string NewPassword { get; set; }
+
+        public int Id { get; set; }
     }
 }

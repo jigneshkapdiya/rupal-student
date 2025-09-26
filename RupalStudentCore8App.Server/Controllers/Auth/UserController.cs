@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Security.Claims;
 using static RupalStudentCore8App.Server.Class.GlobalConstant;
+using RupalStudentCore8App.Server.ServiceModels;
 
 namespace RupalStudentCore8App.Server.Controllers.Auth
 {
@@ -413,6 +414,31 @@ namespace RupalStudentCore8App.Server.Controllers.Auth
                 return BadRequest(ex.Message);
             }
         }
+
+
+
+        #region Change Password
+        [Route("ChangePassword")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel vm)
+        {
+            AspNetUser? user = await _userManager.FindByIdAsync(vm.Id.ToString());
+            if (user == null)
+                return BadRequest("User data not found.");
+
+            // ?? Generate a reset token
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            // ?? Reset password without old password
+            var result = await _userManager.ResetPasswordAsync(user, token, vm.NewPassword);
+
+            if (!result.Succeeded)
+                return BadRequest(result.Errors.Select(e => e.Description));
+
+            return Ok(true);
+        }
+
+        #endregion
     }
 }
 

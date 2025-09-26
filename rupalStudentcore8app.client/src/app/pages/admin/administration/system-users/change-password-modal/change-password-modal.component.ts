@@ -60,12 +60,12 @@ export class ChangePasswordModalComponent implements OnInit {
     this.spinner.show("modalspin");
     this.administrationService.changePassword(data).pipe(finalize(() => this.spinner.hide("modalspin"))).subscribe({
       next: (res: any) => {
-        if (res.isSuccess) {
-          this.toastr.success(res.message);
+        if (res) {
+          this.toastr.success("Password changed successfully");
           this.onUser_Emit.emit(true);
           this.activeModal.close();
         } else {
-          this.toastr.error(res.message);
+          this.toastr.error(res, "Failed to change password");
         }
       },
       error: (err: any) => {
