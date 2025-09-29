@@ -27,6 +27,7 @@ export class EditStudentComponent implements OnInit {
   status: any;
   formNumber: string; // Static form number for now
   statusList = StudentStatusList;
+  isGeneratingSequence: boolean = false;
 
   constructor(
     public toastr: ToastrService,
@@ -134,6 +135,23 @@ export class EditStudentComponent implements OnInit {
       sequenceNumber: [null], // Sequence number for approved students
       status: [null] // Status field
     });
+
+    // Add conditional validation and auto-generation for sequence number
+    this.form.get('isApproved')?.valueChanges.subscribe(isApproved => {
+      const sequenceNumberControl = this.form.get('sequenceNumber');
+      if (isApproved) {
+        // Auto-generate sequence number if not already set
+        if (!sequenceNumberControl?.value) {
+          this.generateSequenceNumber();
+        }
+        sequenceNumberControl?.setValidators([Validators.required, Validators.min(1)]);
+      } else {
+        sequenceNumberControl?.clearValidators();
+        sequenceNumberControl?.setValue(null);
+      }
+      sequenceNumberControl?.updateValueAndValidity();
+    });
+
     this.uploader = this.createUploader(this.attachmentList);
     if (this.studentId > 0) {
       this.getById();
@@ -369,5 +387,28 @@ export class EditStudentComponent implements OnInit {
       this.attachmentList.splice(index, 1);
       this.toastr.success('Attachment removed successfully');
     }
+  }
+
+  generateSequenceNumber(): void {
+    this.isGeneratingSequence = true;
+    
+    // Use timestamp-based sequence generation for simplicity
+    setTimeout(() => {
+      const now = new Date();
+      const year = now.getFullYear();
+      
+      // Generate sequence: YYYY + current date/time based number
+      // Format: YYYY + MMDD + sequential number based on time
+      const dateStr = (now.getMonth() + 1).toString().padStart(2, '0') + 
+                      now.getDate().toString().padStart(2, '0');
+      const timeStr = now.getHours().toString().padStart(2, '0') + 
+                      now.getMinutes().toString().padStart(2, '0');
+      
+      const sequenceNumber = Number(`${year}${dateStr}${timeStr.slice(-2)}`);
+      
+      this.form.get('sequenceNumber')?.setValue(sequenceNumber);
+      this.toastr.success(`Sequence number ${sequenceNumber} generated successfully`);
+      this.isGeneratingSequence = false;
+    }, 500); // Small delay to show loading state
   }
 }
