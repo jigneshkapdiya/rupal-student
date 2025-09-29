@@ -256,8 +256,5 @@ namespace RupalStudentCore8App.Server.Controllers.Auth
                 return BadRequest(ex.Message);
             }
         }
-
-
-
     }
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { StudentSemesterList, StudentShakhList } from 'app/shared/data/global-constant';
+import { StudentSemesterList, StudentShakhList, StudentStatusList } from 'app/shared/data/global-constant';
 import { environment } from 'environments/environment';
 import { FileItem, FileUploader } from 'ng2-file-upload';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -26,6 +26,7 @@ export class EditStudentComponent implements OnInit {
   studentId: number;
   status: any;
   formNumber: string; // Static form number for now
+  statusList = StudentStatusList;
 
   constructor(
     public toastr: ToastrService,
@@ -130,9 +131,8 @@ export class EditStudentComponent implements OnInit {
         Validators.max(10),
         Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
       ]],
-      isApproved: [false],// Default to false (not approved)
-      isRejected: [false], // Default to false (not rejected)
-      sequenceNumber: [null] // Sequence number for approved students
+      sequenceNumber: [null], // Sequence number for approved students
+      status: [null] // Status field
     });
     this.uploader = this.createUploader(this.attachmentList);
     if (this.studentId > 0) {
@@ -227,11 +227,10 @@ export class EditStudentComponent implements OnInit {
             sgpa: res.sgpa,
             cgpa: res.cgpa,
             semester: res.semester,
-            sequenceNumber: sequenceNumber
+            sequenceNumber: sequenceNumber,
+            status: res.status
           });
           this.status = res.status;
-          this.form.get('isApproved')?.setValue(res.status === 'Approved' ? true : false);
-          this.form.get('isRejected')?.setValue(res.status === 'Rejected' ? true : false);
           this.studentAttachmentList = res.attachmentList || [];
         }
       },
@@ -300,10 +299,9 @@ export class EditStudentComponent implements OnInit {
     formData.append('Percentage', this.form.get('percentage')?.value || '');
     formData.append('Sgpa', this.form.get('sgpa')?.value || '');
     formData.append('Cgpa', this.form.get('cgpa')?.value || '');
-    formData.append('IsApproved', this.form.get('isApproved')?.value ? 'true' : 'false');
-    formData.append('IsRejected', this.form.get('isRejected')?.value ? 'true' : 'false');
     formData.append('Semester', this.form.get('semester')?.value || '');
     formData.append('SequenceNumber', this.form.get('sequenceNumber')?.value || '');
+    formData.append('Status', this.form.get('status')?.value || '');
     let attachmentIndex = 0;
     this.studentAttachmentList.forEach((item) => {
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');

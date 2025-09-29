@@ -64,7 +64,6 @@ export const StudentSemesterList = [
   { name: "10th Semester", nameGU: "દસમું સેમેસ્ટર" },
 ];
 
-
 export const StudentStatusList = [
   { name: 'New' },
   { name: 'Approved' },

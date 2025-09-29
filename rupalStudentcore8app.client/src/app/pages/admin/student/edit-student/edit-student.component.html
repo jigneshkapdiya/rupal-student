@@ -207,21 +207,11 @@
         </div>
 
         <!-- Approval Status Section -->
-        <div class="row mt-3 mb-3">
-          <div class="col-md-6">
-            <label for="isApprovedToggle">Is Approved</label>
-            <!-- Toggle Switch -->
-            <div class="custom-control custom-switch">
-              <input type="checkbox" class="custom-control-input" id="isApprovedToggle" formControlName="isApproved">
-              <label class="custom-control-label" for="isApprovedToggle"></label>
-            </div>
-          </div>
-          <div class="col-md-6 text-right">
-            <label for="isRejectedToggle" class="d-block">Is Rejected</label>
-            <div class="custom-control custom-switch d-flex justify-content-end">
-              <input type="checkbox" class="custom-control-input custom-control-danger" id="isRejectedToggle" formControlName="isRejected">
-              <label class="custom-control-label custom-control-danger" for="isRejectedToggle"></label>
-            </div>
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="status">Status</label>
+            <ng-select [items]="statusList" bindLabel="name" bindValue="name" formControlName="status" placeholder="Select Status">
+            </ng-select>
           </div>
         </div>
 
