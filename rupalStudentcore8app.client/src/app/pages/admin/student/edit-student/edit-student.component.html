@@ -11,7 +11,6 @@
           </div>
         </div>
 
-
         <div class="row">
           <!-- Mobile Number -->
           <div class="col-md-6 form-group">
@@ -152,8 +151,20 @@
         </div>
         <!-- Marks Section -->
         <div class="row">
+
+          <!-- Grade -->
+          <div class="col-md-3">
+            <div class="d-flex justify-content-between">
+              <label for="education">Grade</label>
+              <label for="education">ગ્રેડ</label>
+            </div>
+            <div class="input-group">
+              <input type="text" class="form-control" formControlName="grade"
+                [ngClass]="{'is-invalid': (form.get('grade')?.touched || form.get('grade')?.dirty) && form.get('grade')?.invalid}">
+            </div>
+          </div>
           <!-- Percentage -->
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="d-flex justify-content-between">
               <label for="education">Percentage</label>
               <label for="education">ટકાવારી</label>
@@ -168,7 +179,7 @@
           </div>
 
           <!-- SGPA -->
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="d-flex justify-content-between">
               <label for="education">SGPA</label>
               <label for="education">એસજીપીએ</label>
@@ -183,7 +194,7 @@
           </div>
 
           <!-- CGPA -->
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="d-flex justify-content-between">
               <label for="education">CGPA</label>
               <label for="education">સીજીપીએ</label>
@@ -208,11 +219,20 @@
 
         <!-- Approval Status Section -->
         <div class="row mb-3">
-          <div class="col-md-4">
+          <div class="col-md-4 form-group">
             <label for="status">Status</label>
             <ng-select [items]="statusList" bindLabel="name" bindValue="name" formControlName="status" placeholder="Select Status">
             </ng-select>
           </div>
+          <div class="col-md-8 form-group">
+            <div class="d-flex justify-content-between">
+              <label for="mobile">Description</label>
+              <label for="mobile">વર્ણન</label>
+            </div>
+            <input type="text" class="form-control" formControlName="description" placeholder="Enter description"
+              [ngClass]="{'is-invalid': form.get('description')?.touched && form.get('description')?.invalid}">
+          </div>
+
         </div>
 
         <!-- Sequence Number Section - Only show when approved -->

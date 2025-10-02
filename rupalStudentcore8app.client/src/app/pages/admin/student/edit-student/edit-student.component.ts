@@ -122,6 +122,7 @@ export class EditStudentComponent implements OnInit {
       educationGu: [null],
       percentage: [null],
       semester: [null],
+      grade: [null],
       sgpa: [null, [
         Validators.min(0),
         Validators.max(10),
@@ -133,7 +134,8 @@ export class EditStudentComponent implements OnInit {
         Validators.pattern(/^(10(\.0{0,2})?|\d{1}(\.\d{1,2})?)$/)
       ]],
       sequenceNumber: [null], // Sequence number for approved students
-      status: [null] // Status field
+      status: [null], // Status field
+      description: [null] // Description field
     });
 
     // Add conditional validation and auto-generation for sequence number
@@ -246,7 +248,9 @@ export class EditStudentComponent implements OnInit {
             cgpa: res.cgpa,
             semester: res.semester,
             sequenceNumber: sequenceNumber,
-            status: res.status
+            status: res.status,
+            description: res.description,
+            grade: res.grade
           });
           this.status = res.status;
           this.studentAttachmentList = res.attachmentList || [];
@@ -320,6 +324,8 @@ export class EditStudentComponent implements OnInit {
     formData.append('Semester', this.form.get('semester')?.value || '');
     formData.append('SequenceNumber', this.form.get('sequenceNumber')?.value || '');
     formData.append('Status', this.form.get('status')?.value || '');
+    formData.append('Description', this.form.get('description')?.value || '');
+    formData.append('Grade', this.form.get('grade')?.value || '');
     let attachmentIndex = 0;
     this.studentAttachmentList.forEach((item) => {
       formData.append(`Attachments[${attachmentIndex}].FileName`, item.fileName || '');
@@ -391,21 +397,21 @@ export class EditStudentComponent implements OnInit {
 
   generateSequenceNumber(): void {
     this.isGeneratingSequence = true;
-    
+
     // Use timestamp-based sequence generation for simplicity
     setTimeout(() => {
       const now = new Date();
       const year = now.getFullYear();
-      
+
       // Generate sequence: YYYY + current date/time based number
       // Format: YYYY + MMDD + sequential number based on time
-      const dateStr = (now.getMonth() + 1).toString().padStart(2, '0') + 
-                      now.getDate().toString().padStart(2, '0');
-      const timeStr = now.getHours().toString().padStart(2, '0') + 
-                      now.getMinutes().toString().padStart(2, '0');
-      
+      const dateStr = (now.getMonth() + 1).toString().padStart(2, '0') +
+        now.getDate().toString().padStart(2, '0');
+      const timeStr = now.getHours().toString().padStart(2, '0') +
+        now.getMinutes().toString().padStart(2, '0');
+
       const sequenceNumber = Number(`${year}${dateStr}${timeStr.slice(-2)}`);
-      
+
       this.form.get('sequenceNumber')?.setValue(sequenceNumber);
       this.toastr.success(`Sequence number ${sequenceNumber} generated successfully`);
       this.isGeneratingSequence = false;

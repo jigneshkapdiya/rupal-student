@@ -26,6 +26,8 @@ namespace RupalStudentCore8App.Server.ServiceModel
         public bool IsRejected { get; set; }
         public string Semester { get; set; }
         public string SequenceNumber { get; set; }
+        public string Grade { get; set; }
+        public string Description { get; set; }
         public List<AttachmentViewModel> Attachments { get; set; }
     }
 

@@ -68,6 +68,8 @@ namespace RupalStudentCore8App.Server.Controllers
                         CreatedOn = DateTime.Now,
                         Semester = vm.Semester,
                         SequenceNumber = vm.SequenceNumber,
+                        Grade = vm.Grade,
+                        Description = vm.Description
                     };
                     _Db.StudentMarkSheets.Add(entity);
                     await _Db.SaveChangesAsync();
@@ -92,6 +94,8 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Semester = vm.Semester;
                     entity.SequenceNumber = vm.SequenceNumber;
                     entity.Status = vm.Status;
+                    entity.Grade = vm.Grade;
+                    entity.Description = vm.Description;
                     if (vm.SequenceNumber != null)
                     {
                         entity.GroupSequenceNumber = (maxGroupSeq + 1).ToString();
@@ -171,7 +175,9 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.AcademicYear,
                     s.Status,
                     s.CreatedOn,
-                    s.Semester
+                    s.Semester,
+                    s.Grade,
+                    s.Description
                 }).OrderByDescending(o => o.FormNumber).ToListAsync();
                 return Ok(list);
             }
@@ -230,6 +236,8 @@ namespace RupalStudentCore8App.Server.Controllers
                     s.Status,
                     s.Semester,
                     s.SequenceNumber,
+                    s.Grade,
+                    s.Description,
                     AttachmentList = _Db.Attachments.Where(w => w.ReferenceId == s.Id && w.ReferenceType == AttachmentReferenceType.Student).Select(s => new
                     {
                         s.Id,
@@ -291,7 +299,8 @@ namespace RupalStudentCore8App.Server.Controllers
                         Cgpa = s.Cgpa,
                         Status = s.Status,
                         CreatedOn = s.CreatedOn,
-                        Semester = s.Semester
+                        Semester = s.Semester,
+                        Grade = s.Grade
                     })
                     .ToListAsync();
 
