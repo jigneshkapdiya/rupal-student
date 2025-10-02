@@ -300,7 +300,8 @@ namespace RupalStudentCore8App.Server.Controllers
                         Status = s.Status,
                         CreatedOn = s.CreatedOn,
                         Semester = s.Semester,
-                        Grade = s.Grade
+                        Grade = s.Grade,
+                        Description = s.Description
                     })
                     .ToListAsync();
 
@@ -736,6 +737,298 @@ namespace RupalStudentCore8App.Server.Controllers
 
             return cell;
         }
+
+        [HttpPost("GetList2")]
+        public async Task<IActionResult> GetList2(StudentFilterViewModel vm)
+        {
+            try
+            {
+                var query = _Db.StudentMarkSheets.Where(w =>
+                    (string.IsNullOrWhiteSpace(vm.SearchText)
+                     || w.FormNumber.Contains(vm.SearchText.Trim())
+                     || w.Mobile.Contains(vm.SearchText.Trim())
+                     || w.FamilyName.Contains(vm.SearchText.Trim())
+                     || w.FatherName.Contains(vm.SearchText.Trim())
+                     || w.StudentName.Contains(vm.SearchText.Trim()))
+                    && (vm.Status == null || w.Status == vm.Status)
+                );
+
+                int totalRecord = await query.CountAsync();
+
+                // ✅ Get education order dictionary
+                var educationOrder = await _Db.StudentEducations
+                    .OrderBy(e => e.Id) // Assuming Id = sequence order
+                    .ToDictionaryAsync(e => e.Name, e => e.Id);
+
+                // ✅ Pull all records first
+                var allRecords = await query
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.FormNumber,
+                        s.Mobile,
+                        s.FamilyName,
+                        s.FamilyNameGu,
+                        s.FatherNameGu,
+                        s.FatherName,
+                        s.StudentName,
+                        s.StudentNameGu,
+                        s.Education,
+                        s.EducationGu,
+                        s.SchoolName,
+                        s.Percentage,
+                        s.Sgpa,
+                        s.Cgpa,
+                        s.Status,
+                        s.CreatedOn,
+                        s.Semester,
+                        s.Grade,
+                        s.Description
+                    })
+                    .ToListAsync();
+
+                // ✅ Final ranked list
+                var rankedList = new List<object>();
+
+                // Group by Education in correct sequence
+                var grouped = allRecords
+                    .GroupBy(r => r.Education)
+                    .OrderBy(g => educationOrder.ContainsKey(g.Key) ? educationOrder[g.Key] : int.MaxValue);
+
+                foreach (var group in grouped)
+                {
+                    // Sort inside education group
+                    var ordered = group.OrderByDescending(x => x.Percentage ?? 0)
+                                       .ThenByDescending(x => x.Sgpa ?? 0)
+                                       .ThenByDescending(x => x.Cgpa ?? 0)
+                                       .ToList();
+
+                    int rank = 1;
+                    foreach (var s in ordered)
+                    {
+                        rankedList.Add(new
+                        {
+                            s.Id,
+                            s.FormNumber,
+                            s.Mobile,
+                            s.FamilyName,
+                            s.FamilyNameGu,
+                            s.FatherNameGu,
+                            s.FatherName,
+                            s.StudentName,
+                            s.StudentNameGu,
+                            s.Education,
+                            s.EducationGu,
+                            s.SchoolName,
+                            s.Percentage,
+                            s.Sgpa,
+                            s.Cgpa,
+                            s.Status,
+                            s.CreatedOn,
+                            s.Semester,
+                            s.Grade,
+                            s.Description,
+                            Rank = rank++
+                        });
+                    }
+                }
+
+                // ✅ Pagination
+                var pageData = rankedList
+                    .Skip((vm.Page - 1) * vm.PageSize)
+                    .Take(vm.PageSize)
+                    .ToList();
+
+                return Ok(new { dataList = pageData, totalRecord });
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to get data.");
+            }
+        }
+
+        [HttpPost("ExportStudentList2")]
+        public async Task<IActionResult> ExportToExcel2(StudentFilterViewModel vm)
+        {
+            try
+            {
+                var query = _Db.StudentMarkSheets.Where(w =>
+                    (string.IsNullOrWhiteSpace(vm.SearchText)
+                     || w.FormNumber.Contains(vm.SearchText.Trim())
+                     || w.Mobile.Contains(vm.SearchText.Trim())
+                     || w.FamilyName.Contains(vm.SearchText.Trim())
+                     || w.FatherName.Contains(vm.SearchText.Trim())
+                     || w.StudentName.Contains(vm.SearchText.Trim()))
+                    && (vm.Status == null || w.Status == vm.Status)
+                );
+
+                int totalRecord = await query.CountAsync();
+
+                // ✅ Get education order dictionary
+                var educationOrder = await _Db.StudentEducations
+                    .OrderBy(e => e.Id) // Assuming Id = sequence order
+                    .ToDictionaryAsync(e => e.Name, e => e.Id);
+
+                // ✅ Pull all records first
+                var allRecords = await query
+                    .Select(s => new
+                    {
+                        s.Id,
+                        s.FormNumber,
+                        s.Mobile,
+                        s.FamilyName,
+                        s.FamilyNameGu,
+                        s.FatherNameGu,
+                        s.FatherName,
+                        s.StudentName,
+                        s.StudentNameGu,
+                        s.Education,
+                        s.EducationGu,
+                        s.SchoolName,
+                        s.Percentage,
+                        s.Sgpa,
+                        s.Cgpa,
+                        s.Status,
+                        s.CreatedOn,
+                        s.Semester,
+                        s.Grade,
+                        s.Description
+                    })
+                    .ToListAsync();
+
+                // ✅ Final ranked list
+                var rankedList = new List<dynamic>();
+
+                // Group by Education in correct sequence
+                var grouped = allRecords
+                    .GroupBy(r => r.Education)
+                    .OrderBy(g => educationOrder.ContainsKey(g.Key) ? educationOrder[g.Key] : int.MaxValue);
+
+                foreach (var group in grouped)
+                {
+                    // Sort inside education group
+                    var ordered = group.OrderByDescending(x => x.Percentage ?? 0)
+                                       .ThenByDescending(x => x.Sgpa ?? 0)
+                                       .ThenByDescending(x => x.Cgpa ?? 0)
+                                       .ToList();
+
+                    int rank = 1;
+                    foreach (var s in ordered)
+                    {
+                        rankedList.Add(new
+                        {
+                            s.Id,
+                            s.FormNumber,
+                            s.Mobile,
+                            s.FamilyName,
+                            s.FamilyNameGu,
+                            s.FatherNameGu,
+                            s.FatherName,
+                            s.StudentName,
+                            s.StudentNameGu,
+                            s.Education,
+                            s.EducationGu,
+                            s.SchoolName,
+                            s.Percentage,
+                            s.Sgpa,
+                            s.Cgpa,
+                            s.Status,
+                            s.CreatedOn,
+                            s.Semester,
+                            s.Grade,
+                            s.Description,
+                            Rank = rank++,
+                            ResultText = BuildResult(s) // ✅ Combined string for Excel
+                        });
+                    }
+                }
+
+                byte[] finalResult;
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Student");
+                    var currentRow = 1;
+
+                    worksheet.Row(currentRow).Style.Font.Bold = true;
+
+                    // Headers
+                    worksheet.Cell(currentRow, 1).Value = "Education";
+                    worksheet.Cell(currentRow, 2).Value = "Student Name";
+                    worksheet.Cell(currentRow, 3).Value = "Result"; // Combined column
+                    worksheet.Cell(currentRow, 4).Value = "Family Name";
+
+                    // Data rows
+                    for (int i = 0; i < rankedList.Count; i++)
+                    {
+                        currentRow++;
+
+                        var s = rankedList[i];
+
+                        // Education
+                        worksheet.Cell(currentRow, 1).Value = s.EducationGu + Environment.NewLine + s.Education;
+                        worksheet.Cell(currentRow, 1).Style.Alignment.WrapText = true;
+
+                        // Student Name (Gujarati + English)
+                        worksheet.Cell(currentRow, 2).Value = s.StudentNameGu + Environment.NewLine + s.StudentName;
+                        worksheet.Cell(currentRow, 2).Style.Alignment.WrapText = true;
+
+                        // ✅ Combined Result
+                        worksheet.Cell(currentRow, 3).Value = s.ResultText;
+                        worksheet.Cell(currentRow, 3).Style.Alignment.WrapText = true;
+
+                        // Family Name
+                        worksheet.Cell(currentRow, 4).Value = s.FamilyNameGu + Environment.NewLine + s.Description;
+                        worksheet.Cell(currentRow, 4).Style.Alignment.WrapText = true;
+
+                    }
+
+                    // Auto-fit columns
+                    worksheet.Columns().AdjustToContents();
+
+                    // Borders
+                    var dataRange = worksheet.Range(worksheet.Cell(1, 1), worksheet.Cell(currentRow, 12));
+                    dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
+                    dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
+                    dataRange.Style.Border.BottomBorderColor = XLColor.Black;
+                    dataRange.Style.Border.TopBorderColor = XLColor.Black;
+                    dataRange.Style.Border.LeftBorderColor = XLColor.Black;
+                    dataRange.Style.Border.RightBorderColor = XLColor.Black;
+
+                    using var stream = new MemoryStream();
+                    workbook.SaveAs(stream);
+                    finalResult = stream.ToArray();
+                }
+
+                return File(finalResult, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Student.xlsx");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return BadRequest("Fail to get data.");
+            }
+        }
+
+        // Helper method to format Percentage, Grade, SGPA, CGPA
+        private string BuildResult(dynamic s)
+        {
+            var parts = new List<string>();
+
+            if (s.Percentage != null)
+                parts.Add($"{s.Percentage:0.00}%");
+
+            if (!string.IsNullOrEmpty(s.Grade))
+                parts.Add(s.Grade);
+
+            if (s.Sgpa != null)
+                parts.Add($"SGPA: {s.Sgpa:0.00}");
+
+            if (s.Cgpa != null)
+                parts.Add($"CGPA: {s.Cgpa:0.00}");
+
+            return string.Join(", ", parts);
+        }
+
 
     }
 }

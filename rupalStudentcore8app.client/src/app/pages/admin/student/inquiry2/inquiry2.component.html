@@ -1,0 +1,108 @@
+<div class="card">
+  <div class="card-content">
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="onFilter()">
+        <div class="row d-flex align-items-center">
+          <!--Start: Search-->
+          <div class="col-md-4">
+            <label for="searchText">Search</label>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fa fa-search"></i></span>
+              </div>
+              <input type="text" formControlName="searchText" id="searchText" placeholder="Search" class="form-control">
+            </div>
+          </div>
+          <!--End: Search-->
+          <!--Start : Filter-->
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-warning mb-1">
+              <i class="fa fa-search mr-1"></i>Filter</button>
+            <button class="btn btn-secondary mb-1 ml-1" (click)="onClearFilter()">
+              <i class="fa fa-times mr-1"></i>Clear</button>
+            <button type="button" class="btn btn-success mb-1 ml-1" (click)="exportToExcel()">
+              <i class="fas fa-file-excel mr-1"></i> Download Excel
+            </button>
+          </div>
+          <!--End : Filter-->
+        </div>
+      </form>
+      <br>
+      <div class="table-responsive">
+        <table class="table table-striped table-sm table-specialresponsive">
+          <thead class="text-left">
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Education</th>
+              <th scope="col">Student Name</th>
+              <th scope="col" class="text-center">Percentage</th>
+              <th scope="col">Family Name</th>
+            </tr>
+          </thead>
+          <tbody class="text-left">
+            <tr *ngFor="let item of dataList  let i = index">
+              <td data-title="#">{{i+1}}</td>
+              <td data-title="Education">{{item.education}}<span *ngIf="item.semester" class="ml-2"> {{item.semester}}</span>
+                <!-- <div *ngIf="item.schoolName" class="text-muted small">
+                  {{item.schoolName}}
+                </div> -->
+              </td>
+              <td data-title="Student Name">{{item.studentNameGu}}
+                <div *ngIf="item.studentName" class="text-muted small">
+                  {{item.studentName}}
+                  <span style="cursor:pointer; margin-left:6px; position:relative; display:inline-block;" tabindex="0" (mouseenter)="item.showFatherName = true"
+                    (mouseleave)="item.showFatherName = false" (touchstart)="item.showFatherName = true" (touchend)="item.showFatherName = false"
+                    (blur)="item.showFatherName = false">
+                    <i class="fa fa-info-circle" style="color:#6ec6ff; font-size:1.1em; background: #e3f2fd; border-radius: 50%; padding: 2px;"></i>
+                    <span *ngIf="item.showFatherName" class="tooltip-custom"
+                      style="position:absolute; left:28px; top:50%; transform:translateY(-50%); min-width:120px; background:rgba(33,150,243,0.08); color:#1976d2; border:1px solid #90caf9; padding:6px 14px; border-radius:8px; box-shadow:0 4px 16px rgba(33,150,243,0.10); z-index:1000; font-size:0.97em; font-weight:500; white-space:nowrap;">
+                      <i class="fa fa-user mr-1" style="color:#1976d2;"></i> {{ item.fatherName }}
+                    </span>
+                  </span>
+                </div>
+              </td>
+              <td class="text-center">
+                <ng-container *ngIf="item.percentage !== null && item.percentage !== undefined && item.percentage !== ''">
+                  {{ item.percentage | number:'1.2-2' }}%
+                </ng-container>
+
+                <ng-container *ngIf="item.grade">
+                  <ng-container *ngIf="item.percentage">, </ng-container>{{ item.grade }}
+                </ng-container>
+
+                <ng-container *ngIf="item.sgpa !== null && item.sgpa !== undefined && item.sgpa !== ''">
+                  <ng-container *ngIf="item.percentage || item.grade">, </ng-container>SGPA: {{ item.sgpa | number:'1.2-2' }}
+                </ng-container>
+
+                <ng-container *ngIf="item.cgpa !== null && item.cgpa !== undefined && item.cgpa !== ''">
+                  <ng-container *ngIf="item.percentage || item.grade || item.sgpa">, </ng-container>CGPA: {{ item.cgpa | number:'1.2-2' }}
+                </ng-container>
+              </td>
+
+
+              <td data-title="Family Name">{{item.familyNameGu}}
+                <div *ngIf="item.familyName" class="text-muted small">
+                  {{item.description}}
+                </div>
+              </td>
+            </tr>
+            <tr *ngIf="dataList?.length === 0">
+              <td colspan="4" class="text-center">No record's found!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="row mt-3">
+        <div class="col-md-2 mb-2"> Showing {{ getStartIndex() }} to {{ getEndIndex() }} of {{ totalRecord}} entries
+        </div>
+        <div class="col-md-8 d-flex justify-content-end mb-0">
+          <ngb-pagination [collectionSize]="totalRecord" [page]="page" (pageChange)="onClick_PageChange($event)" [pageSize]="pageSize" [maxSize]="20">
+          </ngb-pagination>
+        </div>
+        <div class="col-md-2 mb-2">
+          <ng-select [items]="pageSizeList" bindLabel="name" bindValue="pageSize" [(ngModel)]="pageSize" [clearable]="false" (change)="onChange_PageSize()"></ng-select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

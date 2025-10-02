@@ -23,6 +23,10 @@ export class StudentService {
     return this.http.post(this.ApiURL + "Student/GetList", data);
   }
 
+  getStudentMarkSheet2(data: any) {
+    return this.http.post(this.ApiURL + "Student/GetList2", data);
+  }
+
   getStudentMarkSheetById(id: number) {
     return this.http.get(this.ApiURL + "Student/" + id);
   }
@@ -37,6 +41,12 @@ export class StudentService {
 
   getStudentExportToExcel(filterData: any): Observable<any> {
     return this.http.post(this.ApiURL + "Student/ExportStudentList", filterData, {
+      responseType: "arraybuffer",
+    });
+  }
+
+  getStudentExportToExcel2(filterData: any): Observable<any> {
+    return this.http.post(this.ApiURL + "Student/ExportStudentList2", filterData, {
       responseType: "arraybuffer",
     });
   }

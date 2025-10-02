@@ -10,9 +10,10 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { ToastrModule } from "ngx-toastr";
 import { EditStudentComponent } from './edit-student/edit-student.component';
 import { FileUploadModule } from "ng2-file-upload";
+import { Inquiry2Component } from './inquiry2/inquiry2.component';
 
 @NgModule({
-  declarations: [InquiryComponent, EditStudentComponent],
+  declarations: [InquiryComponent, EditStudentComponent, Inquiry2Component],
   imports: [StudentRoutingModule,
     NgbModule,
     CommonModule,

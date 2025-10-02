@@ -2,6 +2,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { InquiryComponent } from "./inquiry/inquiry.component";
 import { EditStudentComponent } from "./edit-student/edit-student.component";
+import { Inquiry2Component } from "./inquiry2/inquiry2.component";
 
 const routes: Routes = [
   {
@@ -20,7 +21,14 @@ const routes: Routes = [
         data: {
           title: "Edit Student",
         }
-      }
+      },
+      {
+        path: "inquiry2",
+        component: Inquiry2Component,
+        data: {
+          title: "Student Inquiry 2",
+        }
+      },
     ],
   },
 ];
