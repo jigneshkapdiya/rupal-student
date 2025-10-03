@@ -139,20 +139,20 @@ export class EditStudentComponent implements OnInit {
     });
 
     // Add conditional validation and auto-generation for sequence number
-    this.form.get('isApproved')?.valueChanges.subscribe(isApproved => {
-      const sequenceNumberControl = this.form.get('sequenceNumber');
-      if (isApproved) {
-        // Auto-generate sequence number if not already set
-        if (!sequenceNumberControl?.value) {
-          this.generateSequenceNumber();
-        }
-        sequenceNumberControl?.setValidators([Validators.required, Validators.min(1)]);
-      } else {
-        sequenceNumberControl?.clearValidators();
-        sequenceNumberControl?.setValue(null);
-      }
-      sequenceNumberControl?.updateValueAndValidity();
-    });
+    // this.form.get('status')?.valueChanges.subscribe(status => {
+    //   const sequenceNumberControl = this.form.get('sequenceNumber');
+    //   if (status === 'Approved') {
+    //     // Auto-generate sequence number if not already set
+    //     if (!sequenceNumberControl?.value) {
+    //       this.generateSequenceNumber();
+    //     }
+    //     sequenceNumberControl?.setValidators([Validators.required, Validators.min(1)]);
+    //   } else {
+    //     sequenceNumberControl?.clearValidators();
+    //     sequenceNumberControl?.setValue(null);
+    //   }
+    //   sequenceNumberControl?.updateValueAndValidity();
+    // });
 
     this.uploader = this.createUploader(this.attachmentList);
     if (this.studentId > 0) {
@@ -203,7 +203,9 @@ export class EditStudentComponent implements OnInit {
     const schoolLevelEducations = ['KG',
       'Standard 1', 'Standard 2', 'Standard 3', 'Standard 4', 'Standard 5',
       'Standard 6', 'Standard 7', 'Standard 8', 'Standard 9', 'Standard 10',
-      'Standard 11', 'Standard 12'
+      'Standard 11', 'Standard 12', '11 Arts', '12 Arts',
+      '11 Commerce', '12 Commerce',
+      '11 Science', '12 Science'
     ];
 
     if (schoolLevelEducations.includes(education)) {
@@ -305,7 +307,6 @@ export class EditStudentComponent implements OnInit {
     }
 
     const formData = new FormData();
-
     // Main student fields matching StudentViewModel
     formData.append('Id', this.studentId.toString());
     formData.append('Mobile', this.form.get('mobile')?.value || '');
@@ -322,7 +323,7 @@ export class EditStudentComponent implements OnInit {
     formData.append('Sgpa', this.form.get('sgpa')?.value || '');
     formData.append('Cgpa', this.form.get('cgpa')?.value || '');
     formData.append('Semester', this.form.get('semester')?.value || '');
-    formData.append('SequenceNumber', this.form.get('sequenceNumber')?.value || '');
+    formData.append('SequenceNumber', this.form.get('sequenceNumber')?.value || 0);
     formData.append('Status', this.form.get('status')?.value || '');
     formData.append('Description', this.form.get('description')?.value || '');
     formData.append('Grade', this.form.get('grade')?.value || '');
@@ -395,26 +396,28 @@ export class EditStudentComponent implements OnInit {
     }
   }
 
-  generateSequenceNumber(): void {
-    this.isGeneratingSequence = true;
+  //   generateSequenceNumber(): void {
+  //     this.isGeneratingSequence = true;
+  //     //here auto generated but i want to generated like 1 2 3 give me a  solution like this
+  // //
 
-    // Use timestamp-based sequence generation for simplicity
-    setTimeout(() => {
-      const now = new Date();
-      const year = now.getFullYear();
+  //     // // Use timestamp-based sequence generation for simplicity
+  //     // setTimeout(() => {
+  //     //   const now = new Date();
+  //     //   const year = now.getFullYear();
 
-      // Generate sequence: YYYY + current date/time based number
-      // Format: YYYY + MMDD + sequential number based on time
-      const dateStr = (now.getMonth() + 1).toString().padStart(2, '0') +
-        now.getDate().toString().padStart(2, '0');
-      const timeStr = now.getHours().toString().padStart(2, '0') +
-        now.getMinutes().toString().padStart(2, '0');
+  //     //   // Generate sequence: YYYY + current date/time based number
+  //     //   // Format: YYYY + MMDD + sequential number based on time
+  //     //   const dateStr = (now.getMonth() + 1).toString().padStart(2, '0') +
+  //     //     now.getDate().toString().padStart(2, '0');
+  //     //   const timeStr = now.getHours().toString().padStart(2, '0') +
+  //     //     now.getMinutes().toString().padStart(2, '0');
 
-      const sequenceNumber = Number(`${year}${dateStr}${timeStr.slice(-2)}`);
+  //     //   const sequenceNumber = Number(`${year}${dateStr}${timeStr.slice(-2)}`);
 
-      this.form.get('sequenceNumber')?.setValue(sequenceNumber);
-      this.toastr.success(`Sequence number ${sequenceNumber} generated successfully`);
-      this.isGeneratingSequence = false;
-    }, 500); // Small delay to show loading state
-  }
+  //     //   this.form.get('sequenceNumber')?.setValue(sequenceNumber);
+  //     //   this.toastr.success(`Sequence number ${sequenceNumber} generated successfully`);
+  //     //   this.isGeneratingSequence = false;
+  //     // }, 500); // Small delay to show loading state
+  //   }
 }

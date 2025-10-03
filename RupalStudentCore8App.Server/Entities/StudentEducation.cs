@@ -15,6 +15,7 @@ namespace RupalStudentCore8App.Server.Entities
 
         [StringLength(100)]
         public string NameGu { get; set; }
+        [Column(TypeName = "decimal(18, 2)")]
+        public decimal SequenceNo { get; set; }
     }
-
 }

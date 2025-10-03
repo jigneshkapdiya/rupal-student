@@ -49,11 +49,21 @@
               <th scope="col" class="text-left" (click)="sortData('formNumber')">
                 <app-sorting [isAscending]="isAscending" name="formNumber" [sortBy]="sortBy" [title]="'NO.'"></app-sorting>
               </th>
-              <th scope="col">Student Name</th>
-              <th scope="col">Father Name</th>
-              <th scope="col">Mobile</th>
-              <th scope="col">Family Name</th>
-              <th scope="col">Education</th>
+              <th scope="col" class="text-left" (click)="sortData('studentName')">
+                <app-sorting [isAscending]="isAscending" name="studentName" [sortBy]="sortBy" [title]="'Student Name'"></app-sorting>
+              </th>
+              <th scope="col" class="text-left" (click)="sortData('fatherName')">
+                <app-sorting [isAscending]="isAscending" name="fatherName" [sortBy]="sortBy" [title]="'Father Name'"></app-sorting>
+              </th>
+              <th scope="col" class="text-left" (click)="sortData('mobile')">
+                <app-sorting [isAscending]="isAscending" name="mobile" [sortBy]="sortBy" [title]="'Mobile'"></app-sorting>
+              </th>
+              <th scope="col" class="text-left" (click)="sortData('familyName')">
+                <app-sorting [isAscending]="isAscending" name="familyName" [sortBy]="sortBy" [title]="'Family Name'"></app-sorting>
+              </th>
+              <th scope="col" class="text-left" (click)="sortData('education')">
+                <app-sorting [isAscending]="isAscending" name="education" [sortBy]="sortBy" [title]="'Education'"></app-sorting>
+              </th>
               <th scope="col" class="text-right" (click)="sortData('percentage')">
                 <app-sorting [isAscending]="isAscending" name="percentage" [sortBy]="sortBy" [title]="'Percentage'"></app-sorting>
               </th>

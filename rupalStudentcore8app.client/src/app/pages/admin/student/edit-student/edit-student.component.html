@@ -236,29 +236,29 @@
         </div>
 
         <!-- Sequence Number Section - Only show when approved -->
-        <div class="row mt-3 mb-3" *ngIf="form.get('isApproved')?.value">
+        <div class="row mt-3 mb-3" *ngIf="form.get('status')?.value === 'Approved'">
           <div class="col-md-6">
             <div class="d-flex justify-content-between">
-              <label for="sequenceNumber">Sequence Number (Auto-Generated)</label>
-              <label for="sequenceNumber">અનુક્રમ નંબર (સ્વચાલિત)</label>
+              <label for="sequenceNumber">Sequence Number</label>
+              <label for="sequenceNumber">અનુક્રમ નંબર</label>
             </div>
             <div class="input-group">
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
               </div>
-              <input type="number" class="form-control bg-light" id="sequenceNumber" formControlName="sequenceNumber" placeholder="સ્વચાલિત રીતે જનરેટ થશે" readonly
+              <input type="number" class="form-control" id="sequenceNumber" formControlName="sequenceNumber" placeholder="અનુક્રમ નંબર"
                 [ngClass]="{'is-invalid': form.get('sequenceNumber')?.touched && form.get('sequenceNumber')?.invalid}">
-              <div class="input-group-append" *ngIf="!form.get('sequenceNumber')?.value && form.get('isApproved')?.value">
+              <!-- <div class="input-group-append" *ngIf="!form.get('sequenceNumber')?.value && form.get('isApproved')?.value">
                 <button class="btn btn-outline-secondary" type="button" (click)="generateSequenceNumber()" [disabled]="isGeneratingSequence">
                   <i class="fas fa-sync" [class.fa-spin]="isGeneratingSequence"></i>
                   Generate
                 </button>
-              </div>
+              </div> -->
             </div>
-            <small class="form-text text-muted">
+            <!-- <small class="form-text text-muted">
               <i class="fas fa-info-circle mr-1"></i>
               Sequence number will be auto-generated when student is approved
-            </small>
+            </small> -->
           </div>
         </div>
         <div class="card" *ngIf="studentId > 0">

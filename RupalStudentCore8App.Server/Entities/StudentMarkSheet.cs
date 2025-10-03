@@ -59,12 +59,9 @@ namespace RupalStudentCore8App.Server.Entities
         [StringLength(20)]
         public string Grade { get; set; }
         [StringLength(4000)]
-
         public string Description { get; set; }
-        [StringLength(10)]
-        public string SequenceNumber { get; set; }
-        [StringLength(10)]
-        public string GroupSequenceNumber { get; set; }
+        public int? SequenceNumber { get; set; }
+        public int? GroupSequenceNumber { get; set; }
         public DateTime? CreatedOn { get; set; }
 
         [StringLength(20)]

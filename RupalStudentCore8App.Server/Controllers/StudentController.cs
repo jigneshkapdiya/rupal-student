@@ -42,8 +42,12 @@ namespace RupalStudentCore8App.Server.Controllers
             {
                 StudentMarkSheet entity = await _Db.StudentMarkSheets.FirstOrDefaultAsync(w => w.Id == vm.Id);
                 // Get max sequence as integer for the same education
-                int maxGroupSeq = _Db.StudentMarkSheets.Where(s => s.Education == vm.Education).AsEnumerable().Select(s => string.IsNullOrEmpty(s.GroupSequenceNumber) ? 0 : int.Parse(s.GroupSequenceNumber)).DefaultIfEmpty(0)
-                .Max();
+                int maxGroupSeq = (int)(_Db.StudentMarkSheets
+           .Where(s => s.Education == vm.Education)
+           .AsEnumerable()
+           .Select(s => s.GroupSequenceNumber)
+           .DefaultIfEmpty(0)
+           .Max() ?? 0);
 
                 if (entity == null)
                 {
@@ -96,9 +100,9 @@ namespace RupalStudentCore8App.Server.Controllers
                     entity.Status = vm.Status;
                     entity.Grade = vm.Grade;
                     entity.Description = vm.Description;
-                    if (vm.SequenceNumber != null)
+                    if (vm.SequenceNumber != 0)
                     {
-                        entity.GroupSequenceNumber = (maxGroupSeq + 1).ToString();
+                        entity.GroupSequenceNumber = (maxGroupSeq + 1);
                     }
                     _Db.StudentMarkSheets.Update(entity);
                     await _Db.SaveChangesAsync();
@@ -276,7 +280,7 @@ namespace RupalStudentCore8App.Server.Controllers
 
                 // Get education order from StudentEducation table
                 var educationOrder = await _Db.StudentEducations
-                    .ToDictionaryAsync(e => e.Name, e => e.Id);
+                    .ToDictionaryAsync(e => e.Name, e => e.SequenceNo);
 
                 // Simple grouping logic - always apply education order first
                 var allRecords = await query
@@ -756,9 +760,10 @@ namespace RupalStudentCore8App.Server.Controllers
                 int totalRecord = await query.CountAsync();
 
                 // ✅ Get education order dictionary
-                var educationOrder = await _Db.StudentEducations
-                    .OrderBy(e => e.Id) // Assuming Id = sequence order
-                    .ToDictionaryAsync(e => e.Name, e => e.Id);
+                //var educationOrder = await _Db.StudentEducations
+                //    .OrderBy(e => e.Id) // Assuming Id = sequence order
+                //    .ToDictionaryAsync(e => e.Name, e => e.Id);
+                var educationOrder = await _Db.StudentEducations.Select(e => new { e.Name, e.SequenceNo }).ToDictionaryAsync(e => e.Name, e => e.SequenceNo);
 
                 // ✅ Pull all records first
                 var allRecords = await query
@@ -987,7 +992,7 @@ namespace RupalStudentCore8App.Server.Controllers
                     worksheet.Columns().AdjustToContents();
 
                     // Borders
-                    var dataRange = worksheet.Range(worksheet.Cell(1, 1), worksheet.Cell(currentRow, 12));
+                    var dataRange = worksheet.Range(worksheet.Cell(1, 1), worksheet.Cell(currentRow, 4));
                     dataRange.Style.Border.OutsideBorder = XLBorderStyleValues.Thin;
                     dataRange.Style.Border.InsideBorder = XLBorderStyleValues.Thin;
                     dataRange.Style.Border.BottomBorderColor = XLColor.Black;

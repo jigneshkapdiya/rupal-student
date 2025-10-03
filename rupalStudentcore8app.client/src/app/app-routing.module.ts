@@ -11,7 +11,8 @@ import { STUDENT_ROUTES } from './shared/routes/student-layout.routes';
 const appRoutes: Routes = [
   {
     path: "",
-    redirectTo: "/reg-form",
+    // redirectTo: "/reg-form",
+    redirectTo: "/auth/login",
     pathMatch: "full",
   },
   // Direct routes without layout
